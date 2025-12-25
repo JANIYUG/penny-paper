@@ -3573,48 +3573,64 @@ body.login-page {
     flex-direction: column;
   }
   
-  /* ===== DASHBOARD - FIT ON ONE SCREEN ===== */
+  /* ===== DASHBOARD - HORIZONTAL SWIPER ===== */
   .dashboard {
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
+    width: 100%;
     height: 100%;
     overflow: hidden;
     padding: 0;
+    position: relative;
   }
   
-  /* COMPACT CARD ROWS - 4 cards fit on screen */
-  .card-row {
+  .dashboard-swiper {
     display: flex;
-    flex-direction: column;
-    gap: 6px;
+    flex-direction: row;
     width: 100%;
-    max-height: none !important;
-    margin: 0 !important;
-    padding: 0 !important;
-    flex: 1;
-  }
-  
-  .card-row.row-2 {
-    display: flex;
-    flex-direction: row;
-    gap: 6px;
-    height: 22%;
-  }
-  
-  .card-row.row-5 {
-    display: flex;
-    flex-direction: row;
-    gap: 6px;
-    height: 24%;
-    flex-wrap: nowrap;
+    height: 100%;
     overflow-x: auto;
     overflow-y: hidden;
+    scroll-snap-type: x mandatory;
     -webkit-overflow-scrolling: touch;
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* IE/Edge */
   }
   
-  /* ===== CARDS - SUPER COMPACT ===== */
-  .card {
+  .dashboard-swiper::-webkit-scrollbar {
+    display: none; /* Chrome, Safari, Opera */
+  }
+  
+  .dash-slide {
+    flex: 0 0 100%;
+    width: 100%;
+    height: 100%;
+    scroll-snap-align: start;
+    scroll-snap-stop: always;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 10px;
+    box-sizing: border-box;
+    justify-content: center;
+  }
+  
+  /* ===== CARDS - COMPACT FOR SWIPER ===== */
+  .dash-slide .card {
+    width: 100% !important;
+    max-width: 100% !important;
+    flex: 1;
+    min-height: 0;
+    padding: 8px !important;
+    box-sizing: border-box;
+    border-radius: 10px;
+    border-width: 2px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+  }
+  
+  .card-row .card {
     width: 100% !important;
     max-width: 100% !important;
     min-height: auto !important;
@@ -3639,15 +3655,28 @@ body.login-page {
   /* Compact typography */
   .card h4,
   .card-title {
-    font-size: 9px !important;
+    font-size: 10px !important;
     line-height: 1.2;
     margin-bottom: 2px !important;
   }
   
   .card h2,
   .card-value {
-    font-size: 16px !important;
+    font-size: 18px !important;
     margin-bottom: 2px !important;
+  }
+  
+  .card p, .card small {
+    font-size: 10px !important;
+  }
+  
+  .card .list {
+    font-size: 10px !important;
+  }
+  
+  .card .list li {
+    margin-bottom: 3px;
+    line-height: 1.3;
   }
   
   /* ===== DONUT/RING CARDS - DRAMATICALLY SHRINK ===== */
@@ -3760,7 +3789,7 @@ body.login-page {
     font-size: 8px;
   }
   
-  /* ===== NOTES PAGE - FIT ON ONE SCREEN ===== */
+  /* ===== NOTES PAGE - VERTICAL SCROLL ===== */
   .notes-grid {
     display: grid;
     grid-template-columns: 1fr !important;
@@ -3768,8 +3797,10 @@ body.login-page {
     padding: 8px;
     width: 100%;
     max-height: calc(100vh - 140px);
-    overflow-y: auto;
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
     -webkit-overflow-scrolling: touch;
+    box-sizing: border-box;
   }
   
   .note-card {
@@ -3832,7 +3863,7 @@ body.login-page {
     font-size: 9px;
   }
   
-  /* ===== ADD EXPENSE FORM - FIT ON ONE SCREEN ===== */
+  /* ===== ADD EXPENSE FORM - VERTICAL SCROLL ===== */
   .add-expense-container {
     display: flex;
     flex-direction: column;
@@ -3841,7 +3872,8 @@ body.login-page {
     width: 100%;
     box-sizing: border-box;
     height: calc(100vh - 60px);
-    overflow-y: auto;
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
     -webkit-overflow-scrolling: touch;
   }
   
@@ -3880,11 +3912,12 @@ body.login-page {
     box-sizing: border-box;
   }
   
-  /* ===== REPORTS & ANALYSIS - FIT ON ONE SCREEN ===== */
+  /* ===== REPORTS & ANALYSIS - VERTICAL SCROLL ONLY ===== */
   .report-main {
     padding: 8px;
     height: calc(100vh - 60px);
-    overflow-y: auto;
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
     -webkit-overflow-scrolling: touch;
     width: 100%;
     box-sizing: border-box;
@@ -3897,6 +3930,8 @@ body.login-page {
     gap: 6px;
     align-items: stretch;
     flex-shrink: 0;
+    width: 100%;
+    box-sizing: border-box;
   }
   
   .filter-group {
@@ -3927,13 +3962,14 @@ body.login-page {
     padding: 6px;
   }
   
-  /* Stats cards - compact grid */
+  /* Stats cards - single column for no horizontal scroll */
   .analysis-grid {
-    display: grid !important;
-    grid-template-columns: 1fr !important;
+    display: flex !important;
+    flex-direction: column !important;
     gap: 8px;
     padding: 0;
     width: 100%;
+    box-sizing: border-box;
   }
   
   .summary-cards {
@@ -3941,6 +3977,7 @@ body.login-page {
     grid-template-columns: repeat(2, 1fr);
     gap: 6px;
     width: 100%;
+    box-sizing: border-box;
   }
   
   .summary-card {
@@ -3957,12 +3994,14 @@ body.login-page {
     font-size: 9px;
   }
   
-  /* Chart containers - compressed */
+  /* Chart containers - full width, no horizontal overflow */
   .chart-container {
     width: 100%;
-    height: 200px;
+    max-width: 100%;
+    height: 220px;
     padding: 8px;
     box-sizing: border-box;
+    overflow: hidden;
   }
   
   .chart-title {
@@ -3972,6 +4011,7 @@ body.login-page {
   
   canvas {
     max-width: 100% !important;
+    width: 100% !important;
     height: auto !important;
   }
   
