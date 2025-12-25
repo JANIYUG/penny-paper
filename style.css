@@ -5,6 +5,15 @@
   font-family: system-ui, sans-serif;
 }
 
+/* NO SCROLL - FIT EVERYTHING ON SCREEN */
+html, body {
+  overflow-x: hidden !important;
+  overflow-y: hidden !important;
+  height: 100vh !important;
+  width: 100%;
+  position: fixed;
+}
+
 /* BASE */
 body {
   background: linear-gradient(135deg, #FFF8F0 0%, #FFE8E0 50%, #FFD8E8 100%);
@@ -21,6 +30,8 @@ body.add-expense-page {
   display: flex;
   flex-direction: column;
   height: 100vh;
+  width: 100%;
+  overflow: hidden;
 }
 
 /* TOP NAV */
@@ -192,6 +203,26 @@ body.add-expense-page {
 .content {
   display: flex;
   flex: 1;
+  overflow: hidden;
+  position: relative;
+}
+
+/* SIDEBAR OVERLAY */
+.sidebar-overlay {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 999;
+  pointer-events: none;
+}
+
+.sidebar-overlay.show {
+  display: block;
+  pointer-events: all;
 }
 
 /* SIDEBAR */
@@ -202,6 +233,8 @@ body.add-expense-page {
   display: none;
   border-right: 3px solid #FF1493;
   box-shadow: 4px 0 20px rgba(255,20,147,0.3);
+  overflow-y: auto;
+  max-height: 100vh;
 }
 
 #sidebar-toggle:checked ~ .content .sidebar {
@@ -298,6 +331,9 @@ body.add-expense-page {
   flex: 1;
   padding: 12px 8px 8px 8px;
   overflow: hidden;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
 }
 
 /* DASHBOARD PROFILE */
@@ -352,10 +388,10 @@ body.add-expense-page {
   display: flex;
   flex-direction: column;
   gap: 12px;
-  height: calc(100vh - 87px);
+  height: 100%;
   padding: 0;
   margin-top: -5px;
-  overflow-y: auto;
+  overflow: hidden;
 }
 
 /* REMINDERS SECTION */
@@ -3377,41 +3413,33 @@ body.login-page {
 }
 
 /* ========================================
-   MOBILE RESPONSIVE - COMPLETE OVERHAUL
-   Clean single-column layout for phones
+   MOBILE RESPONSIVE - NO SCROLL, FIT ON ONE SCREEN
+   Everything must fit in 100vh viewport
 ======================================== */
 
 @media (max-width: 768px) {
   
-  /* ===== GLOBAL RESETS ===== */
+  /* ===== ENFORCE NO SCROLL ===== */
+  html, body {
+    overflow: hidden !important;
+    height: 100vh !important;
+    position: fixed !important;
+    width: 100%;
+  }
+  
   * {
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
     box-sizing: border-box;
   }
   
-  html, body {
-    overflow-x: hidden;
-    width: 100%;
-    margin: 0;
-    padding: 0;
-  }
-  
-  body {
-    overflow-y: auto;
-    -webkit-overflow-scrolling: touch;
-    min-height: 100vh;
-    height: auto;
-  }
-  
   /* ===== APP CONTAINER ===== */
   .app {
     display: flex;
     flex-direction: column;
-    height: auto;
-    min-height: 100vh;
+    height: 100vh;
     width: 100%;
-    overflow: visible;
+    overflow: hidden;
   }
   
   .content {
@@ -3419,20 +3447,21 @@ body.login-page {
     flex-direction: column;
     flex: 1;
     width: 100%;
-    overflow: visible;
+    overflow: hidden;
+    height: 100%;
   }
   
-  /* ===== NAVIGATION BAR ===== */
+  /* ===== NAVIGATION BAR - COMPACT ===== */
   .top-nav {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 10px 12px;
+    padding: 6px 10px;
     gap: 8px;
     flex-wrap: nowrap;
     min-height: auto;
-    width: 100%;
-    box-sizing: border-box;
+    flex-shrink: 0;
+    height: 50px;
   }
   
   .top-nav nav {
@@ -3440,7 +3469,7 @@ body.login-page {
   }
   
   .top-nav h1 {
-    font-size: 15px !important;
+    font-size: 14px !important;
     white-space: nowrap;
     margin: 0;
     flex: 1;
@@ -3448,14 +3477,14 @@ body.login-page {
   
   .hamburger {
     display: block;
-    padding: 8px;
-    width: 40px;
-    height: 40px;
+    padding: 6px;
+    width: 36px;
+    height: 36px;
     flex-shrink: 0;
   }
   
   .hamburger span {
-    width: 22px;
+    width: 20px;
     height: 2px;
     display: block;
   }
@@ -3468,317 +3497,369 @@ body.login-page {
   /* Top action buttons */
   .top-settings-btn,
   .top-logout-btn {
-    padding: 8px 12px;
-    font-size: 12px;
+    padding: 6px 10px;
+    font-size: 11px;
     min-width: auto;
     white-space: nowrap;
   }
   
-  /* ===== SIDEBAR ===== */
+  /* ===== SIDEBAR WITH OVERLAY ===== */
   .sidebar {
+    position: fixed;
+    left: 0;
+    top: 0;
     width: 260px;
     max-width: 80vw;
-    padding: 15px;
+    height: 100vh;
+    padding: 12px;
     z-index: 1000;
     overflow-y: auto;
     -webkit-overflow-scrolling: touch;
+    transform: translateX(-100%);
+    transition: transform 0.3s ease;
+  }
+  
+  #sidebar-toggle:checked ~ .content .sidebar {
+    transform: translateX(0);
+  }
+  
+  .sidebar-overlay {
+    z-index: 999;
+  }
+  
+  #sidebar-toggle:checked ~ .content .sidebar-overlay {
+    display: block;
+    pointer-events: all;
   }
   
   .sidebar-profile {
-    padding: 12px;
-    gap: 10px;
-    margin-bottom: 15px;
+    padding: 10px;
+    gap: 8px;
+    margin-bottom: 12px;
   }
   
   .profile-avatar {
-    width: 45px;
-    height: 45px;
-    font-size: 22px;
+    width: 40px;
+    height: 40px;
+    font-size: 20px;
   }
   
   .profile-name {
-    font-size: 15px;
+    font-size: 14px;
   }
   
   .profile-age {
-    font-size: 13px;
+    font-size: 12px;
   }
   
   .logo {
-    font-size: 18px;
-    margin-bottom: 20px;
+    font-size: 16px;
+    margin-bottom: 15px;
   }
   
   .sidebar a {
-    padding: 12px;
-    font-size: 15px;
-    margin-bottom: 6px;
+    padding: 10px;
+    font-size: 14px;
+    margin-bottom: 5px;
   }
   
-  /* ===== MAIN CONTENT AREA ===== */
+  /* ===== MAIN CONTENT - NO SCROLL ===== */
   .main {
-    padding: 12px;
-    overflow: visible;
-    height: auto;
-    width: 100%;
-    box-sizing: border-box;
+    padding: 6px;
+    overflow: hidden;
+    height: 100%;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
   }
   
-  /* ===== DASHBOARD LAYOUT ===== */
+  /* ===== DASHBOARD - FIT ON ONE SCREEN ===== */
   .dashboard {
     display: flex;
     flex-direction: column;
-    gap: 12px;
-    height: auto;
-    overflow: visible;
+    gap: 6px;
+    height: 100%;
+    overflow: hidden;
     padding: 0;
-    padding-bottom: 30px;
-    width: 100%;
   }
   
-  /* SINGLE COLUMN CARD LAYOUT */
+  /* COMPACT CARD ROWS - 4 cards fit on screen */
   .card-row {
     display: flex;
     flex-direction: column;
-    gap: 12px;
+    gap: 6px;
     width: 100%;
     max-height: none !important;
     margin: 0 !important;
     padding: 0 !important;
+    flex: 1;
   }
   
-  .card-row.row-2,
+  .card-row.row-2 {
+    display: flex;
+    flex-direction: row;
+    gap: 6px;
+    height: 22%;
+  }
+  
   .card-row.row-5 {
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
+    gap: 6px;
+    height: 24%;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    overflow-y: hidden;
+    -webkit-overflow-scrolling: touch;
   }
   
-  /* ===== CARDS - FULL WIDTH ===== */
+  /* ===== CARDS - SUPER COMPACT ===== */
   .card {
     width: 100% !important;
     max-width: 100% !important;
-    min-height: 120px;
-    height: auto;
-    padding: 15px;
+    min-height: auto !important;
+    height: 100% !important;
+    padding: 6px !important;
     box-sizing: border-box;
-    border-radius: 12px;
+    border-radius: 10px;
     border-width: 2px;
+    overflow: hidden;
   }
   
   .card-row.row-2 .card,
   .card-row.row-5 .card {
-    width: 100% !important;
-    flex: none;
+    flex: 1;
+    min-width: 150px;
   }
   
   .card-content {
     width: 100%;
   }
   
-  /* Typography adjustments */
+  /* Compact typography */
   .card h4,
   .card-title {
-    font-size: 12px !important;
-    line-height: 1.4;
+    font-size: 9px !important;
+    line-height: 1.2;
+    margin-bottom: 2px !important;
   }
   
   .card h2,
   .card-value {
-    font-size: 24px !important;
-    margin-bottom: 6px !important;
+    font-size: 16px !important;
+    margin-bottom: 2px !important;
   }
   
-  /* ===== DONUT/RING CARDS ===== */
+  /* ===== DONUT/RING CARDS - DRAMATICALLY SHRINK ===== */
   .ring-card {
     display: flex !important;
-    flex-direction: row !important;
+    flex-direction: column !important;
     align-items: center !important;
-    justify-content: space-between !important;
-    gap: 15px;
-    padding: 15px !important;
+    justify-content: center !important;
+    gap: 4px;
+    padding: 6px !important;
   }
   
   .ring-content {
-    flex: 1;
-    order: 1;
-    text-align: left;
+    flex: none;
+    order: 2;
+    text-align: center;
     padding: 0 !important;
   }
   
   .ring-container {
     flex-shrink: 0;
-    order: 2;
-    width: 140px;
-    height: 140px;
+    order: 1;
+    width: 90px !important;
+    height: 90px !important;
     display: flex;
     align-items: center;
     justify-content: center;
   }
   
-  /* Donut size reduction */
-  .ring-svg {
-    width: 140px !important;
-    height: 140px !important;
+  /* DONUT SIZE - ULTRA COMPACT */
+  .ring-svg,
+  .donut-chart,
+  .donut-container,
+  .donut-img {
+    width: 90px !important;
+    height: 90px !important;
+    max-width: 90px !important;
+    max-height: 90px !important;
   }
   
   /* Prevent blur on donuts */
   .ring-svg,
-  .ring-container img {
+  .ring-container img,
+  .donut-chart,
+  .donut-img {
     background-size: contain !important;
     image-rendering: -webkit-optimize-contrast;
     image-rendering: crisp-edges;
+    filter: none !important;
   }
   
   .ring-amount {
-    font-size: 14px !important;
-    font-weight: 800 !important;
+    font-size: 10px !important;
+    font-weight: 700 !important;
   }
   
   .ring-label {
-    font-size: 10px !important;
+    font-size: 7px !important;
   }
   
-  /* Set limit button adjustment */
+  /* Set limit button - inline */
   .set-limit-btn {
     position: static;
-    margin-top: 10px;
-    padding: 8px 12px;
-    font-size: 10px;
+    margin-top: 4px;
+    padding: 4px 8px;
+    font-size: 8px;
     width: 100%;
   }
   
-  /* ===== INFO CARD LISTS ===== */
+  /* ===== INFO CARD LISTS - COMPACT ===== */
   .card ul {
-    gap: 8px;
+    gap: 3px;
     width: 100%;
+    margin: 0;
+    padding: 0;
   }
   
   .card ul li {
-    font-size: 13px;
-    padding: 8px 10px;
-    line-height: 1.5;
+    font-size: 9px;
+    padding: 3px 5px;
+    line-height: 1.3;
   }
   
   .transaction-category {
-    font-size: 13px;
+    font-size: 9px;
   }
   
   .transaction-details {
-    font-size: 12px;
+    font-size: 8px;
   }
   
   .category-bar {
-    padding: 8px;
-    margin-bottom: 8px;
+    padding: 4px;
+    margin-bottom: 3px;
   }
   
   .category-name {
-    font-size: 12px;
+    font-size: 9px;
   }
   
   .category-amount {
-    font-size: 12px;
+    font-size: 9px;
   }
   
   .category-bar-fill {
-    height: 6px;
+    height: 4px;
   }
   
   .category-percentage {
-    font-size: 11px;
+    font-size: 8px;
   }
   
-  /* ===== NOTES PAGE ===== */
+  /* ===== NOTES PAGE - FIT ON ONE SCREEN ===== */
   .notes-grid {
     display: grid;
     grid-template-columns: 1fr !important;
-    gap: 10px;
-    padding: 10px;
+    gap: 8px;
+    padding: 8px;
     width: 100%;
+    max-height: calc(100vh - 140px);
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
   }
   
   .note-card {
     width: 100% !important;
     max-width: 100%;
-    padding: 12px;
+    padding: 10px;
     box-sizing: border-box;
+    min-height: auto;
   }
   
   .note-card h3 {
-    font-size: 15px;
-    margin-bottom: 8px;
+    font-size: 13px;
+    margin-bottom: 4px;
   }
   
   .note-date,
   .note-preview {
-    font-size: 12px;
+    font-size: 10px;
   }
   
   .notes-header {
-    padding: 12px;
-    gap: 10px;
-    flex-direction: column;
-    align-items: stretch;
+    padding: 10px;
+    gap: 8px;
+    flex-direction: row;
+    align-items: center;
+    flex-wrap: wrap;
+    flex-shrink: 0;
   }
   
   .notes-header h1 {
-    font-size: 18px;
+    font-size: 16px;
   }
   
   .notes-actions {
     display: flex;
     flex-direction: row;
-    gap: 10px;
+    gap: 8px;
     width: 100%;
   }
   
   .notes-actions input {
     flex: 1;
     width: auto;
-    padding: 10px;
-    font-size: 14px;
+    padding: 8px;
+    font-size: 13px;
   }
   
   .notes-actions button {
-    padding: 10px 15px;
-    font-size: 14px;
+    padding: 8px 12px;
+    font-size: 13px;
     white-space: nowrap;
   }
   
   .reminder-badge {
-    font-size: 10px;
-    padding: 3px 8px;
+    font-size: 8px;
+    padding: 2px 6px;
   }
   
   .reminder-time {
-    font-size: 11px;
+    font-size: 9px;
   }
   
-  /* ===== ADD EXPENSE FORM ===== */
+  /* ===== ADD EXPENSE FORM - FIT ON ONE SCREEN ===== */
   .add-expense-container {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 15px;
-    padding: 15px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 10px;
     width: 100%;
     box-sizing: border-box;
+    height: calc(100vh - 60px);
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
   }
   
   .form-card {
     width: 100%;
-    padding: 20px;
+    padding: 12px;
     box-sizing: border-box;
   }
   
   .form-card h2 {
-    font-size: 20px;
-    margin-bottom: 20px;
+    font-size: 16px;
+    margin-bottom: 12px;
   }
   
   .form-card label {
-    font-size: 13px;
+    font-size: 11px;
     display: block;
-    margin-bottom: 8px;
+    margin-bottom: 4px;
   }
   
   .form-card input,
@@ -3786,24 +3867,25 @@ body.login-page {
   .form-card textarea {
     width: 100% !important;
     max-width: 100%;
-    padding: 12px;
-    font-size: 15px;
+    padding: 8px;
+    font-size: 14px;
     box-sizing: border-box;
     border-radius: 8px;
   }
   
   .form-card button {
     width: 100% !important;
-    padding: 14px;
-    font-size: 15px;
+    padding: 10px;
+    font-size: 14px;
     box-sizing: border-box;
   }
   
-  /* ===== REPORTS & ANALYSIS ===== */
+  /* ===== REPORTS & ANALYSIS - FIT ON ONE SCREEN ===== */
   .report-main {
-    padding: 12px;
-    height: auto;
-    overflow: visible;
+    padding: 8px;
+    height: calc(100vh - 60px);
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
     width: 100%;
     box-sizing: border-box;
   }
@@ -3811,44 +3893,45 @@ body.login-page {
   .filter-bar {
     display: flex;
     flex-direction: column;
-    padding: 12px;
-    gap: 10px;
+    padding: 8px;
+    gap: 6px;
     align-items: stretch;
+    flex-shrink: 0;
   }
   
   .filter-group {
     display: flex;
     flex-direction: row;
     align-items: center;
-    gap: 10px;
+    gap: 6px;
     width: 100%;
   }
   
   .filter-group label {
-    font-size: 12px;
+    font-size: 10px;
     white-space: nowrap;
-    min-width: 60px;
+    min-width: 50px;
   }
   
   .filter-group select,
   .filter-group input[type="date"] {
     flex: 1;
-    font-size: 13px;
-    padding: 10px;
+    font-size: 11px;
+    padding: 6px;
     min-width: 0;
   }
   
   .btn-export {
     width: 100%;
-    font-size: 13px;
-    padding: 10px;
+    font-size: 11px;
+    padding: 6px;
   }
   
-  /* Stats cards - single column */
+  /* Stats cards - compact grid */
   .analysis-grid {
     display: grid !important;
     grid-template-columns: 1fr !important;
-    gap: 12px;
+    gap: 8px;
     padding: 0;
     width: 100%;
   }
@@ -3856,35 +3939,35 @@ body.login-page {
   .summary-cards {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    gap: 10px;
+    gap: 6px;
     width: 100%;
   }
   
   .summary-card {
-    padding: 12px;
+    padding: 8px;
     width: 100%;
     box-sizing: border-box;
   }
   
   .summary-value {
-    font-size: 20px;
+    font-size: 14px;
   }
   
   .summary-label {
-    font-size: 12px;
+    font-size: 9px;
   }
   
-  /* Chart containers auto-resize */
+  /* Chart containers - compressed */
   .chart-container {
     width: 100%;
-    height: 300px;
-    padding: 12px;
+    height: 200px;
+    padding: 8px;
     box-sizing: border-box;
   }
   
   .chart-title {
-    font-size: 15px;
-    margin-bottom: 12px;
+    font-size: 12px;
+    margin-bottom: 6px;
   }
   
   canvas {
@@ -3918,29 +4001,29 @@ body.login-page {
   .profile-header,
   .settings-header,
   .note-modal-header {
-    padding: 15px;
+    padding: 12px;
   }
   
   .modal-header h2,
   .profile-header h2,
   .settings-header h2 {
-    font-size: 20px;
+    font-size: 16px;
   }
   
   .close-btn,
   .close-profile,
   .close-settings,
   .close-note-modal {
-    font-size: 28px;
-    width: 36px;
-    height: 36px;
+    font-size: 24px;
+    width: 32px;
+    height: 32px;
   }
   
   .modal-body,
   .profile-body,
   .settings-body,
   .note-modal-body {
-    padding: 20px;
+    padding: 15px;
     overflow-y: auto;
     -webkit-overflow-scrolling: touch;
   }
@@ -3953,8 +4036,8 @@ body.login-page {
   .settings-input {
     width: 100% !important;
     max-width: 100%;
-    font-size: 15px;
-    padding: 12px;
+    font-size: 14px;
+    padding: 10px;
     box-sizing: border-box;
   }
   
@@ -3962,35 +4045,35 @@ body.login-page {
   .profile-footer button,
   .settings-footer button {
     width: 100%;
-    font-size: 15px;
-    padding: 14px;
+    font-size: 14px;
+    padding: 12px;
   }
   
   /* Settings sections */
   .settings-section {
-    padding: 20px;
-    margin-bottom: 20px;
+    padding: 15px;
+    margin-bottom: 15px;
   }
   
   .settings-section h3 {
-    font-size: 18px;
-    margin-bottom: 15px;
+    font-size: 16px;
+    margin-bottom: 12px;
   }
   
   .limit-input-group {
-    margin-bottom: 15px;
+    margin-bottom: 12px;
   }
   
   .limit-input-group label {
-    font-size: 13px;
+    font-size: 11px;
     display: block;
-    margin-bottom: 8px;
+    margin-bottom: 6px;
   }
   
   .limit-input-group input {
     width: 100%;
-    font-size: 15px;
-    padding: 12px;
+    font-size: 14px;
+    padding: 10px;
     box-sizing: border-box;
   }
   

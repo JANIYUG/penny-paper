@@ -30,9 +30,9 @@
       <h2 class="logo">EXPENSE</h2>
       <nav>
         <a href="index.html">Home</a>
-        <a href="add-expense.html">Add Expenses</a>
-        <a href="r&p.html" class="active">Reports & Analysis</a>
-        <a href="notes.html">Notes</a>
+      <a href="add-expense.html" onclick="closeSidebarMobile()">Add Expenses</a>
+      <a href="r&p.html" class="active" onclick="closeSidebarMobile()">Reports & Analysis</a>
+      <a href="notes.html" onclick="closeSidebarMobile()">Notes</a>
       </nav>
     </aside>
 
@@ -982,6 +982,30 @@
     a.click();
     window.URL.revokeObjectURL(url);
   }
+
+  // Close sidebar on mobile
+  function closeSidebarMobile() {
+    const sidebarToggle = document.getElementById('sidebar-toggle');
+    const overlay = document.getElementById('sidebarOverlay');
+    if (sidebarToggle) {
+      sidebarToggle.checked = false;
+    }
+    if (overlay) {
+      overlay.classList.remove('show');
+    }
+  }
+
+  // Show overlay when sidebar opens
+  document.getElementById('sidebar-toggle')?.addEventListener('change', function(e) {
+    const overlay = document.getElementById('sidebarOverlay');
+    if (overlay) {
+      if (e.target.checked) {
+        overlay.classList.add('show');
+      } else {
+        overlay.classList.remove('show');
+      }
+    }
+  });
 </script>
 
 </body>
