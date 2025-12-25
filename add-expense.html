@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Penny & Paper | Add Expense</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="add-expense-page">
+
+<div class="app">
+
+  <!-- SIDEBAR TOGGLE -->
+  <input type="checkbox" id="sidebar-toggle">
+
+  <!-- TOP NAV -->
+  <header class="top-nav">
+    <label for="sidebar-toggle" class="hamburger">☰</label>
+    <nav>
+      <a>Add Expenses</a>
+    </nav>
+  </header>
+
+  <!-- CONTENT -->
+  <div class="content">
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+      <h2 class="logo">EXPENSE</h2>
+      <nav>
+        <a href="home.html">Home</a>
+        <a href="add-expense.html" class="active">Add Expenses</a>
+        <a href="r&p.html">Reports & Analysis</a>
+        <a href="notes.html">Notes</a>
+      </nav>
+    </aside>
+
+    <!-- MAIN -->
+    <main class="main">
+
+      <!-- ADD EXPENSE FORM -->
+      <div class="add-expense-container">
+        <div class="form-card">
+          <h1>Add New Expense</h1>
+          <form id="expenseForm">
+            
+            <div class="form-group">
+              <label for="amount">Amount (₹)</label>
+              <input type="number" id="amount" placeholder="Enter amount" min="0" step="0.01" required>
+            </div>
+
+            <div class="form-group">
+              <label for="category">Category</label>
+              <select id="category" required>
+                <option value="">Select Category</option>
+                <option value="food">Food</option>
+                <option value="travel">Travel</option>
+                <option value="shopping">Shopping</option>
+                <option value="entertainment">Entertainment</option>
+                <option value="bills">Bills & Utilities</option>
+                <option value="health">Health</option>
+                <option value="education">Education</option>
+                <option value="other">Other</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="description">Description</label>
+              <input type="text" id="description" placeholder="What did you spend on?" required>
+            </div>
+
+            <div class="form-group">
+              <label for="date">Date</label>
+              <input type="date" id="date" required>
+            </div>
+
+            <div class="form-group">
+              <label for="paymentMethod">Payment Method</label>
+              <select id="paymentMethod" required>
+                <option value="">Select Payment Method</option>
+                <option value="cash">Cash</option>
+                <option value="card">Credit/Debit Card</option>
+                <option value="upi">UPI</option>
+                <option value="netbanking">Net Banking</option>
+                <option value="wallet">Digital Wallet</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="notes">Notes (Optional)</label>
+              <textarea id="notes" rows="3" placeholder="Additional notes..."></textarea>
+            </div>
+
+            <div class="form-actions">
+              <button type="submit" class="btn-submit">Add Expense</button>
+              <button type="reset" class="btn-reset">Clear Form</button>
+            </div>
+
+          </form>
+        </div>
+
+        <!-- RECENT ENTRIES -->
+        <div class="recent-entries">
+          <h2>Recent Entries</h2>
+          <div class="entries-list">
+            <div class="entry-item">
+              <div class="entry-info">
+                <span class="entry-category">Food</span>
+                <span class="entry-desc">Lunch at restaurant</span>
+              </div>
+              <div class="entry-details">
+                <span class="entry-amount">₹320</span>
+                <span class="entry-date">Today</span>
+              </div>
+            </div>
+            <div class="entry-item">
+              <div class="entry-info">
+                <span class="entry-category">Travel</span>
+                <span class="entry-desc">Cab fare</span>
+              </div>
+              <div class="entry-details">
+                <span class="entry-amount">₹180</span>
+                <span class="entry-date">Today</span>
+              </div>
+            </div>
+            <div class="entry-item">
+              <div class="entry-info">
+                <span class="entry-category">Shopping</span>
+                <span class="entry-desc">Groceries</span>
+              </div>
+              <div class="entry-details">
+                <span class="entry-amount">₹850</span>
+                <span class="entry-date">Yesterday</span>
+              </div>
+            </div>
+            <div class="entry-item">
+              <div class="entry-info">
+                <span class="entry-category">Bills</span>
+                <span class="entry-desc">Electricity bill</span>
+              </div>
+              <div class="entry-details">
+                <span class="entry-amount">₹1,240</span>
+                <span class="entry-date">2 days ago</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </main>
+  </div>
+</div>
+
+<script>
+  // Initialize expenses from localStorage
+  let expenses = JSON.parse(localStorage.getItem('expenses')) || [];
+
+  // Set today's date as default
+  document.getElementById('date').valueAsDate = new Date();
+
+  // Function to format date
+  function formatDate(dateString) {
+    const date = new Date(dateString);
+    const today = new Date();
+    const yesterday = new Date(today);
+    yesterday.setDate(yesterday.getDate() - 1);
+    
+    if (date.toDateString() === today.toDateString()) {
+      return 'Today';
+    } else if (date.toDateString() === yesterday.toDateString()) {
+      return 'Yesterday';
+    } else {
+      const daysAgo = Math.floor((today - date) / (1000 * 60 * 60 * 24));
+      if (daysAgo < 7) {
+        return `${daysAgo} days ago`;
+      }
+      return date.toLocaleDateString('en-IN', { month: 'short', day: 'numeric' });
+    }
+  }
+
+  // Function to update recent entries display
+  function updateRecentEntries() {
+    const entriesList = document.querySelector('.entries-list');
+    const recentExpenses = expenses.slice(-5).reverse(); // Show last 5, newest first
+    
+    entriesList.innerHTML = recentExpenses.map(expense => `
+      <div class="entry-item">
+        <div class="entry-info">
+          <span class="entry-category">${expense.category}</span>
+          <span class="entry-desc">${expense.description}</span>
+        </div>
+        <div class="entry-details">
+          <span class="entry-amount">₹${parseFloat(expense.amount).toLocaleString('en-IN')}</span>
+          <span class="entry-date">${formatDate(expense.date)}</span>
+        </div>
+      </div>
+    `).join('');
+    
+    if (recentExpenses.length === 0) {
+      entriesList.innerHTML = '<p style="color: rgba(255,255,255,0.7); text-align: center; padding: 20px;">No expenses yet. Add your first expense!</p>';
+    }
+  }
+
+  // Initial display
+  updateRecentEntries();
+
+  // Function to reset all expenses
+  function resetAllExpenses() {
+    if (confirm('Are you sure you want to reset? This will clear current data but preserve your expense history/statement.')) {
+      if (confirm('Continue with reset? Your statement history will remain accessible.')) {
+        // Get current expenses
+        const currentExpenses = JSON.parse(localStorage.getItem('expenses')) || [];
+        
+        // Get existing history
+        const expenseHistory = JSON.parse(localStorage.getItem('expenseHistory')) || [];
+        
+        // Add current expenses to history with archive timestamp
+        if (currentExpenses.length > 0) {
+          const archiveEntry = {
+            archivedAt: new Date().toISOString(),
+            expenses: currentExpenses
+          };
+          expenseHistory.push(archiveEntry);
+          localStorage.setItem('expenseHistory', JSON.stringify(expenseHistory));
+        }
+        
+        // Clear current expenses only
+        expenses = [];
+        localStorage.removeItem('expenses');
+        updateRecentEntries();
+        
+        alert(`Reset successful! ${currentExpenses.length} expenses moved to history. Your statement data is preserved.`);
+      }
+    }
+  }
+
+  document.getElementById('expenseForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    
+    const amount = document.getElementById('amount').value;
+    const category = document.getElementById('category').value;
+    const description = document.getElementById('description').value;
+    const date = document.getElementById('date').value;
+    const paymentMethod = document.getElementById('paymentMethod').value;
+    const notes = document.getElementById('notes').value;
+
+    // Create expense object
+    const expense = {
+      id: Date.now(),
+      amount: parseFloat(amount),
+      category: category.charAt(0).toUpperCase() + category.slice(1),
+      description: description,
+      date: date,
+      paymentMethod: paymentMethod,
+      notes: notes,
+      timestamp: new Date().toISOString()
+    };
+
+    // Add to expenses array
+    expenses.push(expense);
+    
+    // Save to localStorage
+    localStorage.setItem('expenses', JSON.stringify(expenses));
+
+    // Update recent entries display
+    updateRecentEntries();
+
+    // Show success message
+    alert(`Expense Added Successfully!\n\nAmount: ₹${parseFloat(amount).toLocaleString('en-IN')}\nCategory: ${expense.category}\nDescription: ${description}`);
+    
+    // Reset form
+    this.reset();
+    document.getElementById('date').valueAsDate = new Date();
+  });
+</script>
+
+</body>
+</html>

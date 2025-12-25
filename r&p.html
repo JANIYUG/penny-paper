@@ -1,0 +1,987 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Penny & Paper | Reports & Analysis</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+
+<div class="app">
+
+  <!-- SIDEBAR TOGGLE -->
+  <input type="checkbox" id="sidebar-toggle">
+
+  <!-- TOP NAV -->
+  <header class="top-nav">
+    <label for="sidebar-toggle" class="hamburger">☰</label>
+    <nav>
+      <a class="active">Reports & Analysis</a>
+    </nav>
+  </header>
+
+  <!-- CONTENT -->
+  <div class="content">
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+      <h2 class="logo">EXPENSE</h2>
+      <nav>
+        <a href="home.html">Home</a>
+        <a href="add-expense.html">Add Expenses</a>
+        <a href="r&p.html" class="active">Reports & Analysis</a>
+        <a href="notes.html">Notes</a>
+      </nav>
+    </aside>
+
+    <!-- MAIN -->
+    <main class="main report-main">
+
+      <!-- FILTER BAR -->
+      <div class="filter-bar">
+        <div class="filter-group">
+          <label>Period:</label>
+          <select id="periodFilter" onchange="updateReports()">
+            <option value="week">This Week</option>
+            <option value="month" selected>This Month</option>
+            <option value="year">This Year</option>
+            <option value="custom">Custom Range</option>
+          </select>
+        </div>
+        <div class="filter-group" id="customDateRange" style="display: none;">
+          <input type="date" id="startDate">
+          <span>to</span>
+          <input type="date" id="endDate">
+          <button onclick="applyCustomRange()">Apply</button>
+        </div>
+        <div class="filter-group">
+          <label>Category:</label>
+          <select id="categoryFilter" onchange="updateReports()">
+            <option value="all">All Categories</option>
+            <option value="Food">Food</option>
+            <option value="Travel">Travel</option>
+            <option value="Shopping">Shopping</option>
+            <option value="Entertainment">Entertainment</option>
+            <option value="Bills">Bills</option>
+            <option value="Health">Health</option>
+            <option value="Education">Education</option>
+            <option value="Other">Other</option>
+          </select>
+        </div>
+        <button class="export-btn" onclick="exportReport()">📊 Export Report</button>
+      </div>
+
+      <!-- REPORTS DASHBOARD -->
+      <div class="reports-dashboard">
+
+        <!-- COMPACT GRID LAYOUT -->
+        <div class="report-grid">
+          
+          <!-- Left Column: Summary Cards & Charts -->
+          <div class="grid-column left-column">
+            <!-- Summary Cards -->
+            <div class="summary-row">
+              <div class="report-card summary-card">
+                <div class="card-icon">💰</div>
+                <div class="card-content">
+                  <h4>Total Expenses</h4>
+                  <h2 id="totalExpenses">₹0</h2>
+                  <p id="expenseChange">+0% vs last period</p>
+                </div>
+              </div>
+
+              <div class="report-card summary-card">
+                <div class="card-icon">📊</div>
+                <div class="card-content">
+                  <h4>Current Period Avg</h4>
+                  <h2 id="avgDaily">₹0</h2>
+                  <p id="avgChange">+0% vs last period</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="summary-row">
+              <div class="report-card summary-card">
+                <div class="card-icon">�</div>
+                <div class="card-content">
+                  <h4>This Month</h4>
+                  <h2 id="monthlyTotal">₹0</h2>
+                  <p id="monthlyChange">+0% vs last month</p>
+                </div>
+              </div>
+
+              <div class="report-card summary-card">
+                <div class="card-icon">📆</div>
+                <div class="card-content">
+                  <h4>This Year</h4>
+                  <h2 id="yearlyTotal">₹0</h2>
+                  <p id="yearlyChange">+0% vs last year</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Averages Breakdown -->
+            <div class="report-card analysis-card">
+              <h3>📊 Spending Averages</h3>
+              <div id="spendingAverages" class="insights-content">
+                <div class="insight-item">
+                  <span class="insight-icon">📅</span>
+                  <div>
+                    <strong>Daily Avg:</strong>
+                    <span id="dailyAvg">-</span>
+                  </div>
+                </div>
+                <div class="insight-item">
+                  <span class="insight-icon">📊</span>
+                  <div>
+                    <strong>Weekly Avg:</strong>
+                    <span id="weeklyAvg">-</span>
+                  </div>
+                </div>
+                <div class="insight-item">
+                  <span class="insight-icon">📈</span>
+                  <div>
+                    <strong>Monthly Avg:</strong>
+                    <span id="monthlyAvg">-</span>
+                  </div>
+                </div>
+                <div class="insight-item">
+                  <span class="insight-icon">📆</span>
+                  <div>
+                    <strong>Yearly Avg:</strong>
+                    <span id="yearlyAvg">-</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Middle Column: Charts & Category Analysis -->
+          <div class="grid-column middle-column">
+            <!-- Charts Row -->
+            <div class="charts-container">
+              <div class="report-card chart-card">
+                <h3>Category Breakdown</h3>
+                <canvas id="categoryChart"></canvas>
+                <div class="chart-stats" id="categoryStats">
+                  <!-- Dynamic category stats -->
+                </div>
+              </div>
+
+              <div class="report-card chart-card">
+                <h3>Spending Trend</h3>
+                <canvas id="trendChart"></canvas>
+                <div class="chart-stats" id="trendStats">
+                  <!-- Dynamic trend stats -->
+                </div>
+              </div>
+            </div>
+
+            <!-- Category Comparison -->
+            <div class="report-card analysis-card">
+              <h3>🏷️ Category Comparison</h3>
+              <div id="categoryComparison" class="insights-content">
+                <!-- Dynamic category comparison items -->
+              </div>
+            </div>
+          </div>
+
+          <!-- Right Column: Top Expenses, Predictions & Statement -->
+          <div class="grid-column right-column">
+            <div class="report-card chart-card">
+              <h3>Top Expenses</h3>
+              <div id="topExpensesList" class="top-expenses-list"></div>
+            </div>
+
+            <div class="report-card analysis-card">
+              <h3> Predictions</h3>
+              <div id="predictions" class="insights-content">
+                <div class="insight-item">
+                  <span class="insight-icon"></span>
+                  <div>
+                    <strong>Month End:</strong>
+                    <span id="monthEndPrediction">-</span>
+                  </div>
+                </div>
+                <div class="insight-item">
+                  <span class="insight-icon"></span>
+                  <div>
+                    <strong>Year End:</strong>
+                    <span id="yearEndPrediction">-</span>
+                  </div>
+                </div>
+                <div class="insight-item">
+                  <span class="insight-icon"></span>
+                  <div>
+                    <strong>Next Month:</strong>
+                    <span id="nextMonthPrediction">-</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="report-card statement-card">
+              <h3> Expense Statement</h3>
+              <div class="statement-preview">
+                <p><strong id="statementCount">0</strong> transactions recorded</p>
+                <p>Total: <strong id="statementTotal">0</strong></p>
+                <button class="view-statement-btn" onclick="openStatementModal()"> View Full Statement</button>
+              </div>
+            </div>
+
+
+      </div>
+
+    </main>
+  </div>
+</div>
+
+<!-- STATEMENT MODAL -->
+<div id="statementModal" class="statement-modal">
+  <div class="statement-modal-content">
+    <div class="statement-modal-header">
+      <h2>📜 Expense Statement</h2>
+      <span class="close" onclick="closeStatementModal()">&times;</span>
+    </div>
+    <div class="statement-filters">
+      <select id="statementPeriod" onchange="updateStatementView()">
+        <option value="all">All Time</option>
+        <option value="month" selected>This Month</option>
+        <option value="week">This Week</option>
+        <option value="year">This Year</option>
+      </select>
+      <select id="statementCategory" onchange="updateStatementView()">
+        <option value="all">All Categories</option>
+        <option value="Food">Food</option>
+        <option value="Travel">Travel</option>
+        <option value="Shopping">Shopping</option>
+        <option value="Entertainment">Entertainment</option>
+        <option value="Bills">Bills</option>
+        <option value="Health">Health</option>
+        <option value="Education">Education</option>
+        <option value="Other">Other</option>
+      </select>
+      <button class="print-btn" onclick="printStatement()">🖨️ Print</button>
+    </div>
+    <div class="statement-summary">
+      <div class="summary-item">
+        <span>Total Transactions:</span>
+        <strong id="modalTotalTransactions">0</strong>
+      </div>
+      <div class="summary-item">
+        <span>Total Amount:</span>
+        <strong id="modalTotalAmount">₹0</strong>
+      </div>
+      <div class="summary-item">
+        <span>Average:</span>
+        <strong id="modalAverage">₹0</strong>
+      </div>
+    </div>
+    <div class="statement-table-container">
+      <table class="statement-table">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Date</th>
+            <th>Category</th>
+            <th>Description</th>
+            <th>Amount</th>
+          </tr>
+        </thead>
+        <tbody id="statementTableBody">
+          <!-- Dynamic content -->
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<script>
+  let expenses = JSON.parse(localStorage.getItem('expenses')) || [];
+  let expenseHistory = JSON.parse(localStorage.getItem('expenseHistory')) || [];
+  
+  // Combine current expenses with archived history for complete statement view
+  function getAllExpensesWithHistory() {
+    let allExpenses = [...expenses];
+    
+    // Add all archived expenses
+    expenseHistory.forEach(archive => {
+      if (archive.expenses && Array.isArray(archive.expenses)) {
+        allExpenses = allExpenses.concat(archive.expenses);
+      }
+    });
+    
+    return allExpenses;
+  }
+  
+  let currentPeriod = 'month';
+  let customStartDate = null;
+  let customEndDate = null;
+  
+  // Chart instances
+  let categoryChart = null;
+  let trendChart = null;
+
+  // Initialize
+  document.addEventListener('DOMContentLoaded', function() {
+    updateReports();
+    
+    // Show/hide custom date range
+    document.getElementById('periodFilter').addEventListener('change', function(e) {
+      const customRange = document.getElementById('customDateRange');
+      if (e.target.value === 'custom') {
+        customRange.style.display = 'flex';
+      } else {
+        customRange.style.display = 'none';
+        currentPeriod = e.target.value;
+        updateReports();
+      }
+    });
+  });
+
+  function applyCustomRange() {
+    const startDate = document.getElementById('startDate').value;
+    const endDate = document.getElementById('endDate').value;
+    
+    if (startDate && endDate) {
+      customStartDate = new Date(startDate);
+      customEndDate = new Date(endDate);
+      currentPeriod = 'custom';
+      updateReports();
+    } else {
+      alert('Please select both start and end dates');
+    }
+  }
+
+  function getDateRange(period) {
+    const now = new Date();
+    let startDate, endDate = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 23, 59, 59);
+    
+    if (period === 'custom' && customStartDate && customEndDate) {
+      return { startDate: customStartDate, endDate: customEndDate };
+    }
+    
+    switch(period) {
+      case 'week':
+        startDate = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
+        break;
+      case 'month':
+        startDate = new Date(now.getFullYear(), now.getMonth(), 1);
+        break;
+      case 'year':
+        startDate = new Date(now.getFullYear(), 0, 1);
+        break;
+      default:
+        startDate = new Date(now.getFullYear(), now.getMonth(), 1);
+    }
+    
+    return { startDate, endDate };
+  }
+
+  function filterExpenses() {
+    const { startDate, endDate } = getDateRange(currentPeriod);
+    const categoryFilter = document.getElementById('categoryFilter').value;
+    
+    return expenses.filter(expense => {
+      const expenseDate = new Date(expense.date);
+      const matchesDate = expenseDate >= startDate && expenseDate <= endDate;
+      const matchesCategory = categoryFilter === 'all' || expense.category === categoryFilter;
+      return matchesDate && matchesCategory;
+    });
+  }
+
+  function updateReports() {
+    const filteredExpenses = filterExpenses();
+    updateSummaryCards(filteredExpenses);
+    updateMonthlyYearlyCards();
+    updateCategoryChart(filteredExpenses);
+    updateTrendChart(filteredExpenses);
+    updateTopExpenses(filteredExpenses);
+    updateAverages();
+    updateCategoryComparison();
+    updatePredictions();
+    updateStatementPreview();
+  }
+
+  function updateSummaryCards(filteredExpenses) {
+    const total = filteredExpenses.reduce((sum, exp) => sum + parseFloat(exp.amount), 0);
+    const { startDate, endDate } = getDateRange(currentPeriod);
+    const days = Math.max(1, Math.ceil((endDate - startDate) / (1000 * 60 * 60 * 24)));
+    const avgDaily = total / days;
+    
+    // Get previous period for comparison
+    const prevPeriodExpenses = getPreviousPeriodExpenses();
+    const prevTotal = prevPeriodExpenses.reduce((sum, exp) => sum + parseFloat(exp.amount), 0);
+    const prevAvgDaily = prevTotal / days;
+    
+    // Calculate changes
+    const totalChange = prevTotal > 0 ? ((total - prevTotal) / prevTotal * 100).toFixed(1) : 0;
+    const avgDailyChange = prevAvgDaily > 0 ? ((avgDaily - prevAvgDaily) / prevAvgDaily * 100).toFixed(1) : 0;
+    
+    document.getElementById('totalExpenses').textContent = `₹${Math.round(total).toLocaleString('en-IN')}`;
+    document.getElementById('expenseChange').textContent = `${totalChange >= 0 ? '+' : ''}${totalChange}% vs last period`;
+    document.getElementById('expenseChange').className = totalChange >= 0 ? 'negative-change' : 'positive-change';
+    
+    document.getElementById('avgDaily').textContent = `₹${Math.round(avgDaily).toLocaleString('en-IN')}/day`;
+    document.getElementById('avgChange').textContent = `${avgDailyChange >= 0 ? '+' : ''}${avgDailyChange}% vs last period`;
+    document.getElementById('avgChange').className = avgDailyChange >= 0 ? 'negative-change' : 'positive-change';
+  }
+
+  function updateMonthlyYearlyCards() {
+    const now = new Date();
+    const monthStart = new Date(now.getFullYear(), now.getMonth(), 1);
+    const monthEnd = new Date(now.getFullYear(), now.getMonth() + 1, 0, 23, 59, 59);
+    const yearStart = new Date(now.getFullYear(), 0, 1);
+    const yearEnd = new Date(now.getFullYear(), 11, 31, 23, 59, 59);
+    
+    // Current month
+    const monthExpenses = expenses.filter(exp => {
+      const date = new Date(exp.date);
+      return date >= monthStart && date <= monthEnd;
+    });
+    const monthTotal = monthExpenses.reduce((sum, exp) => sum + parseFloat(exp.amount), 0);
+    
+    // Last month
+    const lastMonthStart = new Date(now.getFullYear(), now.getMonth() - 1, 1);
+    const lastMonthEnd = new Date(now.getFullYear(), now.getMonth(), 0, 23, 59, 59);
+    const lastMonthExpenses = expenses.filter(exp => {
+      const date = new Date(exp.date);
+      return date >= lastMonthStart && date <= lastMonthEnd;
+    });
+    const lastMonthTotal = lastMonthExpenses.reduce((sum, exp) => sum + parseFloat(exp.amount), 0);
+    
+    // Current year
+    const yearExpenses = expenses.filter(exp => {
+      const date = new Date(exp.date);
+      return date >= yearStart && date <= yearEnd;
+    });
+    const yearTotal = yearExpenses.reduce((sum, exp) => sum + parseFloat(exp.amount), 0);
+    
+    // Last year
+    const lastYearStart = new Date(now.getFullYear() - 1, 0, 1);
+    const lastYearEnd = new Date(now.getFullYear() - 1, 11, 31, 23, 59, 59);
+    const lastYearExpenses = expenses.filter(exp => {
+      const date = new Date(exp.date);
+      return date >= lastYearStart && date <= lastYearEnd;
+    });
+    const lastYearTotal = lastYearExpenses.reduce((sum, exp) => sum + parseFloat(exp.amount), 0);
+    
+    // Calculate changes
+    const monthChange = lastMonthTotal > 0 ? ((monthTotal - lastMonthTotal) / lastMonthTotal * 100).toFixed(1) : 0;
+    const yearChange = lastYearTotal > 0 ? ((yearTotal - lastYearTotal) / lastYearTotal * 100).toFixed(1) : 0;
+    
+    document.getElementById('monthlyTotal').textContent = `₹${Math.round(monthTotal).toLocaleString('en-IN')}`;
+    document.getElementById('monthlyChange').textContent = `${monthChange >= 0 ? '+' : ''}${monthChange}% vs last month`;
+    document.getElementById('monthlyChange').className = monthChange >= 0 ? 'negative-change' : 'positive-change';
+    
+    document.getElementById('yearlyTotal').textContent = `₹${Math.round(yearTotal).toLocaleString('en-IN')}`;
+    document.getElementById('yearlyChange').textContent = `${yearChange >= 0 ? '+' : ''}${yearChange}% vs last year`;
+    document.getElementById('yearlyChange').className = yearChange >= 0 ? 'negative-change' : 'positive-change';
+  }
+
+  function getPreviousPeriodExpenses() {
+    const { startDate, endDate } = getDateRange(currentPeriod);
+    const periodLength = endDate - startDate;
+    const prevEndDate = new Date(startDate.getTime() - 1);
+    const prevStartDate = new Date(prevEndDate.getTime() - periodLength);
+    
+    const categoryFilter = document.getElementById('categoryFilter').value;
+    
+    return expenses.filter(expense => {
+      const expenseDate = new Date(expense.date);
+      const matchesDate = expenseDate >= prevStartDate && expenseDate <= prevEndDate;
+      const matchesCategory = categoryFilter === 'all' || expense.category === categoryFilter;
+      return matchesDate && matchesCategory;
+    });
+  }
+
+  function updateCategoryChart(filteredExpenses) {
+    const categoryTotals = {};
+    let total = 0;
+    filteredExpenses.forEach(expense => {
+      const cat = expense.category || 'Other';
+      const amount = parseFloat(expense.amount);
+      categoryTotals[cat] = (categoryTotals[cat] || 0) + amount;
+      total += amount;
+    });
+    
+    const ctx = document.getElementById('categoryChart').getContext('2d');
+    
+    if (categoryChart) {
+      categoryChart.destroy();
+    }
+    
+    categoryChart = new Chart(ctx, {
+      type: 'doughnut',
+      data: {
+        labels: Object.keys(categoryTotals),
+        datasets: [{
+          data: Object.values(categoryTotals),
+          backgroundColor: [
+            '#FF1493', '#FF69B4', '#FF85C1', '#FFB3D9', 
+            '#FF6B9D', '#FF1493CC', '#FF69B4CC', '#FF85C1CC'
+          ],
+          borderColor: '#FFFFFF',
+          borderWidth: 2
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: true,
+        plugins: {
+          legend: {
+            position: 'right',
+            labels: {
+              color: '#734128',
+              font: { size: 12, weight: 'bold' },
+              padding: 10
+            }
+          },
+          tooltip: {
+            callbacks: {
+              label: function(context) {
+                const value = context.parsed;
+                const total = context.dataset.data.reduce((a, b) => a + b, 0);
+                const percentage = ((value / total) * 100).toFixed(1);
+                return `${context.label}: ₹${Math.round(value).toLocaleString('en-IN')} (${percentage}%)`;
+              }
+            }
+          }
+        }
+      }
+    });
+    
+    // Update category stats
+    const topCategories = Object.entries(categoryTotals)
+      .sort((a, b) => b[1] - a[1])
+      .slice(0, 3);
+    
+    const totalCategories = Object.keys(categoryTotals).length;
+    const avgPerCategory = totalCategories > 0 ? total / totalCategories : 0;
+    
+    const statsHtml = topCategories.map(([cat, amount]) => {
+      const percent = total > 0 ? ((amount / total) * 100).toFixed(0) : 0;
+      return `
+        <div class="stat-item">
+          <label>${cat}</label>
+          <value>${percent}%</value>
+        </div>
+      `;
+    }).join('') + `
+      <div class="stat-item">
+        <label>Total Categories</label>
+        <value>${totalCategories}</value>
+      </div>
+      <div class="stat-item">
+        <label>Avg/Category</label>
+        <value>₹${Math.round(avgPerCategory).toLocaleString('en-IN')}</value>
+      </div>
+    `;
+    
+    document.getElementById('categoryStats').innerHTML = statsHtml || '<div class="stat-item"><label>No data</label><value>-</value></div>';
+  }
+
+  function updateTrendChart(filteredExpenses) {
+    const { startDate, endDate } = getDateRange(currentPeriod);
+    const days = Math.ceil((endDate - startDate) / (1000 * 60 * 60 * 24));
+    const dailyTotals = {};
+    
+    // Initialize all days
+    for (let i = 0; i <= days; i++) {
+      const date = new Date(startDate.getTime() + i * 24 * 60 * 60 * 1000);
+      const dateStr = date.toLocaleDateString('en-IN', { month: 'short', day: 'numeric' });
+      dailyTotals[dateStr] = 0;
+    }
+    
+    // Sum expenses by day
+    filteredExpenses.forEach(expense => {
+      const date = new Date(expense.date);
+      const dateStr = date.toLocaleDateString('en-IN', { month: 'short', day: 'numeric' });
+      dailyTotals[dateStr] = (dailyTotals[dateStr] || 0) + parseFloat(expense.amount);
+    });
+    
+    const ctx = document.getElementById('trendChart').getContext('2d');
+    
+    if (trendChart) {
+      trendChart.destroy();
+    }
+    
+    trendChart = new Chart(ctx, {
+      type: 'line',
+      data: {
+        labels: Object.keys(dailyTotals),
+        datasets: [{
+          label: 'Daily Spending',
+          data: Object.values(dailyTotals),
+          borderColor: '#FF1493',
+          backgroundColor: 'rgba(255, 20, 147, 0.1)',
+          borderWidth: 3,
+          fill: true,
+          tension: 0.4,
+          pointRadius: 4,
+          pointBackgroundColor: '#FF1493',
+          pointBorderColor: '#FFFFFF',
+          pointBorderWidth: 2
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: true,
+        plugins: {
+          legend: { display: false },
+          tooltip: {
+            callbacks: {
+              label: function(context) {
+                return `₹${Math.round(context.parsed.y).toLocaleString('en-IN')}`;
+              }
+            }
+          }
+        },
+        scales: {
+          y: {
+            beginAtZero: true,
+            ticks: {
+              color: '#734128',
+              callback: function(value) {
+                return '₹' + value.toLocaleString('en-IN');
+              }
+            },
+            grid: { color: 'rgba(115, 65, 40, 0.1)' }
+          },
+          x: {
+            ticks: { color: '#734128', maxRotation: 45, minRotation: 45 },
+            grid: { display: false }
+          }
+        }
+      }
+    });
+    
+    // Update trend stats
+    const values = Object.values(dailyTotals).filter(v => v > 0);
+    const maxSpend = values.length > 0 ? Math.max(...values) : 0;
+    const avgSpend = values.length > 0 ? values.reduce((a, b) => a + b, 0) / values.length : 0;
+    const daysWithSpending = values.length;
+    const totalDays = Object.keys(dailyTotals).length;
+    const spendingRate = totalDays > 0 ? ((daysWithSpending / totalDays) * 100).toFixed(0) : 0;
+    
+    const statsHtml = `
+      <div class="stat-item">
+        <label>Peak Day</label>
+        <value>₹${Math.round(maxSpend).toLocaleString('en-IN')}</value>
+      </div>
+      <div class="stat-item">
+        <label>Daily Avg</label>
+        <value>₹${Math.round(avgSpend).toLocaleString('en-IN')}</value>
+      </div>
+      <div class="stat-item">
+        <label>Active Days</label>
+        <value>${daysWithSpending}</value>
+      </div>
+      <div class="stat-item">
+        <label>Total Days</label>
+        <value>${totalDays}</value>
+      </div>
+      <div class="stat-item">
+        <label>Activity Rate</label>
+        <value>${spendingRate}%</value>
+      </div>
+    `;
+    
+    document.getElementById('trendStats').innerHTML = statsHtml;
+  }
+
+  function updateTopExpenses(filteredExpenses) {
+    const sorted = [...filteredExpenses].sort((a, b) => parseFloat(b.amount) - parseFloat(a.amount));
+    const top10 = sorted.slice(0, 10);
+    
+    const html = top10.map((expense, index) => `
+      <div class="top-expense-item">
+        <span class="rank">#${index + 1}</span>
+        <div class="expense-details">
+          <strong>${expense.description || 'Expense'}</strong>
+          <small>${expense.category} • ${new Date(expense.date).toLocaleDateString('en-IN')}</small>
+        </div>
+        <span class="amount">₹${Math.round(parseFloat(expense.amount)).toLocaleString('en-IN')}</span>
+      </div>
+    `).join('');
+    
+    document.getElementById('topExpensesList').innerHTML = html || '<p style="text-align: center; color: #734128; opacity: 0.6;">No expenses found</p>';
+  }
+
+  function updateAverages() {
+    const now = new Date();
+    const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    const weekAgo = new Date(today.getTime() - 7 * 24 * 60 * 60 * 1000);
+    const monthStart = new Date(now.getFullYear(), now.getMonth(), 1);
+    const yearStart = new Date(now.getFullYear(), 0, 1);
+    
+    // Calculate averages
+    const dailyExpenses = expenses.filter(exp => new Date(exp.date) >= today);
+    const weeklyExpenses = expenses.filter(exp => new Date(exp.date) >= weekAgo);
+    const monthlyExpenses = expenses.filter(exp => new Date(exp.date) >= monthStart);
+    const yearlyExpenses = expenses.filter(exp => new Date(exp.date) >= yearStart);
+    
+    const dailyAvg = dailyExpenses.reduce((sum, exp) => sum + parseFloat(exp.amount), 0);
+    const weeklyAvg = weeklyExpenses.reduce((sum, exp) => sum + parseFloat(exp.amount), 0) / 7;
+    const daysInMonth = now.getDate();
+    const monthlyAvg = monthlyExpenses.reduce((sum, exp) => sum + parseFloat(exp.amount), 0) / daysInMonth;
+    const daysInYear = Math.ceil((now - yearStart) / (1000 * 60 * 60 * 24));
+    const yearlyAvg = yearlyExpenses.reduce((sum, exp) => sum + parseFloat(exp.amount), 0) / daysInYear;
+    
+    document.getElementById('dailyAvg').textContent = `₹${Math.round(dailyAvg).toLocaleString('en-IN')}/day`;
+    document.getElementById('weeklyAvg').textContent = `₹${Math.round(weeklyAvg).toLocaleString('en-IN')}/day`;
+    document.getElementById('monthlyAvg').textContent = `₹${Math.round(monthlyAvg).toLocaleString('en-IN')}/day`;
+    document.getElementById('yearlyAvg').textContent = `₹${Math.round(yearlyAvg).toLocaleString('en-IN')}/day`;
+  }
+
+  function updatePredictions() {
+    const now = new Date();
+    const monthStart = new Date(now.getFullYear(), now.getMonth(), 1);
+    const yearStart = new Date(now.getFullYear(), 0, 1);
+    
+    // Month-to-date expenses
+    const monthExpenses = expenses.filter(exp => new Date(exp.date) >= monthStart);
+    const monthTotal = monthExpenses.reduce((sum, exp) => sum + parseFloat(exp.amount), 0);
+    const daysElapsed = now.getDate();
+    const daysInMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0).getDate();
+    const monthEndPrediction = (monthTotal / daysElapsed) * daysInMonth;
+    
+    // Year-to-date expenses
+    const yearExpenses = expenses.filter(exp => new Date(exp.date) >= yearStart);
+    const yearTotal = yearExpenses.reduce((sum, exp) => sum + parseFloat(exp.amount), 0);
+    const daysInYearElapsed = Math.ceil((now - yearStart) / (1000 * 60 * 60 * 24));
+    const daysInYear = 365;
+    const yearEndPrediction = (yearTotal / daysInYearElapsed) * daysInYear;
+    
+    // Next month prediction based on last 3 months average
+    const last3MonthsTotal = [];
+    for (let i = 0; i < 3; i++) {
+      const start = new Date(now.getFullYear(), now.getMonth() - i, 1);
+      const end = new Date(now.getFullYear(), now.getMonth() - i + 1, 0, 23, 59, 59);
+      const monthExp = expenses.filter(exp => {
+        const date = new Date(exp.date);
+        return date >= start && date <= end;
+      });
+      const total = monthExp.reduce((sum, exp) => sum + parseFloat(exp.amount), 0);
+      last3MonthsTotal.push(total);
+    }
+    const nextMonthPrediction = last3MonthsTotal.reduce((a, b) => a + b, 0) / last3MonthsTotal.length;
+    
+    document.getElementById('monthEndPrediction').textContent = `₹${Math.round(monthEndPrediction).toLocaleString('en-IN')}`;
+    document.getElementById('yearEndPrediction').textContent = `₹${Math.round(yearEndPrediction).toLocaleString('en-IN')}`;
+    document.getElementById('nextMonthPrediction').textContent = `₹${Math.round(nextMonthPrediction).toLocaleString('en-IN')}`;
+  }
+
+  function updateRecommendations(filteredExpenses) {
+    const total = filteredExpenses.reduce((sum, exp) => sum + parseFloat(exp.amount), 0);
+    const count = filteredExpenses.length;
+    
+    if (count === 0) {
+      document.getElementById('rec1').textContent = 'No expenses recorded yet. Start tracking to get insights!';
+      document.getElementById('rec2').textContent = 'Add your daily expenses to see personalized recommendations.';
+      document.getElementById('rec3').textContent = 'Set spending limits to stay on budget.';
+      return;
+    }
+    
+    // Category analysis
+    const categoryTotals = {};
+    filteredExpenses.forEach(expense => {
+      const cat = expense.category || 'Other';
+      categoryTotals[cat] = (categoryTotals[cat] || 0) + parseFloat(expense.amount);
+    });
+    const topCategory = Object.entries(categoryTotals).sort((a, b) => b[1] - a[1])[0];
+    const topCategoryPercent = (topCategory[1] / total * 100).toFixed(0);
+    
+    // Generate recommendations
+    const recommendations = [];
+    
+    if (topCategoryPercent > 40) {
+      recommendations.push(`Your ${topCategory[0]} spending is ${topCategoryPercent}% of total expenses. Consider ways to reduce this category.`);
+    }
+    
+    const avgTransaction = total / count;
+    if (avgTransaction > 500) {
+      recommendations.push(`Your average transaction is ₹${Math.round(avgTransaction)}. Look for bulk purchase opportunities to save more.`);
+    } else {
+      recommendations.push(`You're making frequent small purchases (avg ₹${Math.round(avgTransaction)}). Consolidate purchases to save time.`);
+    }
+    
+    const prevExpenses = getPreviousPeriodExpenses();
+    const prevTotal = prevExpenses.reduce((sum, exp) => sum + parseFloat(exp.amount), 0);
+    if (total > prevTotal) {
+      const increase = ((total - prevTotal) / prevTotal * 100).toFixed(0);
+      recommendations.push(`Your spending increased by ${increase}% compared to last period. Review recent expenses for savings.`);
+    } else if (total < prevTotal) {
+      const decrease = ((prevTotal - total) / prevTotal * 100).toFixed(0);
+      recommendations.push(`Great job! You reduced spending by ${decrease}% compared to last period. Keep it up!`);
+    } else {
+      recommendations.push(`Your spending is consistent with last period. Set new savings goals to improve further.`);
+    }
+    
+    document.getElementById('rec1').textContent = recommendations[0] || 'Keep tracking expenses regularly!';
+    document.getElementById('rec2').textContent = recommendations[1] || 'Review your spending patterns weekly.';
+  }
+
+  function updateStatementPreview() {
+    const now = new Date();
+    const monthStart = new Date(now.getFullYear(), now.getMonth(), 1);
+    
+    // Use all expenses including history
+    const allExpenses = getAllExpensesWithHistory();
+    const monthExpenses = allExpenses.filter(exp => new Date(exp.date) >= monthStart);
+    const total = monthExpenses.reduce((sum, exp) => sum + parseFloat(exp.amount), 0);
+    
+    document.getElementById('statementCount').textContent = monthExpenses.length;
+    document.getElementById('statementTotal').textContent = `₹${Math.round(total).toLocaleString('en-IN')}`;
+  }
+
+  function openStatementModal() {
+    document.getElementById('statementModal').classList.add('active');
+    updateStatementView();
+  }
+
+  function closeStatementModal() {
+    document.getElementById('statementModal').classList.remove('active');
+  }
+
+  function updateStatementView() {
+    const period = document.getElementById('statementPeriod').value;
+    const category = document.getElementById('statementCategory').value;
+    
+    // Use all expenses including history for statement
+    let filteredExpenses = getAllExpensesWithHistory();
+    const now = new Date();
+    
+    // Filter by period
+    if (period === 'week') {
+      const weekAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
+      filteredExpenses = filteredExpenses.filter(exp => new Date(exp.date) >= weekAgo);
+    } else if (period === 'month') {
+      const monthStart = new Date(now.getFullYear(), now.getMonth(), 1);
+      filteredExpenses = filteredExpenses.filter(exp => new Date(exp.date) >= monthStart);
+    } else if (period === 'year') {
+      const yearStart = new Date(now.getFullYear(), 0, 1);
+      filteredExpenses = filteredExpenses.filter(exp => new Date(exp.date) >= yearStart);
+    }
+    
+    // Filter by category
+    if (category !== 'all') {
+      filteredExpenses = filteredExpenses.filter(exp => exp.category === category);
+    }
+    
+    // Sort by date (newest first)
+    filteredExpenses.sort((a, b) => new Date(b.date) - new Date(a.date));
+    
+    // Update summary
+    const total = filteredExpenses.reduce((sum, exp) => sum + parseFloat(exp.amount), 0);
+    const average = filteredExpenses.length > 0 ? total / filteredExpenses.length : 0;
+    
+    document.getElementById('modalTotalTransactions').textContent = filteredExpenses.length;
+    document.getElementById('modalTotalAmount').textContent = `₹${Math.round(total).toLocaleString('en-IN')}`;
+    document.getElementById('modalAverage').textContent = `₹${Math.round(average).toLocaleString('en-IN')}`;
+    
+    // Update table
+    const tbody = document.getElementById('statementTableBody');
+    if (filteredExpenses.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="5" style="text-align: center; padding: 20px; opacity: 0.7;">No transactions found</td></tr>';
+      return;
+    }
+    
+    const html = filteredExpenses.map((expense, index) => {
+      const date = new Date(expense.date);
+      const dateStr = date.toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' });
+      return `
+        <tr>
+          <td>${index + 1}</td>
+          <td>${dateStr}</td>
+          <td><span class="category-badge">${expense.category || 'Other'}</span></td>
+          <td>${expense.description || '-'}</td>
+          <td>₹${Math.round(parseFloat(expense.amount)).toLocaleString('en-IN')}</td>
+        </tr>
+      `;
+    }).join('');
+    
+    tbody.innerHTML = html;
+  }
+
+  function printStatement() {
+    window.print();
+  }
+
+  // Close modal when clicking outside
+  window.onclick = function(event) {
+    const modal = document.getElementById('statementModal');
+    if (event.target === modal) {
+      closeStatementModal();
+    }
+  }
+
+  function updateCategoryComparison() {
+    const now = new Date();
+    const monthStart = new Date(now.getFullYear(), now.getMonth(), 1);
+    const lastMonthStart = new Date(now.getFullYear(), now.getMonth() - 1, 1);
+    const lastMonthEnd = new Date(now.getFullYear(), now.getMonth(), 0, 23, 59, 59);
+    
+    // Current month categories
+    const currentCategories = {};
+    const lastCategories = {};
+    
+    expenses.forEach(exp => {
+      const date = new Date(exp.date);
+      const cat = exp.category || 'Other';
+      const amount = parseFloat(exp.amount);
+      
+      if (date >= monthStart) {
+        currentCategories[cat] = (currentCategories[cat] || 0) + amount;
+      } else if (date >= lastMonthStart && date <= lastMonthEnd) {
+        lastCategories[cat] = (lastCategories[cat] || 0) + amount;
+      }
+    });
+    
+    // Get top 4 categories
+    const sortedCategories = Object.entries(currentCategories)
+      .sort((a, b) => b[1] - a[1])
+      .slice(0, 4);
+    
+    const html = sortedCategories.map(([category, amount]) => {
+      const lastAmount = lastCategories[category] || 0;
+      const change = lastAmount > 0 ? ((amount - lastAmount) / lastAmount * 100).toFixed(0) : 0;
+      const changeText = change >= 0 ? `↑${change}%` : `↓${Math.abs(change)}%`;
+      const changeColor = change >= 0 ? '#FFB6C1' : '#90EE90';
+      
+      return `
+        <div class="insight-item">
+          <span class="insight-icon">🏷️</span>
+          <div>
+            <strong>${category}:</strong>
+            <span>₹${Math.round(amount).toLocaleString('en-IN')} <span style="color: ${changeColor}">${changeText}</span></span>
+          </div>
+        </div>
+      `;
+    }).join('');
+    
+    document.getElementById('categoryComparison').innerHTML = html || '<p style="text-align: center; color: #FFFFFF; opacity: 0.7;">No data available</p>';
+  }
+
+  function exportReport() {
+    const filteredExpenses = filterExpenses();
+    const { startDate, endDate } = getDateRange(currentPeriod);
+    
+    let csv = 'Date,Category,Description,Amount\n';
+    filteredExpenses.forEach(expense => {
+      csv += `${expense.date},${expense.category},"${expense.description}",${expense.amount}\n`;
+    });
+    
+    const blob = new Blob([csv], { type: 'text/csv' });
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `expense-report-${startDate.toISOString().split('T')[0]}-to-${endDate.toISOString().split('T')[0]}.csv`;
+    a.click();
+    window.URL.revokeObjectURL(url);
+  }
+</script>
+
+</body>
+</html>
