@@ -2829,32 +2829,95 @@ body.add-expense-page {
 
 /* Responsive */
 @media (max-width: 768px) {
+  /* Notes Page - Compact Mobile */
   .notes-grid {
     grid-template-columns: 1fr;
+    gap: 8px;
+    padding: 8px;
+  }
+  
+  .note-card {
+    padding: 10px;
+    min-height: 100px;
+  }
+  
+  .note-card h3 {
+    font-size: 14px;
+    margin-bottom: 6px;
+  }
+  
+  .note-date,
+  .note-preview {
+    font-size: 11px;
   }
   
   .notes-header {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 15px;
+    padding: 10px;
+    gap: 8px;
+    flex-direction: row;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+  
+  .notes-header h1 {
+    font-size: 16px;
   }
   
   .notes-actions {
     width: 100%;
-    flex-direction: column;
+    gap: 8px;
   }
   
   .notes-actions input {
     width: 100%;
+    padding: 8px;
+    font-size: 13px;
+  }
+  
+  .notes-actions button {
+    padding: 8px 12px;
+    font-size: 13px;
+    white-space: nowrap;
+  }
+  
+  .reminder-badge {
+    font-size: 9px;
+    padding: 2px 6px;
+  }
+  
+  .reminder-time {
+    font-size: 10px;
   }
   
   .reminder-row {
-    flex-direction: column;
+    flex-direction: row;
+    gap: 6px;
+    font-size: 10px;
   }
   
   .note-modal-content {
-    width: 95%;
-    max-height: 90vh;
+    width: 100%;
+    height: 100%;
+    max-height: 100vh;
+    border-radius: 0;
+  }
+  
+  .note-modal-header {
+    padding: 12px;
+  }
+  
+  .note-modal-header h2 {
+    font-size: 16px;
+  }
+  
+  .note-modal-body {
+    padding: 12px;
+  }
+  
+  .note-modal-body input,
+  .note-modal-body textarea {
+    font-size: 14px;
+    padding: 10px;
   }
 }
 
@@ -3401,128 +3464,117 @@ body.login-page {
   }
 }
 
-/* COMPREHENSIVE MOBILE RESPONSIVE */
+/* COMPREHENSIVE MOBILE RESPONSIVE - ULTRA COMPACT */
 @media (max-width: 768px) {
-  /* Top Navigation */
+  /* Make body scrollable smoothly */
+  body {
+    overflow-x: hidden;
+  }
+  
+  /* App container */
+  .app {
+    height: auto;
+    min-height: 100vh;
+  }
+  
+  /* Top Navigation - Super Compact */
   .top-nav {
-    padding: 10px 12px;
-    gap: 8px;
-    flex-wrap: wrap;
+    padding: 6px 8px;
+    gap: 6px;
+    flex-wrap: nowrap;
+    min-height: auto;
   }
   
   .top-nav h1 {
-    font-size: 16px !important;
+    font-size: 13px !important;
+    white-space: nowrap;
   }
   
   .hamburger {
-    padding: 8px;
+    padding: 6px;
+    width: 32px;
+    height: 32px;
   }
   
   .hamburger span {
-    width: 20px;
+    width: 18px;
+    height: 2px;
   }
   
-  /* Top Reminders */
+  /* Hide or minimize top reminders on mobile */
   .top-reminders {
-    max-width: 100%;
-    order: 3;
-    width: 100%;
-    justify-content: flex-start;
+    display: none;
   }
   
-  .top-reminder-item {
-    padding: 4px 8px;
-    gap: 6px;
-    min-width: auto;
-  }
-  
-  .top-reminder-time {
-    font-size: 11px;
-    min-width: 60px;
-    padding: 2px 6px;
-  }
-  
-  .top-reminder-label {
-    font-size: 9px;
-  }
-  
-  .top-reminder-text {
-    font-size: 11px;
-    max-width: 120px;
-  }
-  
-  /* Top Buttons */
+  /* Top Buttons - Compact */
   .top-settings-btn,
   .top-logout-btn {
-    padding: 8px 12px;
-    font-size: 12px;
+    padding: 6px 10px;
+    font-size: 11px;
     min-width: auto;
   }
   
   /* Sidebar */
   .sidebar {
-    width: 250px;
-    padding: 15px;
+    width: 220px;
+    padding: 12px;
     z-index: 1000;
   }
   
   .sidebar-profile {
-    padding: 12px;
-    gap: 10px;
+    padding: 8px;
+    gap: 8px;
+    margin-bottom: 15px;
   }
   
   .profile-avatar {
-    width: 40px;
-    height: 40px;
-    font-size: 22px;
+    width: 35px;
+    height: 35px;
+    font-size: 18px;
   }
   
   .profile-name {
-    font-size: 14px;
+    font-size: 13px;
   }
   
   .profile-age {
-    font-size: 12px;
+    font-size: 11px;
   }
   
   .logo {
-    font-size: 18px;
-    margin-bottom: 20px;
+    font-size: 15px;
+    margin-bottom: 15px;
   }
   
   .sidebar a {
-    padding: 12px;
-    font-size: 14px;
+    padding: 8px 10px;
+    font-size: 13px;
+    margin-bottom: 4px;
   }
   
-  /* Main Content */
+  /* Main Content - Ultra Compact */
   .main {
-    padding: 8px 6px 6px 6px;
+    padding: 4px;
+    overflow-y: auto;
   }
   
-  /* Card Rows - Stack on Mobile */
+  /* Card Rows - 2 Column Grid for Compact View */
   .card-row {
-    flex-direction: column;
-    gap: 12px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6px;
     max-height: none !important;
-    margin-bottom: 12px;
+    margin-bottom: 6px;
+    padding: 0 !important;
+    margin-top: 0 !important;
   }
   
-  .card-row.row-2,
-  .card-row.row-5 {
-    padding-left: 0;
-    margin-top: 0;
-  }
-  
-  .card-row.row-2 .card,
-  .card-row.row-5 .card {
-    min-height: 140px;
-  }
-  
-  /* Cards */
+  /* Cards - Ultra Compact */
   .card {
-    padding: 16px;
-    min-height: 120px;
+    padding: 8px;
+    min-height: 90px;
+    border-radius: 10px;
+    border-width: 2px;
   }
   
   .card-content {
@@ -3530,194 +3582,394 @@ body.login-page {
   }
   
   .card-value {
-    font-size: 28px !important;
+    font-size: 18px !important;
+    margin-bottom: 2px !important;
   }
   
   .card-title {
-    font-size: 13px !important;
+    font-size: 10px !important;
+    line-height: 1.2;
   }
   
-  /* Ring Card Specific */
+  /* Ring Card Specific - Side by Side */
   .ring-card {
-    flex-direction: column !important;
+    flex-direction: row !important;
     align-items: center !important;
-    gap: 15px;
+    gap: 6px;
+    justify-content: space-between;
   }
   
   .ring-content {
-    order: 2;
-    text-align: center;
+    order: 1;
+    text-align: left;
     padding-left: 0 !important;
+    flex: 1;
   }
   
   .ring-container {
-    order: 1;
+    order: 2;
+    flex-shrink: 0;
   }
   
   .ring-svg {
-    width: 100px !important;
-    height: 100px !important;
+    width: 50px !important;
+    height: 50px !important;
   }
   
   .ring-amount {
-    font-size: 16px !important;
+    font-size: 11px !important;
+    font-weight: 800 !important;
   }
   
   .ring-label {
-    font-size: 11px !important;
+    font-size: 8px !important;
   }
   
   .set-limit-btn {
-    position: static;
-    margin-top: 10px;
-    width: 100%;
-    order: 3;
+    position: absolute;
+    left: 6px;
+    bottom: 6px;
+    padding: 4px 8px;
+    font-size: 8px;
+    width: auto;
+    order: initial;
+    margin: 0;
   }
   
-  /* Info Cards */
+  /* Info Cards - Compact Lists */
   .card ul {
-    gap: 8px;
+    gap: 4px;
   }
   
   .card ul li {
-    font-size: 13px;
-    padding: 8px 10px;
+    font-size: 10px;
+    padding: 4px 6px;
+    line-height: 1.3;
   }
   
   /* Recent Transactions */
   .transaction-category {
-    font-size: 13px;
+    font-size: 10px;
   }
   
   .transaction-details {
-    font-size: 12px;
+    font-size: 9px;
   }
   
   /* Category Bars */
   .category-bar {
-    padding: 8px 10px;
+    padding: 4px 6px;
+    margin-bottom: 4px;
   }
   
   .category-name {
-    font-size: 12px;
+    font-size: 10px;
   }
   
   .category-amount {
-    font-size: 13px;
+    font-size: 10px;
   }
   
   .category-bar-fill {
-    height: 5px;
+    height: 4px;
   }
   
-  /* Modals */
-  .modal-content {
-    width: 95%;
-    max-height: 85vh;
-    padding: 20px;
+  .category-percentage {
+    font-size: 9px;
   }
   
-  .modal-header h2 {
-    font-size: 20px;
+  /* Modals - Full Screen on Mobile */
+  .modal-content,
+  .profile-modal-content,
+  .settings-modal-content,
+  .note-modal-content {
+    width: 100%;
+    height: 100%;
+    max-height: 100vh;
+    border-radius: 0;
+    padding: 15px;
   }
   
-  .close-btn {
-    font-size: 28px;
-    width: 32px;
-    height: 32px;
+  .modal-header,
+  .profile-header,
+  .settings-header,
+  .note-modal-header {
+    padding: 15px;
+  }
+  
+  .modal-header h2,
+  .profile-header h2,
+  .settings-header h2 {
+    font-size: 18px;
+  }
+  
+  .close-btn,
+  .close-profile,
+  .close-settings,
+  .close-note-modal {
+    font-size: 24px;
+    width: 30px;
+    height: 30px;
+  }
+  
+  .modal-body,
+  .profile-body,
+  .settings-body {
+    padding: 15px;
   }
   
   /* Forms in Modals */
   .modal input,
   .modal select,
-  .modal button {
+  .modal textarea,
+  .profile-input,
+  .settings-input {
     font-size: 14px;
-    padding: 10px 12px;
+    padding: 10px;
   }
   
-  /* Profile Modal */
-  .profile-modal-content {
-    width: 95%;
-    max-height: 85vh;
+  .modal button,
+  .profile-footer button,
+  .settings-footer button {
+    font-size: 14px;
+    padding: 10px;
   }
   
-  .profile-header h2 {
-    font-size: 20px;
+  /* Settings Sections */
+  .settings-section {
+    padding: 15px;
+    margin-bottom: 15px;
   }
   
-  .profile-body {
-    padding: 20px;
-  }
-}
-
-/* Extra Small Phones */
-@media (max-width: 480px) {
-  .top-nav {
-    padding: 8px 10px;
+  .settings-section h3 {
+    font-size: 16px;
+    margin-bottom: 12px;
   }
   
-  .top-nav h1 {
-    font-size: 14px !important;
+  /* Limit Inputs in Settings */
+  .limit-input-group label {
+    font-size: 12px;
   }
   
-  .top-reminder-item {
+  .limit-input-group input {
+    font-size: 13px;
+    padding: 8px;
+  }
+  
+  /* Reports & Analysis Page - Mobile Compact */
+  .report-main {
+    padding: 4px;
+    height: auto;
+    min-height: calc(100vh - 50px);
+  }
+  
+  .filter-bar {
+    padding: 6px;
+    gap: 6px;
     flex-direction: column;
-    align-items: flex-start;
+    align-items: stretch;
+  }
+  
+  .filter-group {
+    width: 100%;
+    justify-content: space-between;
+    gap: 6px;
+  }
+  
+  .filter-group label {
+    font-size: 10px;
+    white-space: nowrap;
+  }
+  
+  .filter-group select,
+  .filter-group input[type="date"] {
+    font-size: 11px;
+    padding: 6px;
+    flex: 1;
+  }
+  
+  .btn-export {
+    width: 100%;
+    font-size: 11px;
     padding: 6px;
   }
   
-  .top-reminder-time {
-    font-size: 10px;
-    min-width: 50px;
+  .analysis-grid {
+    grid-template-columns: 1fr !important;
+    gap: 8px;
+    padding: 4px;
   }
   
-  .top-reminder-text {
-    max-width: 100px;
+  .summary-cards {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 6px;
+  }
+  
+  .summary-card {
+    padding: 8px;
+  }
+  
+  .summary-value {
+    font-size: 16px;
+  }
+  
+  .summary-label {
+    font-size: 10px;
+  }
+  
+  .chart-container {
+    height: 250px;
+    padding: 8px;
+  }
+  
+  .chart-title {
+    font-size: 14px;
+    margin-bottom: 8px;
+  }
+  
+  /* Add Expense Page - Mobile */
+  .add-expense-container {
+    grid-template-columns: 1fr;
+    gap: 10px;
+    padding: 10px;
+  }
+  
+  .form-card {
+    padding: 15px;
+  }
+  
+  .form-card h2 {
+    font-size: 16px;
+    margin-bottom: 15px;
+  }
+  
+  .form-card label {
+    font-size: 12px;
+  }
+  
+  .form-card input,
+  .form-card select {
+    font-size: 14px;
+    padding: 10px;
+  }
+  
+  .form-card button {
+    font-size: 14px;
+    padding: 10px;
+  }
+}
+
+
+/* Extra Small Phones - Even More Compact */
+@media (max-width: 480px) {
+  .top-nav {
+    padding: 6px 8px;
+  }
+  
+  .top-nav h1 {
+    font-size: 12px !important;
+  }
+  
+  .hamburger {
+    width: 28px;
+    height: 28px;
+  }
+  
+  .top-settings-btn,
+  .top-logout-btn {
+    padding: 5px 8px;
     font-size: 10px;
   }
   
   .sidebar {
     width: 200px;
+    padding: 10px;
+  }
+  
+  .sidebar a {
+    padding: 8px;
+    font-size: 12px;
+  }
+  
+  .main {
+    padding: 3px;
+  }
+  
+  .card-row {
+    gap: 4px;
+    margin-bottom: 4px;
   }
   
   .card {
-    padding: 12px;
-    min-height: 100px;
+    padding: 6px;
+    min-height: 80px;
   }
   
   .card-value {
-    font-size: 24px !important;
+    font-size: 16px !important;
   }
   
   .card-title {
-    font-size: 11px !important;
+    font-size: 9px !important;
   }
   
   .ring-svg {
-    width: 80px !important;
-    height: 80px !important;
+    width: 45px !important;
+    height: 45px !important;
   }
   
   .ring-amount {
-    font-size: 14px !important;
+    font-size: 10px !important;
+  }
+  
+  .ring-label {
+    font-size: 7px !important;
   }
   
   .set-limit-btn {
+    font-size: 7px;
+    padding: 3px 6px;
+  }
+  
+  .card ul li {
     font-size: 9px;
-    padding: 6px 10px;
+    padding: 3px 5px;
+  }
+  
+  .transaction-category {
+    font-size: 9px;
+  }
+  
+  .transaction-details {
+    font-size: 8px;
   }
 }
 
-/* Landscape Mobile */
+/* Landscape Mobile - Utilize Width */
 @media (max-width: 768px) and (orientation: landscape) {
   .card-row {
-    flex-direction: row;
-    flex-wrap: wrap;
+    grid-template-columns: repeat(4, 1fr);
   }
   
-  .card-row.row-2 .card,
-  .card-row.row-5 .card {
-    flex: 1 1 calc(50% - 6px);
-    min-width: 250px;
+  .card {
+    min-height: 85px;
+  }
+  
+  .top-reminders {
+    display: flex;
+    max-width: 50%;
+  }
+}
+
+/* iOS Safe Area Support */
+@supports (padding: env(safe-area-inset-top)) {
+  @media (max-width: 768px) {
+    .top-nav {
+      padding-top: max(6px, env(safe-area-inset-top));
+    }
+    
+    .main {
+      padding-bottom: max(4px, env(safe-area-inset-bottom));
+    }
   }
 }
