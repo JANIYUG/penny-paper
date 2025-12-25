@@ -80,7 +80,7 @@
     // Check if user is already logged in
     const currentUser = localStorage.getItem('currentUser');
     if (currentUser) {
-      window.location.href = 'home.html';
+      window.location.href = 'index.html';
     }
 
     function showSignup() {
@@ -127,7 +127,7 @@
         }));
         
         alert('Login successful!');
-        window.location.href = 'home.html';
+        window.location.href = 'index.html';
       } else {
         alert('Invalid email or password. Please try again.');
       }
@@ -164,7 +164,7 @@
       localStorage.setItem('currentUser', JSON.stringify({ name, email }));
       
       alert('Account created successfully!');
-      window.location.href = 'home.html';
+      window.location.href = 'index.html';
     }
   </script>
 </body>
