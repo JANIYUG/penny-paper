@@ -3281,8 +3281,16 @@ body.login-page {
 }
 
 .eye-icon {
-  font-size: 20px;
+  width: 20px;
+  height: 20px;
+  color: #FF1493;
+  transition: all 0.3s ease;
   user-select: none;
+}
+
+.toggle-password:hover .eye-icon {
+  color: #FF69B4;
+  transform: scale(1.1);
 }
 
 .btn-auth {
@@ -3390,5 +3398,326 @@ body.login-page {
   
   .under-development p {
     font-size: 14px;
+  }
+}
+
+/* COMPREHENSIVE MOBILE RESPONSIVE */
+@media (max-width: 768px) {
+  /* Top Navigation */
+  .top-nav {
+    padding: 10px 12px;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+  
+  .top-nav h1 {
+    font-size: 16px !important;
+  }
+  
+  .hamburger {
+    padding: 8px;
+  }
+  
+  .hamburger span {
+    width: 20px;
+  }
+  
+  /* Top Reminders */
+  .top-reminders {
+    max-width: 100%;
+    order: 3;
+    width: 100%;
+    justify-content: flex-start;
+  }
+  
+  .top-reminder-item {
+    padding: 4px 8px;
+    gap: 6px;
+    min-width: auto;
+  }
+  
+  .top-reminder-time {
+    font-size: 11px;
+    min-width: 60px;
+    padding: 2px 6px;
+  }
+  
+  .top-reminder-label {
+    font-size: 9px;
+  }
+  
+  .top-reminder-text {
+    font-size: 11px;
+    max-width: 120px;
+  }
+  
+  /* Top Buttons */
+  .top-settings-btn,
+  .top-logout-btn {
+    padding: 8px 12px;
+    font-size: 12px;
+    min-width: auto;
+  }
+  
+  /* Sidebar */
+  .sidebar {
+    width: 250px;
+    padding: 15px;
+    z-index: 1000;
+  }
+  
+  .sidebar-profile {
+    padding: 12px;
+    gap: 10px;
+  }
+  
+  .profile-avatar {
+    width: 40px;
+    height: 40px;
+    font-size: 22px;
+  }
+  
+  .profile-name {
+    font-size: 14px;
+  }
+  
+  .profile-age {
+    font-size: 12px;
+  }
+  
+  .logo {
+    font-size: 18px;
+    margin-bottom: 20px;
+  }
+  
+  .sidebar a {
+    padding: 12px;
+    font-size: 14px;
+  }
+  
+  /* Main Content */
+  .main {
+    padding: 8px 6px 6px 6px;
+  }
+  
+  /* Card Rows - Stack on Mobile */
+  .card-row {
+    flex-direction: column;
+    gap: 12px;
+    max-height: none !important;
+    margin-bottom: 12px;
+  }
+  
+  .card-row.row-2,
+  .card-row.row-5 {
+    padding-left: 0;
+    margin-top: 0;
+  }
+  
+  .card-row.row-2 .card,
+  .card-row.row-5 .card {
+    min-height: 140px;
+  }
+  
+  /* Cards */
+  .card {
+    padding: 16px;
+    min-height: 120px;
+  }
+  
+  .card-content {
+    width: 100%;
+  }
+  
+  .card-value {
+    font-size: 28px !important;
+  }
+  
+  .card-title {
+    font-size: 13px !important;
+  }
+  
+  /* Ring Card Specific */
+  .ring-card {
+    flex-direction: column !important;
+    align-items: center !important;
+    gap: 15px;
+  }
+  
+  .ring-content {
+    order: 2;
+    text-align: center;
+    padding-left: 0 !important;
+  }
+  
+  .ring-container {
+    order: 1;
+  }
+  
+  .ring-svg {
+    width: 100px !important;
+    height: 100px !important;
+  }
+  
+  .ring-amount {
+    font-size: 16px !important;
+  }
+  
+  .ring-label {
+    font-size: 11px !important;
+  }
+  
+  .set-limit-btn {
+    position: static;
+    margin-top: 10px;
+    width: 100%;
+    order: 3;
+  }
+  
+  /* Info Cards */
+  .card ul {
+    gap: 8px;
+  }
+  
+  .card ul li {
+    font-size: 13px;
+    padding: 8px 10px;
+  }
+  
+  /* Recent Transactions */
+  .transaction-category {
+    font-size: 13px;
+  }
+  
+  .transaction-details {
+    font-size: 12px;
+  }
+  
+  /* Category Bars */
+  .category-bar {
+    padding: 8px 10px;
+  }
+  
+  .category-name {
+    font-size: 12px;
+  }
+  
+  .category-amount {
+    font-size: 13px;
+  }
+  
+  .category-bar-fill {
+    height: 5px;
+  }
+  
+  /* Modals */
+  .modal-content {
+    width: 95%;
+    max-height: 85vh;
+    padding: 20px;
+  }
+  
+  .modal-header h2 {
+    font-size: 20px;
+  }
+  
+  .close-btn {
+    font-size: 28px;
+    width: 32px;
+    height: 32px;
+  }
+  
+  /* Forms in Modals */
+  .modal input,
+  .modal select,
+  .modal button {
+    font-size: 14px;
+    padding: 10px 12px;
+  }
+  
+  /* Profile Modal */
+  .profile-modal-content {
+    width: 95%;
+    max-height: 85vh;
+  }
+  
+  .profile-header h2 {
+    font-size: 20px;
+  }
+  
+  .profile-body {
+    padding: 20px;
+  }
+}
+
+/* Extra Small Phones */
+@media (max-width: 480px) {
+  .top-nav {
+    padding: 8px 10px;
+  }
+  
+  .top-nav h1 {
+    font-size: 14px !important;
+  }
+  
+  .top-reminder-item {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 6px;
+  }
+  
+  .top-reminder-time {
+    font-size: 10px;
+    min-width: 50px;
+  }
+  
+  .top-reminder-text {
+    max-width: 100px;
+    font-size: 10px;
+  }
+  
+  .sidebar {
+    width: 200px;
+  }
+  
+  .card {
+    padding: 12px;
+    min-height: 100px;
+  }
+  
+  .card-value {
+    font-size: 24px !important;
+  }
+  
+  .card-title {
+    font-size: 11px !important;
+  }
+  
+  .ring-svg {
+    width: 80px !important;
+    height: 80px !important;
+  }
+  
+  .ring-amount {
+    font-size: 14px !important;
+  }
+  
+  .set-limit-btn {
+    font-size: 9px;
+    padding: 6px 10px;
+  }
+}
+
+/* Landscape Mobile */
+@media (max-width: 768px) and (orientation: landscape) {
+  .card-row {
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+  
+  .card-row.row-2 .card,
+  .card-row.row-5 .card {
+    flex: 1 1 calc(50% - 6px);
+    min-width: 250px;
   }
 }
