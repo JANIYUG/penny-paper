@@ -2425,6 +2425,448 @@ body.add-expense-page {
   box-shadow: 0 6px 16px rgba(255, 20, 147, 0.4);
 }
 
+/* ==================== NOTES PAGE (Grid Layout) ==================== */
+
+.notes-main {
+  padding: 20px;
+  overflow-y: auto;
+  min-height: calc(100vh - 60px);
+  max-width: 100%;
+  background: linear-gradient(135deg, #FF1493 0%, #FF69B4 50%, #FF85C1 100%);
+  box-sizing: border-box;
+}
+
+/* Notes Header */
+.notes-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  padding: 15px 0;
+  flex-wrap: wrap;
+  gap: 15px;
+  max-width: 100%;
+}
+
+.notes-header h1 {
+  margin: 0;
+  font-size: 36px;
+  font-weight: 700;
+  color: #ffffff;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+}
+
+.notes-actions {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  flex-wrap: wrap;
+  max-width: 100%;
+}
+
+.notes-actions input {
+  padding: 10px 15px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-radius: 25px;
+  background: rgba(255, 255, 255, 0.15);
+  color: #ffffff;
+  font-size: 14px;
+  width: 100%;
+  max-width: 250px;
+  min-width: 150px;
+  backdrop-filter: blur(10px);
+  box-sizing: border-box;
+}
+
+.notes-actions input::placeholder {
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.notes-actions input:focus {
+  outline: none;
+  border-color: #ffffff;
+  background: rgba(255, 255, 255, 0.25);
+}
+
+.new-note-btn {
+  padding: 10px 25px;
+  background: #ffffff;
+  border: none;
+  border-radius: 25px;
+  color: #FF1493;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.new-note-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+}
+
+/* Notes Grid */
+.notes-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(320px, 100%), 1fr));
+  gap: 15px;
+  margin-bottom: 20px;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+.no-notes {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: 80px 20px;
+  color: #ffffff;
+}
+
+.no-notes h3 {
+  font-size: 24px;
+  margin: 0 0 10px 0;
+  font-weight: 600;
+}
+
+.no-notes p {
+  font-size: 16px;
+  margin: 0;
+  opacity: 0.8;
+}
+
+/* Note Card */
+.note-card {
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 15px;
+  padding: 15px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  max-width: 100%;
+  box-sizing: border-box;
+  word-wrap: break-word;
+}
+
+.note-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+}
+
+.note-card.has-reminder {
+  border-left: 5px solid #FF1493;
+}
+
+.note-card.upcoming {
+  border-left: 5px solid #ff3b30;
+  animation: pulse-card 2s infinite;
+}
+
+@keyframes pulse-card {
+  0%, 100% { box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); }
+  50% { box-shadow: 0 4px 20px rgba(255, 59, 48, 0.3); }
+}
+
+.reminder-indicator {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  width: 32px;
+  height: 32px;
+  background: #FF1493;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #ffffff;
+  font-weight: bold;
+  font-size: 18px;
+}
+
+.note-card-header {
+  margin-bottom: 12px;
+}
+
+.note-card-header h3 {
+  margin: 0 40px 5px 0;
+  font-size: 20px;
+  font-weight: 600;
+  color: #FF1493;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.note-date {
+  font-size: 12px;
+  color: rgba(0, 0, 0, 0.5);
+}
+
+.note-reminder-info {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 12px;
+}
+
+.reminder-badge,
+.reminder-time,
+.reminder-amount {
+  font-size: 11px;
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-weight: 600;
+}
+
+.reminder-badge {
+  background: rgba(255, 20, 147, 0.15);
+  color: #FF1493;
+}
+
+.reminder-time {
+  background: rgba(255, 105, 180, 0.15);
+  color: #FF69B4;
+}
+
+.reminder-amount {
+  background: rgba(144, 238, 144, 0.3);
+  color: #2d7a2d;
+}
+
+.note-card-preview {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.6;
+  color: rgba(0, 0, 0, 0.7);
+  display: -webkit-box;
+  -webkit-line-clamp: 4;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* Note Modal */
+.note-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  backdrop-filter: blur(5px);
+}
+
+.note-modal-content {
+  background: linear-gradient(135deg, rgba(255, 20, 147, 0.95), rgba(255, 105, 180, 0.95));
+  border-radius: 20px;
+  width: 90%;
+  max-width: 700px;
+  max-height: 85vh;
+  overflow: hidden;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+  display: flex;
+  flex-direction: column;
+}
+
+.note-modal-header {
+  padding: 25px 30px;
+  border-bottom: 2px solid rgba(255, 255, 255, 0.2);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: rgba(0, 0, 0, 0.1);
+}
+
+.note-modal-header h2 {
+  margin: 0;
+  font-size: 24px;
+  color: #ffffff;
+  font-weight: 700;
+}
+
+.close-modal-btn {
+  width: 40px;
+  height: 40px;
+  border: none;
+  background: rgba(255, 255, 255, 0.2);
+  color: #ffffff;
+  font-size: 28px;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+}
+
+.close-modal-btn:hover {
+  background: rgba(255, 255, 255, 0.3);
+  transform: rotate(90deg);
+}
+
+.note-form {
+  padding: 30px;
+  overflow-y: auto;
+  flex: 1;
+}
+
+.note-input-title {
+  width: 100%;
+  padding: 15px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.15);
+  color: #ffffff;
+  font-size: 24px;
+  font-weight: 700;
+  margin-bottom: 20px;
+  backdrop-filter: blur(10px);
+}
+
+.note-input-title::placeholder {
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.note-input-title:focus {
+  outline: none;
+  border-color: #ffffff;
+  background: rgba(255, 255, 255, 0.25);
+}
+
+.reminder-fields {
+  background: rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  border-radius: 10px;
+  margin-bottom: 20px;
+}
+
+.reminder-row {
+  display: flex;
+  gap: 15px;
+}
+
+.reminder-field {
+  flex: 1;
+}
+
+.reminder-field label {
+  display: block;
+  font-size: 13px;
+  font-weight: 600;
+  color: #ffffff;
+  margin-bottom: 8px;
+}
+
+.reminder-input {
+  width: 100%;
+  padding: 10px 15px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.2);
+  color: #ffffff;
+  font-size: 14px;
+  font-weight: 600;
+  backdrop-filter: blur(10px);
+}
+
+.reminder-input::placeholder {
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.reminder-input:focus {
+  outline: none;
+  border-color: #ffffff;
+  background: rgba(255, 255, 255, 0.3);
+}
+
+/* Chrome, Safari, Edge, Opera - Hide spinner for number input */
+.reminder-input::-webkit-outer-spin-button,
+.reminder-input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox - Hide spinner for number input */
+.reminder-input[type=number] {
+  -moz-appearance: textfield;
+}
+
+.note-textarea {
+  width: 100%;
+  min-height: 250px;
+  padding: 20px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.15);
+  color: #ffffff;
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 1.6;
+  resize: vertical;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  backdrop-filter: blur(10px);
+}
+
+.note-textarea::placeholder {
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.note-textarea:focus {
+  outline: none;
+  border-color: #ffffff;
+  background: rgba(255, 255, 255, 0.25);
+}
+
+.note-modal-footer {
+  padding: 20px 30px;
+  border-top: 2px solid rgba(255, 255, 255, 0.2);
+  display: flex;
+  justify-content: space-between;
+  background: rgba(0, 0, 0, 0.1);
+}
+
+.delete-note-btn {
+  padding: 12px 24px;
+  background: transparent;
+  border: 2px solid rgba(255, 59, 48, 0.8);
+  color: rgba(255, 59, 48, 0.9);
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.delete-note-btn:hover {
+  background: rgba(255, 59, 48, 0.9);
+  color: #ffffff;
+  transform: translateY(-2px);
+}
+
+.save-note-btn {
+  padding: 12px 30px;
+  background: #ffffff;
+  border: none;
+  color: #FF1493;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.save-note-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+}
+
 /* ==================== SETTINGS MODAL ==================== */
 .settings-modal {
   display: none;
@@ -2448,7 +2890,7 @@ body.add-expense-page {
   max-width: 600px;
   max-height: 90vh;
   overflow-y: auto;
-  box-shadow: 0 20px 60px rgba(255, 20, 147, 0.4);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
   animation: slideIn 0.3s ease;
 }
 
@@ -3059,25 +3501,289 @@ body#rp-page .report-grid {
   align-items: center;
 }
 
-/* Smooth sidebar toggle and scrolling */
-.sidebar {
-  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.3s cubic-bezier(0.4, 0, 0.2, 1), padding-top 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  will-change: transform;
+/* ========================================
+   RESPONSIVE BREAKPOINTS (kept for compatibility)
+======================================== */
+
+@media (max-width: 768px) {
+  /* Mobile styles already applied globally */
+  
+  /* Additional mobile-specific overrides if needed */
+  .top-nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 12px;
+    gap: 8px;
+  }
+  
+  .hamburger {
+    display: flex !important;
+  }
+  
+  .top-reminders {
+    display: none !important;
+  }
+  
+  .sidebar {
+    position: fixed;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 260px;
+    max-width: 80vw;
+    padding: 15px;
+    z-index: 1000;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    transform: translateX(-100%);
+    transition: transform 0.3s ease;
+    background: #FF1493;
+    border-right: 3px solid #e0127d;
+    box-shadow: 2px 0 8px rgba(0, 0, 0, 0.3);
+  }
+  
+  #sidebar-toggle:checked ~ .content .sidebar {
+    transform: translateX(0);
+  }
+  
+  /* Overlay when sidebar is open */
+  .content::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0);
+    z-index: 999;
+    pointer-events: none;
+    transition: background 0.3s ease;
+  }
+  
+  #sidebar-toggle:checked ~ .content::before {
+    background: rgba(0, 0, 0, 0.5);
+    pointer-events: auto;
+  }
+  
+  /* Notes page responsive fixes for mobile */
+  .notes-main {
+    padding: 12px;
+  }
+  
+  .notes-header h1 {
+    font-size: 28px;
+  }
+  
+  .notes-grid {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+  
+  /* Donut cards tablet layout - 2x2 but smaller */
+  .donut-cards-grid {
+    height: 50vh;
+    max-height: 500px;
+    gap: 12px;
+  }
+  
+  .donut-card .ring {
+    width: 110px !important;
+    height: 110px !important;
+  }
 }
 
-.content, .dashboard, .main, .card-row, .donut-cards-grid, .notes-main, .notes-grid {
-  scroll-behavior: smooth !important;
+
+/* ===== SMALL PHONES (under 480px) ===== */
+@media (max-width: 480px) {
+  .top-nav h1 {
+    font-size: 13px !important;
+  }
+  
+  .hamburger {
+    width: 36px;
+    height: 36px;
+  }
+  
+  .top-settings-btn,
+  .top-logout-btn {
+    padding: 6px 10px;
+    font-size: 11px;
+  }
+  
+  .main {
+    padding: 10px;
+  }
+  
+  .card {
+    padding: 12px;
+  }
+  
+  .card h2,
+  .card-value {
+    font-size: 20px !important;
+  }
+  
+  .ring-container {
+    width: 120px;
+    height: 120px;
+  }
+  
+  .ring-svg {
+    width: 120px !important;
+    height: 120px !important;
+  }
+  
+  .summary-cards {
+    grid-template-columns: 1fr;
+  }
+  
+  /* Notes page mobile fixes */
+  .notes-main {
+    padding: 10px;
+  }
+  
+  .notes-header {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+  }
+  
+  .notes-header h1 {
+    font-size: 24px;
+  }
+  
+  .notes-actions {
+    flex-direction: column;
+    width: 100%;
+  }
+  
+  .notes-actions input {
+    width: 100%;
+    max-width: 100%;
+  }
+  
+  .new-note-btn {
+    width: 100%;
+  }
+  
+  .notes-grid {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+  
+  /* Donut cards mobile layout */
+  .donut-cards-grid {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto;
+    height: auto;
+    max-height: none;
+  }
+  
+  .donut-card .card-text h4 {
+    font-size: 10px !important;
+  }
+  
+  .donut-card .card-text h2 {
+    font-size: 20px !important;
+  }
+  
+  .donut-card .ring {
+    width: 100px !important;
+    height: 100px !important;
+  }
 }
 
-/* For horizontal card row swiping */
-.card-row, .notes-grid, .donut-cards-grid {
-  -webkit-overflow-scrolling: touch;
-  scroll-behavior: smooth !important;
+/* ===== LANDSCAPE MODE ===== */
+@media (max-width: 896px) and (orientation: landscape) {
+  .dashboard {
+    gap: 10px;
+  }
+  
+  .card-row {
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+  
+  .card {
+    flex: 1 1 calc(50% - 6px);
+    min-width: 280px;
+  }
 }
 
-/* Hide scrollbar for a cleaner look */
-.card-row::-webkit-scrollbar, .notes-grid::-webkit-scrollbar, .donut-cards-grid::-webkit-scrollbar {
-  display: none;
+/* ===== iOS SAFARI FIXES ===== */
+@supports (-webkit-touch-callout: none) {
+  @media (max-width: 768px) {
+    body {
+      min-height: -webkit-fill-available;
+    }
+    
+    .app {
+      min-height: -webkit-fill-available;
+    }
+    
+    /* Prevent zoom on input focus */
+    input,
+    textarea,
+    select {
+      font-size: 16px !important;
+    }
+    
+    /* Fix iOS input padding */
+    input[type="text"],
+    input[type="email"],
+    input[type="password"],
+    input[type="number"],
+    input[type="date"],
+    input[type="time"],
+    textarea,
+    select {
+      -webkit-appearance: none;
+      -moz-appearance: none;
+      appearance: none;
+      border-radius: 8px;
+    }
+  }
+}
+
+/* ===== SAFE AREA FOR NOTCHED DEVICES ===== */
+@supports (padding: max(0px)) {
+  @media (max-width: 768px) {
+    body {
+      padding-left: env(safe-area-inset-left);
+      padding-right: env(safe-area-inset-right);
+    }
+    
+    .top-nav {
+      padding-top: max(10px, env(safe-area-inset-top));
+      padding-left: max(12px, env(safe-area-inset-left));
+      padding-right: max(12px, env(safe-area-inset-right));
+    }
+    
+    .main,
+    .dashboard {
+      padding-bottom: max(30px, env(safe-area-inset-bottom));
+    }
+    
+    .sidebar {
+      padding-bottom: max(15px, env(safe-area-inset-bottom));
+    }
+  }
+}
+
+/* ===== PREVENT HORIZONTAL SCROLL ===== */
+@media (max-width: 768px) {
+  * {
+    max-width: 100%;
+  }
+  
+  img,
+  svg,
+  video,
+  canvas {
+    max-width: 100%;
+    height: auto;
+  }
 }
 
 /* =========================
