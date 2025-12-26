@@ -3409,8 +3409,8 @@ body.login-page {
     display: grid;
     grid-template-columns: 1fr 1fr;
     grid-template-rows: 1fr 1fr;
-    gap: 12px;
-    padding: 8px;
+    gap: 8px;
+    padding: 6px;
     box-sizing: border-box;
   }
   
@@ -3458,13 +3458,13 @@ body.login-page {
     max-width: 100% !important;
     height: 100%;
     min-height: unset;
-    padding: 12px;
+    padding: 8px;
     box-sizing: border-box;
-    border-radius: 12px;
+    border-radius: 10px;
     border-width: 2px;
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
+    justify-content: flex-start;
     overflow: hidden;
   }
   
@@ -3481,86 +3481,64 @@ body.login-page {
   /* Typography adjustments for 2x2 grid */
   .card h4,
   .card-title {
-    font-size: 10px !important;
-    line-height: 1.3;
-    margin-bottom: 4px;
+    font-size: 9px !important;
+    line-height: 1.2;
+    margin-bottom: 3px;
+    margin-top: 0;
+    letter-spacing: 0.5px;
   }
   
   .card h2,
   .card-value {
-    font-size: 20px !important;
-    margin: 4px 0 !important;
+    font-size: 16px !important;
+    margin: 2px 0 !important;
+    line-height: 1.1;
   }
   
   .card p {
-    font-size: 11px !important;
+    font-size: 9px !important;
+    margin: 2px 0;
+    line-height: 1.2;
   }
   
   .card small {
-    font-size: 10px !important;
+    font-size: 8px !important;
+    line-height: 1.2;
   }
   
-  /* ===== DONUT/RING CARDS - COMPACT FOR 2x2 ===== */
+  .card > div {
+    gap: 2px !important;
+  }
+  
+  /* ===== DONUT/RING CARDS - HIDE RINGS ON MOBILE ===== */
   .ring-card {
     display: flex !important;
     flex-direction: column !important;
-    align-items: center !important;
-    justify-content: center !important;
-    gap: 8px;
+    align-items: flex-start !important;
+    justify-content: flex-start !important;
+    gap: 6px;
     padding: 10px !important;
   }
   
   .ring-content {
     flex: 1;
-    order: 2;
-    text-align: center;
-    padding: 0 !important;
-  }
-  
-  .ring-container {
-    flex-shrink: 0;
     order: 1;
-    width: 80px;
-    height: 80px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    text-align: left;
+    padding: 0 !important;
+    width: 100%;
   }
   
-  /* Donut size reduction for 2x2 grid */
-  .ring-svg {
-    width: 80px !important;
-    height: 80px !important;
+  /* HIDE RING CONTAINER ON MOBILE */
+  .ring-container {
+    display: none !important;
   }
   
-  /* Prevent blur on donuts */
+  /* Hide ring elements */
   .ring-svg,
-  .ring-container img {
-    background-size: contain !important;
-    image-rendering: -webkit-optimize-contrast;
-    image-rendering: crisp-edges;
-  }
-  
-  .ring {
-    width: 80px !important;
-    height: 80px !important;
-  }
-  
-  .ring-percent {
-    font-size: 12px !important;
-  }
-  
+  .ring,
+  .ring-percent,
   .ring-info {
-    display: none;
-  }
-  
-  .ring-amount {
-    font-size: 11px !important;
-    font-weight: 800 !important;
-  }
-  
-  .ring-label {
-    font-size: 9px !important;
+    display: none !important;
   }
   
   /* Set limit button adjustment */
@@ -3568,32 +3546,35 @@ body.login-page {
     position: absolute;
     left: 50%;
     transform: translateX(-50%);
-    bottom: 8px;
+    bottom: 6px;
     margin-top: 0;
-    padding: 6px 10px;
-    font-size: 8px;
+    padding: 4px 8px;
+    font-size: 7px;
     width: auto;
-    min-width: 80px;
+    min-width: 60px;
+    letter-spacing: 0.3px;
   }
   
   /* ===== INFO CARD LISTS - COMPACT ===== */
   .card ul {
-    gap: 4px;
+    gap: 2px;
     width: 100%;
+    margin: 0;
+    padding: 0;
   }
   
   .card ul li {
-    font-size: 10px;
-    padding: 4px 6px;
-    line-height: 1.3;
+    font-size: 8px;
+    padding: 2px 4px;
+    line-height: 1.2;
   }
   
   .transaction-category {
-    font-size: 10px;
+    font-size: 8px;
   }
   
   .transaction-details {
-    font-size: 9px;
+    font-size: 7px;
   }
   
   .list {
@@ -3603,8 +3584,9 @@ body.login-page {
   }
   
   .list li {
-    font-size: 10px !important;
-    padding: 3px 0;
+    font-size: 8px !important;
+    padding: 2px 0;
+    line-height: 1.2;
   }
   
   .category-bar {
