@@ -3255,20 +3255,19 @@ body.login-page {
   }
   
   body {
-    overflow-y: auto;
+    overflow-y: hidden;
     -webkit-overflow-scrolling: touch;
     min-height: 100vh;
-    height: auto;
+    height: 100vh;
   }
   
   /* ===== APP CONTAINER ===== */
   .app {
     display: flex;
     flex-direction: column;
-    height: auto;
-    min-height: 100vh;
+    height: 100vh;
     width: 100%;
-    overflow: visible;
+    overflow: hidden;
   }
   
   .content {
@@ -3276,7 +3275,7 @@ body.login-page {
     flex-direction: column;
     flex: 1;
     width: 100%;
-    overflow: visible;
+    overflow: hidden;
   }
   
   /* ===== NAVIGATION BAR ===== */
@@ -3375,51 +3374,98 @@ body.login-page {
   /* ===== MAIN CONTENT AREA ===== */
   .main {
     padding: 12px;
-    overflow: visible;
-    height: auto;
+    overflow: hidden;
+    height: 100%;
     width: 100%;
     box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
   }
   
-  /* ===== DASHBOARD LAYOUT ===== */
+  /* ===== DASHBOARD LAYOUT - SWIPE PAGES ===== */
   .dashboard {
     display: flex;
     flex-direction: column;
-    gap: 12px;
-    height: auto;
-    overflow: visible;
+    height: 100%;
+    overflow: hidden;
     padding: 0;
-    padding-bottom: 30px;
     width: 100%;
+    position: relative;
   }
   
-  /* SINGLE COLUMN CARD LAYOUT */
-  .card-row {
+  /* Mobile Pages Container */
+  .mobile-pages-container {
     display: flex;
-    flex-direction: column;
+    width: 100%;
+    height: calc(100% - 40px);
+    transition: transform 0.3s ease-out;
+    touch-action: pan-y;
+  }
+  
+  /* Individual Page */
+  .mobile-page {
+    min-width: 100%;
+    height: 100%;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
     gap: 12px;
-    width: 100%;
-    max-height: none !important;
-    margin: 0 !important;
-    padding: 0 !important;
+    padding: 8px;
+    box-sizing: border-box;
   }
   
-  .card-row.row-2,
-  .card-row.row-5 {
+  /* Page Dots */
+  .page-dots {
     display: flex;
-    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 0;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    z-index: 10;
   }
   
-  /* ===== CARDS - FULL WIDTH ===== */
+  .page-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.4);
+    transition: all 0.3s ease;
+    cursor: pointer;
+    border: 2px solid transparent;
+  }
+  
+  .page-dot.active {
+    background: #FF1493;
+    transform: scale(1.3);
+    border-color: rgba(255, 255, 255, 0.8);
+    box-shadow: 0 0 10px rgba(255, 20, 147, 0.5);
+  }
+  
+  /* HIDE OLD CARD ROWS */
+  .card-row {
+    display: none !important;
+  }
+  
+  /* ===== CARDS - 2x2 GRID ===== */
   .card {
     width: 100% !important;
     max-width: 100% !important;
-    min-height: 120px;
-    height: auto;
-    padding: 15px;
+    height: 100%;
+    min-height: unset;
+    padding: 12px;
     box-sizing: border-box;
     border-radius: 12px;
     border-width: 2px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    overflow: hidden;
   }
   
   .card-row.row-2 .card,
@@ -3432,50 +3478,59 @@ body.login-page {
     width: 100%;
   }
   
-  /* Typography adjustments */
+  /* Typography adjustments for 2x2 grid */
   .card h4,
   .card-title {
-    font-size: 12px !important;
-    line-height: 1.4;
+    font-size: 10px !important;
+    line-height: 1.3;
+    margin-bottom: 4px;
   }
   
   .card h2,
   .card-value {
-    font-size: 24px !important;
-    margin-bottom: 6px !important;
+    font-size: 20px !important;
+    margin: 4px 0 !important;
   }
   
-  /* ===== DONUT/RING CARDS ===== */
+  .card p {
+    font-size: 11px !important;
+  }
+  
+  .card small {
+    font-size: 10px !important;
+  }
+  
+  /* ===== DONUT/RING CARDS - COMPACT FOR 2x2 ===== */
   .ring-card {
     display: flex !important;
-    flex-direction: row !important;
+    flex-direction: column !important;
     align-items: center !important;
-    justify-content: space-between !important;
-    gap: 15px;
-    padding: 15px !important;
+    justify-content: center !important;
+    gap: 8px;
+    padding: 10px !important;
   }
   
   .ring-content {
     flex: 1;
-    order: 1;
-    text-align: left;
+    order: 2;
+    text-align: center;
     padding: 0 !important;
   }
   
   .ring-container {
     flex-shrink: 0;
-    order: 2;
-    width: 140px;
-    height: 140px;
+    order: 1;
+    width: 80px;
+    height: 80px;
     display: flex;
     align-items: center;
     justify-content: center;
   }
   
-  /* Donut size reduction */
+  /* Donut size reduction for 2x2 grid */
   .ring-svg {
-    width: 140px !important;
-    height: 140px !important;
+    width: 80px !important;
+    height: 80px !important;
   }
   
   /* Prevent blur on donuts */
@@ -3486,63 +3541,91 @@ body.login-page {
     image-rendering: crisp-edges;
   }
   
+  .ring {
+    width: 80px !important;
+    height: 80px !important;
+  }
+  
+  .ring-percent {
+    font-size: 12px !important;
+  }
+  
+  .ring-info {
+    display: none;
+  }
+  
   .ring-amount {
-    font-size: 14px !important;
+    font-size: 11px !important;
     font-weight: 800 !important;
   }
   
   .ring-label {
-    font-size: 10px !important;
+    font-size: 9px !important;
   }
   
   /* Set limit button adjustment */
   .set-limit-btn {
-    position: static;
-    margin-top: 10px;
-    padding: 8px 12px;
-    font-size: 10px;
-    width: 100%;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    bottom: 8px;
+    margin-top: 0;
+    padding: 6px 10px;
+    font-size: 8px;
+    width: auto;
+    min-width: 80px;
   }
   
-  /* ===== INFO CARD LISTS ===== */
+  /* ===== INFO CARD LISTS - COMPACT ===== */
   .card ul {
-    gap: 8px;
+    gap: 4px;
     width: 100%;
   }
   
   .card ul li {
-    font-size: 13px;
-    padding: 8px 10px;
-    line-height: 1.5;
+    font-size: 10px;
+    padding: 4px 6px;
+    line-height: 1.3;
   }
   
   .transaction-category {
-    font-size: 13px;
+    font-size: 10px;
   }
   
   .transaction-details {
-    font-size: 12px;
+    font-size: 9px;
+  }
+  
+  .list {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  
+  .list li {
+    font-size: 10px !important;
+    padding: 3px 0;
   }
   
   .category-bar {
-    padding: 8px;
-    margin-bottom: 8px;
+    padding: 6px;
+    margin-bottom: 6px;
   }
   
   .category-name {
-    font-size: 12px;
+    font-size: 10px;
   }
   
   .category-amount {
-    font-size: 12px;
+    font-size: 10px;
   }
   
   .category-bar-fill {
-    height: 6px;
+    height: 4px;
   }
   
   .category-percentage {
-    font-size: 11px;
+    font-size: 9px;
   }
   
   /* ===== NOTES PAGE ===== */
@@ -3990,6 +4073,111 @@ body.login-page {
   img,
   svg,
   video,
+  canvas {
+    max-width: 100%;
+    height: auto;
+  }
+}
+/* =========================
+   GLOBAL MOBILE RESET
+   APPLIES TO ALL PAGES
+   ========================= */
+@media (max-width: 768px) {
+
+  /* Base text scaling */
+  html {
+    font-size: 14px;
+  }
+
+  body {
+    overflow-x: hidden;
+  }
+
+  /* App container */
+  .app {
+    display: block;
+    width: 100%;
+  }
+
+  /* Universal card fix */
+  .card,
+  .report-card,
+  .stat-card,
+  .expense-card,
+  .note-card,
+  .login-card {
+    width: 100%;
+    padding: 14px !important;
+    box-sizing: border-box;
+  }
+
+  /* Headings scale down */
+  h1 { font-size: 1.3rem; }
+  h2 { font-size: 1.15rem; }
+  h3 { font-size: 1rem; }
+
+  /* Paragraphs & labels */
+  p, span, label {
+    font-size: 0.9rem;
+    line-height: 1.4;
+  }
+
+  /* Buttons */
+  button,
+  .btn,
+  input[type="submit"] {
+    font-size: 0.9rem;
+    padding: 10px 12px;
+  }
+
+  /* Inputs & selects */
+  input,
+  select,
+  textarea {
+    font-size: 0.9rem;
+    padding: 10px;
+    width: 100%;
+  }
+
+  /* ALL grids collapse to single column */
+  .grid,
+  .grid-2,
+  .grid-3,
+  .report-grid,
+  .stats-grid,
+  .cards-grid {
+    grid-template-columns: 1fr !important;
+    gap: 14px;
+  }
+
+  /* Flex containers wrap */
+  .row,
+  .flex,
+  .filter-bar,
+  .top-actions {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+  }
+
+  /* Prevent text overflow */
+  * {
+    max-width: 100%;
+    word-wrap: break-word;
+  }
+
+  /* Tables scroll instead of breaking layout */
+  .table-container,
+  .statement-table-container {
+    overflow-x: auto;
+  }
+
+  table {
+    min-width: 600px;
+  }
+
+  /* Charts & images */
+  img,
   canvas {
     max-width: 100%;
     height: auto;

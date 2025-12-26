@@ -957,6 +957,131 @@
     updateProfileDisplay();
     loadReminders();
     setInterval(loadReminders, 1000);
+    initializeMobileSwipe();
+  });
+
+  // Mobile swipe functionality
+  function initializeMobileSwipe() {
+    if (window.innerWidth > 768) return; // Only for mobile
+    
+    const dashboard = document.querySelector('.dashboard');
+    if (!dashboard) return;
+    
+    // Get all cards
+    const allCards = Array.from(dashboard.querySelectorAll('.card'));
+    
+    // Create pages container
+    const pagesContainer = document.createElement('div');
+    pagesContainer.className = 'mobile-pages-container';
+    
+    // Split cards into pages of 4
+    const cardsPerPage = 4;
+    const totalPages = Math.ceil(allCards.length / cardsPerPage);
+    
+    for (let i = 0; i < totalPages; i++) {
+      const page = document.createElement('div');
+      page.className = 'mobile-page';
+      
+      const pageCards = allCards.slice(i * cardsPerPage, (i + 1) * cardsPerPage);
+      pageCards.forEach(card => {
+        page.appendChild(card.cloneNode(true));
+      });
+      
+      pagesContainer.appendChild(page);
+    }
+    
+    // Clear dashboard and add pages container
+    dashboard.innerHTML = '';
+    dashboard.appendChild(pagesContainer);
+    
+    // Add pagination dots
+    const dotsContainer = document.createElement('div');
+    dotsContainer.className = 'page-dots';
+    for (let i = 0; i < totalPages; i++) {
+      const dot = document.createElement('span');
+      dot.className = 'page-dot' + (i === 0 ? ' active' : '');
+      dot.onclick = () => goToPage(i);
+      dotsContainer.appendChild(dot);
+    }
+    dashboard.appendChild(dotsContainer);
+    
+    // Swipe logic
+    let currentPage = 0;
+    let startX = 0;
+    let isDragging = false;
+    
+    function updatePage() {
+      const offset = -currentPage * 100;
+      pagesContainer.style.transform = `translateX(${offset}%)`;
+      
+      // Update dots
+      document.querySelectorAll('.page-dot').forEach((dot, index) => {
+        dot.classList.toggle('active', index === currentPage);
+      });
+    }
+    
+    function goToPage(pageIndex) {
+      currentPage = Math.max(0, Math.min(pageIndex, totalPages - 1));
+      updatePage();
+    }
+    
+    pagesContainer.addEventListener('touchstart', (e) => {
+      startX = e.touches[0].clientX;
+      isDragging = true;
+    });
+    
+    pagesContainer.addEventListener('touchmove', (e) => {
+      if (!isDragging) return;
+      const currentX = e.touches[0].clientX;
+      const diff = startX - currentX;
+      
+      // Add some resistance while dragging
+      const offset = -currentPage * 100 - (diff / pagesContainer.offsetWidth * 100);
+      pagesContainer.style.transform = `translateX(${offset}%)`;
+    });
+    
+    pagesContainer.addEventListener('touchend', (e) => {
+      if (!isDragging) return;
+      isDragging = false;
+      
+      const endX = e.changedTouches[0].clientX;
+      const diff = startX - endX;
+      const threshold = 50; // minimum swipe distance
+      
+      if (Math.abs(diff) > threshold) {
+        if (diff > 0 && currentPage < totalPages - 1) {
+          currentPage++;
+        } else if (diff < 0 && currentPage > 0) {
+          currentPage--;
+        }
+      }
+      
+      updatePage();
+    });
+    
+    // Re-bind event listeners for cloned cards
+    rebindCardEvents();
+  }
+  
+  function rebindCardEvents() {
+    // Re-bind any click events or other interactive elements within cards
+    document.querySelectorAll('.set-limit-btn').forEach(btn => {
+      btn.onclick = function(e) {
+        e.stopPropagation();
+        openSettingsModal();
+      };
+    });
+  }
+  
+  // Re-initialize on window resize
+  let resizeTimer;
+  window.addEventListener('resize', () => {
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(() => {
+      if (window.innerWidth <= 768) {
+        initializeMobileSwipe();
+      }
+    }, 250);
   });
 </script>
 
