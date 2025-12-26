@@ -3259,7 +3259,7 @@ body.login-page {
   }
   
   html, body {
-    overflow-x: hidden !important;
+    overflow-x: auto !important;
     width: 100%;
     height: 100%;
     margin: 0;
@@ -3420,7 +3420,7 @@ body.login-page {
     padding: 12px;
     padding-bottom: 20px;
     overflow-y: auto;
-    overflow-x: hidden;
+    overflow-x: auto !important;
     -webkit-overflow-scrolling: touch;
     min-height: calc(100vh - 60px);
     width: 100%;
@@ -3431,7 +3431,7 @@ body.login-page {
     position: relative;
   }
   
-  /* ===== DASHBOARD VERTICAL STACK - MOBILE ONLY ===== */
+  /* ===== DASHBOARD HORIZONTAL SWIPE - MOBILE ONLY ===== */
   .dashboard {
     display: flex;
     flex-direction: column;
@@ -3439,7 +3439,11 @@ body.login-page {
     width: 100%;
     max-width: 100%;
     padding: 0;
-    overflow-x: hidden;
+    overflow-x: auto !important;
+  }
+  
+  .reports-dashboard {
+    overflow-x: auto !important;
   }
   
   /* Hide mobile-specific containers */
@@ -3449,25 +3453,32 @@ body.login-page {
     display: none !important;
   }
   
-  /* Show card rows as vertical stack */
+  /* HOME PAGE – make card rows scroll horizontally */
   .card-row {
     display: flex !important;
-    flex-direction: column;
+    flex-direction: row !important;
+    flex-wrap: nowrap !important;
+    overflow-x: auto;
+    overflow-y: hidden;
     gap: 12px;
     width: 100%;
-    max-width: 100%;
+    padding-bottom: 10px;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
   }
   
   .card-row.row-2,
   .card-row.row-5 {
     display: flex !important;
-    flex-direction: column;
+    flex-direction: row !important;
+    flex-wrap: nowrap !important;
   }
   
-  /* ===== CARDS - FULL WIDTH VERTICAL STACK ===== */
+  /* ===== CARDS - HORIZONTAL SWIPE ===== */
   .card {
-    width: 100% !important;
-    max-width: 100% !important;
+    min-width: 85vw !important;
+    width: 85vw !important;
+    max-width: 85vw !important;
     min-height: 120px;
     padding: 16px;
     box-sizing: border-box;
@@ -3479,12 +3490,15 @@ body.login-page {
     overflow: hidden;
     position: relative;
     margin-bottom: 0;
+    flex-shrink: 0;
+    scroll-snap-align: start;
   }
   
   .card-row.row-2 .card,
   .card-row.row-5 .card {
-    width: 100% !important;
-    max-width: 100%;
+    min-width: 85vw !important;
+    width: 85vw !important;
+    flex-shrink: 0;
   }
   
   .card:hover {
@@ -3788,7 +3802,7 @@ body.login-page {
   body.report-page .main {
     min-height: calc(100vh - 60px);
     overflow-y: auto !important;
-    overflow-x: hidden;
+    overflow-x: auto !important;
     -webkit-overflow-scrolling: touch;
   }
   
@@ -3800,9 +3814,32 @@ body.login-page {
     box-sizing: border-box;
   }
   
+  /* REPORT PAGE – convert grid into horizontal lane */
+  .report-grid,
+  .grid-column {
+    display: flex !important;
+    flex-direction: row !important;
+    flex-wrap: nowrap !important;
+    overflow-x: auto !important;
+    gap: 16px;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+  }
+  
+  .report-card,
+  .analysis-card,
+  .chart-card,
+  .summary-card,
+  .statement-card {
+    min-width: 88vw;
+    flex-shrink: 0;
+    scroll-snap-align: start;
+  }
+  
   .filter-bar {
     display: flex;
     flex-direction: column;
+    flex-wrap: wrap;
     padding: 12px;
     gap: 10px;
     align-items: stretch;
