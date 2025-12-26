@@ -957,11 +957,7 @@
     updateProfileDisplay();
     loadReminders();
     setInterval(loadReminders, 1000);
-  // Initialize on page load
-  document.addEventListener('DOMContentLoaded', function() {
-    updateProfileDisplay();
-    loadReminders();
-    setInterval(loadReminders, 1000);
+    initializeMobileSwipe();
     setupSidebarOverlay();
   });
 
@@ -981,6 +977,147 @@
       });
     }
   }
+
+  // Mobile swipe functionality
+  function initializeMobileSwipe() {
+    if (window.innerWidth > 768) return; // Only for mobile
+    
+    const dashboard = document.querySelector('.dashboard');
+    if (!dashboard) return;
+    
+    // Get all cards
+    const allCards = Array.from(dashboard.querySelectorAll('.card'));
+    if (allCards.length === 0) return;
+    
+    // Create pages container
+    const pagesContainer = document.createElement('div');
+    pagesContainer.className = 'mobile-pages-container';
+    
+    // Split cards into pages of 4
+    const cardsPerPage = 4;
+    const totalPages = Math.ceil(allCards.length / cardsPerPage);
+    
+    for (let i = 0; i < totalPages; i++) {
+      const page = document.createElement('div');
+      page.className = 'mobile-page';
+      
+      const pageCards = allCards.slice(i * cardsPerPage, (i + 1) * cardsPerPage);
+      pageCards.forEach(card => {
+        page.appendChild(card.cloneNode(true));
+      });
+      
+      pagesContainer.appendChild(page);
+    }
+    
+    // Clear dashboard and add pages container
+    dashboard.innerHTML = '';
+    dashboard.appendChild(pagesContainer);
+    
+    // Add pagination dots
+    const dotsContainer = document.createElement('div');
+    dotsContainer.className = 'page-dots';
+    for (let i = 0; i < totalPages; i++) {
+      const dot = document.createElement('span');
+      dot.className = 'page-dot' + (i === 0 ? ' active' : '');
+      dot.onclick = () => goToPage(i);
+      dotsContainer.appendChild(dot);
+    }
+    dashboard.appendChild(dotsContainer);
+    
+    // Swipe logic
+    let currentPage = 0;
+    let startX = 0;
+    let startY = 0;
+    let isDragging = false;
+    let moved = false;
+    
+    function updatePage() {
+      const offset = -currentPage * 100;
+      pagesContainer.style.transform = `translateX(${offset}%)`;
+      
+      // Update dots
+      document.querySelectorAll('.page-dot').forEach((dot, index) => {
+        dot.classList.toggle('active', index === currentPage);
+      });
+    }
+    
+    function goToPage(pageIndex) {
+      currentPage = Math.max(0, Math.min(pageIndex, totalPages - 1));
+      updatePage();
+    }
+    
+    pagesContainer.addEventListener('touchstart', (e) => {
+      startX = e.touches[0].clientX;
+      startY = e.touches[0].clientY;
+      isDragging = true;
+      moved = false;
+      pagesContainer.style.transition = 'none';
+    }, {passive: true});
+    
+    pagesContainer.addEventListener('touchmove', (e) => {
+      if (!isDragging) return;
+      
+      const currentX = e.touches[0].clientX;
+      const currentY = e.touches[0].clientY;
+      const diffX = Math.abs(startX - currentX);
+      const diffY = Math.abs(startY - currentY);
+      
+      // Only move horizontally if horizontal movement is dominant
+      if (diffX > diffY && diffX > 5) {
+        moved = true;
+        const diff = startX - currentX;
+        const offset = -currentPage * 100 - (diff / pagesContainer.offsetWidth * 100);
+        pagesContainer.style.transform = `translateX(${offset}%)`;
+      }
+    }, {passive: true});
+    
+    pagesContainer.addEventListener('touchend', (e) => {
+      if (!isDragging) return;
+      isDragging = false;
+      
+      pagesContainer.style.transition = 'transform 0.25s cubic-bezier(0.4, 0.0, 0.2, 1)';
+      
+      if (moved) {
+        const endX = e.changedTouches[0].clientX;
+        const diff = startX - endX;
+        const threshold = 40; // minimum swipe distance
+        
+        if (Math.abs(diff) > threshold) {
+          if (diff > 0 && currentPage < totalPages - 1) {
+            currentPage++;
+          } else if (diff < 0 && currentPage > 0) {
+            currentPage--;
+          }
+        }
+      }
+      
+      updatePage();
+    }, {passive: true});
+    
+    // Re-bind event listeners for cloned cards
+    rebindCardEvents();
+  }
+  
+  function rebindCardEvents() {
+    // Re-bind any click events or other interactive elements within cards
+    document.querySelectorAll('.set-limit-btn').forEach(btn => {
+      btn.onclick = function(e) {
+        e.stopPropagation();
+        openSettingsModal();
+      };
+    });
+  }
+  
+  // Re-initialize on window resize
+  let resizeTimer;
+  window.addEventListener('resize', () => {
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(() => {
+      if (window.innerWidth <= 768) {
+        initializeMobileSwipe();
+      }
+    }, 250);
+  });
 </script>
 
 </body>
