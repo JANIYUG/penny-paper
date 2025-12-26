@@ -3251,15 +3251,14 @@ body.login-page {
 
 @media (max-width: 768px) {
   
-  /* ===== MOBILE-FIRST COMPLETE REDESIGN ===== */
-  * {
-    -webkit-box-sizing: border-box;
-    -moz-box-sizing: border-box;
-    box-sizing: border-box;
-  }
+  /* ============================================
+     MOBILE FIX — MAKE HOME + REPORT SWIPABLE
+     ============================================ */
   
+  /* ---- Unlock scroll (important) ---- */
   html, body {
     overflow-x: auto !important;
+    overflow-y: auto !important;
     width: 100%;
     height: 100%;
     margin: 0;
@@ -3267,7 +3266,6 @@ body.login-page {
   }
   
   body {
-    overflow-y: auto;
     -webkit-overflow-scrolling: touch;
     min-height: 100vh;
   }
@@ -3286,7 +3284,8 @@ body.login-page {
     flex-direction: column;
     flex: 1;
     width: 100%;
-    overflow-x: hidden;
+    overflow-x: auto !important;
+    overflow-y: auto !important;
     position: relative;
   }
   
@@ -3419,8 +3418,8 @@ body.login-page {
   .main {
     padding: 12px;
     padding-bottom: 20px;
-    overflow-y: auto;
     overflow-x: auto !important;
+    overflow-y: auto !important;
     -webkit-overflow-scrolling: touch;
     min-height: calc(100vh - 60px);
     width: 100%;
@@ -3431,19 +3430,20 @@ body.login-page {
     position: relative;
   }
   
-  /* ===== DASHBOARD HORIZONTAL SWIPE - MOBILE ONLY ===== */
+  /* ---- HOME: FIX dashboard height collapsing ---- */
   .dashboard {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
+    height: auto !important;
+    overflow: visible !important;
+    display: block !important;
     width: 100%;
     max-width: 100%;
     padding: 0;
-    overflow-x: auto !important;
   }
   
   .reports-dashboard {
-    overflow-x: auto !important;
+    height: auto !important;
+    overflow: visible !important;
+    display: block !important;
   }
   
   /* Hide mobile-specific containers */
@@ -3453,16 +3453,16 @@ body.login-page {
     display: none !important;
   }
   
-  /* HOME PAGE – make card rows scroll horizontally */
+  /* ---- HOME: Each row becomes horizontal scroll ---- */
   .card-row {
     display: flex !important;
     flex-direction: row !important;
     flex-wrap: nowrap !important;
-    overflow-x: auto;
-    overflow-y: hidden;
-    gap: 12px;
-    width: 100%;
-    padding-bottom: 10px;
+    overflow-x: auto !important;
+    overflow-y: hidden !important;
+    gap: 14px !important;
+    width: 100% !important;
+    padding-bottom: 14px !important;
     scroll-snap-type: x mandatory;
     -webkit-overflow-scrolling: touch;
   }
@@ -3474,11 +3474,12 @@ body.login-page {
     flex-wrap: nowrap !important;
   }
   
-  /* ===== CARDS - HORIZONTAL SWIPE ===== */
+  /* Cards become swipe-size instead of squeezing */
   .card {
     min-width: 85vw !important;
-    width: 85vw !important;
     max-width: 85vw !important;
+    width: 85vw !important;
+    height: auto !important;
     min-height: 120px;
     padding: 16px;
     box-sizing: border-box;
@@ -3490,15 +3491,15 @@ body.login-page {
     overflow: hidden;
     position: relative;
     margin-bottom: 0;
-    flex-shrink: 0;
+    flex-shrink: 0 !important;
     scroll-snap-align: start;
   }
   
   .card-row.row-2 .card,
   .card-row.row-5 .card {
     min-width: 85vw !important;
-    width: 85vw !important;
-    flex-shrink: 0;
+    max-width: 85vw !important;
+    flex-shrink: 0 !important;
   }
   
   .card:hover {
@@ -3801,8 +3802,8 @@ body.login-page {
   /* ===== REPORTS & ANALYSIS ===== */
   body.report-page .main {
     min-height: calc(100vh - 60px);
-    overflow-y: auto !important;
     overflow-x: auto !important;
+    overflow-y: auto !important;
     -webkit-overflow-scrolling: touch;
   }
   
@@ -3814,34 +3815,45 @@ body.login-page {
     box-sizing: border-box;
   }
   
-  /* REPORT PAGE – convert grid into horizontal lane */
-  .report-grid,
-  .grid-column {
+  /* ---- REPORT PAGE: Convert 3-column grid into swipe-lane ---- */
+  .report-grid {
     display: flex !important;
     flex-direction: row !important;
     flex-wrap: nowrap !important;
     overflow-x: auto !important;
-    gap: 16px;
+    overflow-y: hidden !important;
+    gap: 18px !important;
+    width: 100% !important;
+    padding-bottom: 16px !important;
     scroll-snap-type: x mandatory;
     -webkit-overflow-scrolling: touch;
   }
   
+  .grid-column {
+    flex: none !important;
+    display: flex !important;
+    flex-direction: column !important;
+    min-width: 90vw !important;
+    gap: 18px !important;
+  }
+  
   .report-card,
+  .summary-card,
   .analysis-card,
   .chart-card,
-  .summary-card,
   .statement-card {
-    min-width: 88vw;
-    flex-shrink: 0;
+    min-width: 90vw !important;
+    flex-shrink: 0 !important;
     scroll-snap-align: start;
   }
   
+  /* Filter bar shouldn't break */
   .filter-bar {
     display: flex;
     flex-direction: column;
-    flex-wrap: wrap;
+    flex-wrap: wrap !important;
     padding: 12px;
-    gap: 10px;
+    gap: 10px !important;
     align-items: stretch;
   }
   
