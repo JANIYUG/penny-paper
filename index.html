@@ -710,18 +710,10 @@
       if (monthlyBudget) localStorage.setItem('monthlyBudget', monthlyBudget);
       if (savingsTarget) localStorage.setItem('savingsTarget', savingsTarget);
       
-      // Update dashboard cards
-      if (dailyLimit) updateCardLimit('daily', dailyLimit, 0);
-      if (weeklyLimit) updateCardLimit('weekly', weeklyLimit, 1);
-      if (monthlyLimit) updateCardLimit('monthly', monthlyLimit, 2);
-      if (yearlyLimit) updateCardLimit('yearly', yearlyLimit, 3);
-      
-      // Update savings card
-      if (savingsTarget) updateSavingsCard();
-      
+      // Update all dashboard cards and features to reflect new settings
+      updateDashboard();
       // Show confirmation
       alert('Settings saved successfully!');
-      
       // Close modal
       closeSettingsModal();
     } catch (error) {
