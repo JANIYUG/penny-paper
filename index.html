@@ -6,7 +6,7 @@
   <title>Penny & Paper | Home</title>
   <link rel="stylesheet" href="style.css">
 </head>
-<body>
+<body class="index-page">
 
 <script>
   // Check if user is logged in
@@ -958,7 +958,25 @@
     loadReminders();
     setInterval(loadReminders, 1000);
     initializeMobileSwipe();
+    setupSidebarOverlay();
   });
+
+  // Setup sidebar overlay click handler
+  function setupSidebarOverlay() {
+    if (window.innerWidth > 768) return;
+    
+    const content = document.querySelector('.content');
+    const sidebarToggle = document.getElementById('sidebar-toggle');
+    
+    if (content && sidebarToggle) {
+      content.addEventListener('click', function(e) {
+        // Close sidebar if clicking outside it
+        if (sidebarToggle.checked && !e.target.closest('.sidebar')) {
+          sidebarToggle.checked = false;
+        }
+      });
+    }
+  }
 
   // Mobile swipe functionality
   function initializeMobileSwipe() {
@@ -969,6 +987,7 @@
     
     // Get all cards
     const allCards = Array.from(dashboard.querySelectorAll('.card'));
+    if (allCards.length === 0) return;
     
     // Create pages container
     const pagesContainer = document.createElement('div');
@@ -1028,7 +1047,8 @@
     pagesContainer.addEventListener('touchstart', (e) => {
       startX = e.touches[0].clientX;
       isDragging = true;
-    });
+      pagesContainer.style.transition = 'none';
+    }, {passive: true});
     
     pagesContainer.addEventListener('touchmove', (e) => {
       if (!isDragging) return;
@@ -1038,11 +1058,13 @@
       // Add some resistance while dragging
       const offset = -currentPage * 100 - (diff / pagesContainer.offsetWidth * 100);
       pagesContainer.style.transform = `translateX(${offset}%)`;
-    });
+    }, {passive: true});
     
     pagesContainer.addEventListener('touchend', (e) => {
       if (!isDragging) return;
       isDragging = false;
+      
+      pagesContainer.style.transition = 'transform 0.3s ease-out';
       
       const endX = e.changedTouches[0].clientX;
       const diff = startX - endX;
@@ -1057,7 +1079,7 @@
       }
       
       updatePage();
-    });
+    }, {passive: true});
     
     // Re-bind event listeners for cloned cards
     rebindCardEvents();

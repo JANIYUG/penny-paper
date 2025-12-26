@@ -7,7 +7,7 @@
   <link rel="stylesheet" href="style.css">
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
-<body>
+<body class="report-page">
 
 <div class="app">
 
@@ -982,6 +982,22 @@
     a.click();
     window.URL.revokeObjectURL(url);
   }
+
+  // Setup sidebar overlay on mobile
+  document.addEventListener('DOMContentLoaded', function() {
+    if (window.innerWidth <= 768) {
+      const content = document.querySelector('.content');
+      const sidebarToggle = document.getElementById('sidebar-toggle');
+      
+      if (content && sidebarToggle) {
+        content.addEventListener('click', function(e) {
+          if (sidebarToggle.checked && !e.target.closest('.sidebar')) {
+            sidebarToggle.checked = false;
+          }
+        });
+      }
+    }
+  });
 </script>
 
 </body>

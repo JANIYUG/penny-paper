@@ -6,7 +6,7 @@
   <title>Penny & Paper | Notes</title>
   <link rel="stylesheet" href="style.css">
 </head>
-<body>
+<body class="notes-page">
 
 <div class="app">
 
@@ -316,6 +316,22 @@
       return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
     }
   }
+
+  // Setup sidebar overlay on mobile
+  document.addEventListener('DOMContentLoaded', function() {
+    if (window.innerWidth <= 768) {
+      const content = document.querySelector('.content');
+      const sidebarToggle = document.getElementById('sidebar-toggle');
+      
+      if (content && sidebarToggle) {
+        content.addEventListener('click', function(e) {
+          if (sidebarToggle.checked && !e.target.closest('.sidebar')) {
+            sidebarToggle.checked = false;
+          }
+        });
+      }
+    }
+  });
 </script>
 
 </body>
