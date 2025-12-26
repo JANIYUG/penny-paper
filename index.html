@@ -1030,6 +1030,7 @@
     let startY = 0;
     let isDragging = false;
     let moved = false;
+    let startTime = 0;
     
     function updatePage() {
       const offset = -currentPage * 100;
@@ -1049,6 +1050,7 @@
     pagesContainer.addEventListener('touchstart', (e) => {
       startX = e.touches[0].clientX;
       startY = e.touches[0].clientY;
+      startTime = Date.now();
       isDragging = true;
       moved = false;
       pagesContainer.style.transition = 'none';
@@ -1062,8 +1064,8 @@
       const diffX = Math.abs(startX - currentX);
       const diffY = Math.abs(startY - currentY);
       
-      // Only move horizontally if horizontal movement is dominant
-      if (diffX > diffY && diffX > 5) {
+      // Only move horizontally if horizontal movement is dominant and exceeds threshold
+      if (diffX > diffY && diffX > 10) {
         moved = true;
         const diff = startX - currentX;
         const offset = -currentPage * 100 - (diff / pagesContainer.offsetWidth * 100);
@@ -1075,9 +1077,13 @@
       if (!isDragging) return;
       isDragging = false;
       
+      const endTime = Date.now();
+      const duration = endTime - startTime;
+      
       pagesContainer.style.transition = 'transform 0.25s cubic-bezier(0.4, 0.0, 0.2, 1)';
       
-      if (moved) {
+      // Only change pages if user actually swiped (moved significantly)
+      if (moved && duration < 1000) {
         const endX = e.changedTouches[0].clientX;
         const diff = startX - endX;
         const threshold = 40; // minimum swipe distance
@@ -1100,11 +1106,22 @@
   
   function rebindCardEvents() {
     // Re-bind any click events or other interactive elements within cards
-    document.querySelectorAll('.set-limit-btn').forEach(btn => {
-      btn.onclick = function(e) {
+    document.querySelectorAll('.mobile-page .set-limit-btn').forEach(btn => {
+      btn.addEventListener('click', function(e) {
         e.stopPropagation();
+        e.preventDefault();
         openSettingsModal();
-      };
+      });
+    });
+    
+    // Ensure all clickable elements in cards work
+    document.querySelectorAll('.mobile-page .card').forEach(card => {
+      card.addEventListener('touchstart', function(e) {
+        // Allow clicks through if not swiping
+        if (e.target.tagName === 'BUTTON' || e.target.closest('button')) {
+          e.stopPropagation();
+        }
+      }, {passive: true});
     });
   }
   

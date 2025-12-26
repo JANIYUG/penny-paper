@@ -70,7 +70,7 @@
             <option value="Other">Other</option>
           </select>
         </div>
-        <button class="export-btn" onclick="exportReport()">📊 Export Report</button>
+        <button class="export-btn" onclick="exportReport()">Export Report</button>
       </div>
 
       <!-- REPORTS DASHBOARD -->
@@ -84,7 +84,6 @@
             <!-- Summary Cards -->
             <div class="summary-row">
               <div class="report-card summary-card">
-                <div class="card-icon">💰</div>
                 <div class="card-content">
                   <h4>Total Expenses</h4>
                   <h2 id="totalExpenses">₹0</h2>
@@ -93,7 +92,6 @@
               </div>
 
               <div class="report-card summary-card">
-                <div class="card-icon">📊</div>
                 <div class="card-content">
                   <h4>Current Period Avg</h4>
                   <h2 id="avgDaily">₹0</h2>
@@ -104,7 +102,6 @@
 
             <div class="summary-row">
               <div class="report-card summary-card">
-                <div class="card-icon">�</div>
                 <div class="card-content">
                   <h4>This Month</h4>
                   <h2 id="monthlyTotal">₹0</h2>
@@ -113,7 +110,6 @@
               </div>
 
               <div class="report-card summary-card">
-                <div class="card-icon">📆</div>
                 <div class="card-content">
                   <h4>This Year</h4>
                   <h2 id="yearlyTotal">₹0</h2>
@@ -124,31 +120,27 @@
 
             <!-- Averages Breakdown -->
             <div class="report-card analysis-card">
-              <h3>📊 Spending Averages</h3>
+              <h3>Spending Averages</h3>
               <div id="spendingAverages" class="insights-content">
                 <div class="insight-item">
-                  <span class="insight-icon">📅</span>
                   <div>
                     <strong>Daily Avg:</strong>
                     <span id="dailyAvg">-</span>
                   </div>
                 </div>
                 <div class="insight-item">
-                  <span class="insight-icon">📊</span>
                   <div>
                     <strong>Weekly Avg:</strong>
                     <span id="weeklyAvg">-</span>
                   </div>
                 </div>
                 <div class="insight-item">
-                  <span class="insight-icon">📈</span>
                   <div>
                     <strong>Monthly Avg:</strong>
                     <span id="monthlyAvg">-</span>
                   </div>
                 </div>
                 <div class="insight-item">
-                  <span class="insight-icon">📆</span>
                   <div>
                     <strong>Yearly Avg:</strong>
                     <span id="yearlyAvg">-</span>
@@ -181,7 +173,7 @@
 
             <!-- Category Comparison -->
             <div class="report-card analysis-card">
-              <h3>🏷️ Category Comparison</h3>
+              <h3>Category Comparison</h3>
               <div id="categoryComparison" class="insights-content">
                 <!-- Dynamic category comparison items -->
               </div>
@@ -196,7 +188,7 @@
             </div>
 
             <div class="report-card analysis-card">
-              <h3> Predictions</h3>
+              <h3>Predictions</h3>
               <div id="predictions" class="insights-content">
                 <div class="insight-item">
                   <span class="insight-icon"></span>
@@ -223,11 +215,11 @@
             </div>
 
             <div class="report-card statement-card">
-              <h3> Expense Statement</h3>
+              <h3>Expense Statement</h3>
               <div class="statement-preview">
                 <p><strong id="statementCount">0</strong> transactions recorded</p>
                 <p>Total: <strong id="statementTotal">0</strong></p>
-                <button class="view-statement-btn" onclick="openStatementModal()"> View Full Statement</button>
+                <button class="view-statement-btn" onclick="openStatementModal()">View Full Statement</button>
               </div>
             </div>
 
@@ -242,7 +234,7 @@
 <div id="statementModal" class="statement-modal">
   <div class="statement-modal-content">
     <div class="statement-modal-header">
-      <h2>📜 Expense Statement</h2>
+      <h2>Expense Statement</h2>
       <span class="close" onclick="closeStatementModal()">&times;</span>
     </div>
     <div class="statement-filters">
@@ -263,7 +255,7 @@
         <option value="Education">Education</option>
         <option value="Other">Other</option>
       </select>
-      <button class="print-btn" onclick="printStatement()">🖨️ Print</button>
+      <button class="print-btn" onclick="printStatement()">Print</button>
     </div>
     <div class="statement-summary">
       <div class="summary-item">
@@ -953,7 +945,6 @@
       
       return `
         <div class="insight-item">
-          <span class="insight-icon">🏷️</span>
           <div>
             <strong>${category}:</strong>
             <span>₹${Math.round(amount).toLocaleString('en-IN')} <span style="color: ${changeColor}">${changeText}</span></span>
