@@ -18,8 +18,8 @@
 
 <div class="app">
 
-  <!-- SIDEBAR TOGGLE -->
-  <input type="checkbox" id="sidebar-toggle">
+  <!-- SIDEBAR TOGGLE (for mobile/tablet) -->
+  <input type="checkbox" id="sidebar-toggle" class="sidebar-toggle-checkbox" style="display:none;">
 
   <!-- TOP NAV -->
   <header class="top-nav">
@@ -63,14 +63,13 @@
       <!-- DASHBOARD -->
       <div class="dashboard">
 
-        <!-- ROW 1: 2 cards with rings -->
-        <div class="card-row row-2">
+        <!-- DONUT CARDS SECTION: 2x2 Grid -->
+        <div class="donut-cards-grid">
 
-          <div class="card">
-            <div>
+          <div class="card donut-card">
+            <div class="card-text">
               <h4>Today's Spend</h4>
               <h2>₹0</h2>
-              <p>&nbsp;</p>
               <small>Limit ₹500</small>
             </div>
             <div class="ring-container">
@@ -83,11 +82,10 @@
             </div>
           </div>
 
-          <div class="card">
-            <div>
+          <div class="card donut-card">
+            <div class="card-text">
               <h4>Weekly Spending</h4>
               <h2>₹0</h2>
-              <p>&nbsp;</p>
               <small>Limit ₹3,000</small>
             </div>
             <div class="ring-container">
@@ -100,16 +98,10 @@
             </div>
           </div>
 
-        </div>
-
-        <!-- ROW 2: 2 cards with rings -->
-        <div class="card-row row-2">
-
-          <div class="card">
-            <div>
+          <div class="card donut-card">
+            <div class="card-text">
               <h4>Total This Month</h4>
               <h2>₹0</h2>
-              <p>&nbsp;</p>
               <small>Limit ₹20,000</small>
             </div>
             <div class="ring-container">
@@ -122,11 +114,10 @@
             </div>
           </div>
 
-          <div class="card">
-            <div>
+          <div class="card donut-card">
+            <div class="card-text">
               <h4>Yearly Spending</h4>
               <h2>₹0</h2>
-              <p>&nbsp;</p>
               <small>Limit ₹1,50,000</small>
             </div>
             <div class="ring-container">
@@ -141,8 +132,8 @@
 
         </div>
 
-        <!-- ROW 3: 5 cards -->
-        <div class="card-row row-5">
+        <!-- OTHER CARDS SECTION -->
+        <div class="other-cards-section">
 
           <div class="card">
             <div>
@@ -196,6 +187,7 @@
           </div>
 
         </div>
+        <!-- End Other Cards Section -->
 
       </div>
 
