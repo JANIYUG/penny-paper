@@ -3251,14 +3251,14 @@ body.login-page {
 
 @media (max-width: 768px) {
   
-  /* ============================================
-     MOBILE FIX — MAKE HOME + REPORT SWIPABLE
-     ============================================ */
+  /* ================================
+     MOBILE FIX — HOME + REPORT LAYOUT
+     ================================ */
   
-  /* ---- Unlock scroll (important) ---- */
+  /* allow vertical scrolling normally */
   html, body {
-    overflow-x: auto !important;
     overflow-y: auto !important;
+    overflow-x: hidden !important;
     width: 100%;
     height: 100%;
     margin: 0;
@@ -3279,13 +3279,12 @@ body.login-page {
     overflow-x: hidden;
   }
   
+  /* remove weird blank spacing / alignment */
   .content {
-    display: flex;
-    flex-direction: column;
-    flex: 1;
+    display: block !important;
     width: 100%;
-    overflow-x: auto !important;
     overflow-y: auto !important;
+    overflow-x: hidden !important;
     position: relative;
   }
   
@@ -3418,8 +3417,8 @@ body.login-page {
   .main {
     padding: 12px;
     padding-bottom: 20px;
-    overflow-x: auto !important;
     overflow-y: auto !important;
+    overflow-x: hidden !important;
     -webkit-overflow-scrolling: touch;
     min-height: calc(100vh - 60px);
     width: 100%;
@@ -3430,7 +3429,7 @@ body.login-page {
     position: relative;
   }
   
-  /* ---- HOME: FIX dashboard height collapsing ---- */
+  /* remove forced height that causes empty space */
   .dashboard {
     height: auto !important;
     overflow: visible !important;
@@ -3453,18 +3452,11 @@ body.login-page {
     display: none !important;
   }
   
-  /* ---- HOME: Each row becomes horizontal scroll ---- */
+  /* card rows stack vertically */
   .card-row {
-    display: flex !important;
-    flex-direction: row !important;
-    flex-wrap: nowrap !important;
-    overflow-x: auto !important;
-    overflow-y: hidden !important;
-    gap: 14px !important;
+    display: block !important;
     width: 100% !important;
-    padding-bottom: 14px !important;
-    scroll-snap-type: x mandatory;
-    -webkit-overflow-scrolling: touch;
+    margin-bottom: 12px !important;
   }
   
   .card-row.row-2,
@@ -3474,11 +3466,12 @@ body.login-page {
     flex-wrap: nowrap !important;
   }
   
-  /* Cards become swipe-size instead of squeezing */
+  /* ALL cards become full width on phone */
   .card {
-    min-width: 85vw !important;
-    max-width: 85vw !important;
-    width: 85vw !important;
+    width: 93% !important;
+    max-width: 93% !important;
+    margin: 0 auto 16px auto !important;
+    flex: none !important;
     height: auto !important;
     min-height: 120px;
     padding: 16px;
@@ -3490,16 +3483,14 @@ body.login-page {
     justify-content: flex-start;
     overflow: hidden;
     position: relative;
-    margin-bottom: 0;
-    flex-shrink: 0 !important;
-    scroll-snap-align: start;
   }
   
   .card-row.row-2 .card,
   .card-row.row-5 .card {
-    min-width: 85vw !important;
-    max-width: 85vw !important;
-    flex-shrink: 0 !important;
+    width: 93% !important;
+    max-width: 93% !important;
+    margin: 0 auto 16px auto !important;
+    flex: none !important;
   }
   
   .card:hover {
@@ -3815,36 +3806,33 @@ body.login-page {
     box-sizing: border-box;
   }
   
-  /* ---- REPORT PAGE: Convert 3-column grid into swipe-lane ---- */
+  /* remove 3-column layout on report page */
   .report-grid {
-    display: flex !important;
-    flex-direction: row !important;
-    flex-wrap: nowrap !important;
-    overflow-x: auto !important;
-    overflow-y: hidden !important;
-    gap: 18px !important;
+    display: block !important;
     width: 100% !important;
-    padding-bottom: 16px !important;
-    scroll-snap-type: x mandatory;
-    -webkit-overflow-scrolling: touch;
   }
   
   .grid-column {
-    flex: none !important;
-    display: flex !important;
-    flex-direction: column !important;
-    min-width: 90vw !important;
-    gap: 18px !important;
+    width: 100% !important;
+    margin-bottom: 18px !important;
+    display: block !important;
   }
   
+  /* cards inside grid should stack vertically */
+  .grid-column > * {
+    margin-bottom: 16px !important;
+  }
+  
+  /* ALL cards become full width on phone */
   .report-card,
   .summary-card,
   .analysis-card,
   .chart-card,
   .statement-card {
-    min-width: 90vw !important;
-    flex-shrink: 0 !important;
-    scroll-snap-align: start;
+    width: 93% !important;
+    max-width: 93% !important;
+    margin: 0 auto 16px auto !important;
+    flex: none !important;
   }
   
   /* Filter bar shouldn't break */
