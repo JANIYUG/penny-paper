@@ -952,13 +952,24 @@
     }
   }
 
-  // Initialize on page load
+  // Initialize on page load - optimized for performance
   document.addEventListener('DOMContentLoaded', function() {
+    // Critical tasks first
     updateProfileDisplay();
-    loadReminders();
-    setInterval(loadReminders, 1000);
-    initializeMobileSwipe();
-    setupSidebarOverlay();
+    
+    // Defer mobile swipe initialization
+    if (window.innerWidth <= 768) {
+      requestAnimationFrame(() => {
+        initializeMobileSwipe();
+        setupSidebarOverlay();
+      });
+    }
+    
+    // Load reminders after a short delay
+    setTimeout(() => {
+      loadReminders();
+      setInterval(loadReminders, 1000);
+    }, 100);
   });
 
   // Setup sidebar overlay click handler
@@ -993,21 +1004,25 @@
     const pagesContainer = document.createElement('div');
     pagesContainer.className = 'mobile-pages-container';
     
-    // Split cards into pages of 4
-    const cardsPerPage = 4;
-    const totalPages = Math.ceil(allCards.length / cardsPerPage);
+    // Split into 2 pages: first 4 cards (with rings), then remaining 5 cards
+    const firstPage = document.createElement('div');
+    firstPage.className = 'mobile-page page-donuts';
     
-    for (let i = 0; i < totalPages; i++) {
-      const page = document.createElement('div');
-      page.className = 'mobile-page';
-      
-      const pageCards = allCards.slice(i * cardsPerPage, (i + 1) * cardsPerPage);
-      pageCards.forEach(card => {
-        page.appendChild(card.cloneNode(true));
-      });
-      
-      pagesContainer.appendChild(page);
+    const secondPage = document.createElement('div');
+    secondPage.className = 'mobile-page page-info';
+    
+    // First page: 4 cards with rings (2x2 grid)
+    for (let i = 0; i < 4 && i < allCards.length; i++) {
+      firstPage.appendChild(allCards[i].cloneNode(true));
     }
+    
+    // Second page: remaining 5 cards
+    for (let i = 4; i < allCards.length; i++) {
+      secondPage.appendChild(allCards[i].cloneNode(true));
+    }
+    
+    pagesContainer.appendChild(firstPage);
+    pagesContainer.appendChild(secondPage);
     
     // Clear dashboard and add pages container
     dashboard.innerHTML = '';
@@ -1016,7 +1031,7 @@
     // Add pagination dots
     const dotsContainer = document.createElement('div');
     dotsContainer.className = 'page-dots';
-    for (let i = 0; i < totalPages; i++) {
+    for (let i = 0; i < 2; i++) {
       const dot = document.createElement('span');
       dot.className = 'page-dot' + (i === 0 ? ' active' : '');
       dot.onclick = () => goToPage(i);
@@ -1031,6 +1046,7 @@
     let isDragging = false;
     let moved = false;
     let startTime = 0;
+    const totalPages = 2;
     
     function updatePage() {
       const offset = -currentPage * 100;
@@ -1089,10 +1105,10 @@
         const threshold = 40; // minimum swipe distance
         
         if (Math.abs(diff) > threshold) {
-          if (diff > 0 && currentPage < totalPages - 1) {
-            currentPage++;
+          if (diff > 0 && currentPage < 1) {
+            currentPage = 1;
           } else if (diff < 0 && currentPage > 0) {
-            currentPage--;
+            currentPage = 0;
           }
         }
       }
