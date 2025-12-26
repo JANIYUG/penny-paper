@@ -3251,11 +3251,21 @@ body.login-page {
 
 @media (max-width: 768px) {
   
-  /* ==========================================================
-     MOBILE SWIPE FIX — Home + Reports (NO DESKTOP IMPACT)
-     ========================================================== */
+  /* ================================
+     MOBILE FIXES FOR INDEX + R&P
+  ================================*/
   
-  /* Fix home page empty white space */
+  /* Fix empty bottom space on Home (index.html) */
+  body#index-page,
+  body,
+  .dashboard,
+  .main,
+  .content {
+    height: auto !important;
+    min-height: fit-content !important;
+    overflow-y: auto !important;
+  }
+  
   html, body {
     overflow-y: auto !important;
     overflow-x: auto !important;
@@ -3458,23 +3468,19 @@ body.login-page {
     display: none !important;
   }
   
-  /* =====================================
-     HOME — Make card rows swipe sideways
-     ===================================== */
-  .home .card-row,
-  .card-row {
+  /* Make ONLY first row of cards swipe on index */
+  body#index-page .card-row:first-of-type {
     display: flex !important;
-    flex-wrap: nowrap !important;
     overflow-x: auto !important;
-    overflow-y: hidden !important;
-    gap: 14px !important;
+    flex-wrap: nowrap !important;
+    gap: 14px;
     scroll-snap-type: x mandatory;
     padding-right: 14px !important;
     width: 100% !important;
     margin-bottom: 12px !important;
     -webkit-overflow-scrolling: touch;
   }
-  .card-row::-webkit-scrollbar { 
+  body#index-page .card-row:first-of-type::-webkit-scrollbar { 
     display: none; 
   }
   
@@ -3485,8 +3491,7 @@ body.login-page {
     flex-wrap: nowrap !important;
   }
   
-  .home .card-row .card,
-  .card-row .card {
+  body#index-page .card-row:first-of-type .card {
     min-width: 92vw !important;
     max-width: 92vw !important;
     flex-shrink: 0 !important;
@@ -3505,25 +3510,16 @@ body.login-page {
     margin: 0;
   }
   
-  .card-row.row-2 .card,
-  .card-row.row-5 .card {
-    min-width: 92vw !important;
-    max-width: 92vw !important;
-    flex-shrink: 0 !important;
-  }
-  
-  /* Report + Analysis page: cards stacked normally */
-  .report .card-row,
-  .analysis .card-row {
+  /* On r&p page — stack everything, NO swipe */
+  body#rp-page .card-row {
     display: block !important;
     overflow-x: hidden !important;
   }
   
-  .report .card,
-  .analysis .card {
+  body#rp-page .card {
     width: 100% !important;
-    max-width: 100% !important;
     min-width: 100% !important;
+    max-width: 100% !important;
   }
   
   .card:hover {
@@ -3589,7 +3585,7 @@ body.login-page {
     display: none !important;
   }
   
-  /* Show donut image instead */
+  /* Prevent donut collapsing */
   .donut-wrapper {
     min-height: 220px !important;
     display: flex !important;
