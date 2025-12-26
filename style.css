@@ -3540,27 +3540,36 @@ body.login-page {
   }
   
   /* ===== DONUT AS FADED BACKGROUND ===== */
-  .ring-container {
-    position: absolute !important;
-    bottom: -10px;
-    right: -10px;
-    width: 120px !important;
-    height: 120px !important;
-    opacity: 0.25;
-    pointer-events: none;
-    z-index: 0;
+  /* MOBILE FIX – donut responsive (NO desktop changes) */
+  
+  /* Hide ring elements on mobile */
+  .ring-container,
+  .ring,
+  .ring::before,
+  .ring::after {
+    display: none !important;
   }
   
-  .ring {
-    width: 120px !important;
-    height: 120px !important;
-    display: block !important;
+  /* Show donut image instead */
+  .donut-wrapper {
+    display: flex !important;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    padding-top: 6px;
+  }
+  
+  .donut-img {
+    width: 75%;
+    max-width: 220px;
+    height: auto;
+    display: block;
+    margin: 0 auto;
+    object-fit: contain;
   }
   
   .ring-percent {
-    display: block !important;
-    font-size: 16px !important;
-    font-weight: bold;
+    display: none !important;
   }
   
   .ring-info {
