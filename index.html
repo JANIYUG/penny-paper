@@ -952,17 +952,14 @@
     }
   }
 
-  // Initialize on page load - optimized for performance
+  // Initialize on page load - mobile-first optimized
   document.addEventListener('DOMContentLoaded', function() {
     // Critical tasks first
     updateProfileDisplay();
     
-    // Defer mobile swipe initialization
+    // Setup sidebar for mobile
     if (window.innerWidth <= 768) {
-      requestAnimationFrame(() => {
-        initializeMobileSwipe();
-        setupSidebarOverlay();
-      });
+      setupSidebarOverlay();
     }
     
     // Load reminders after a short delay
@@ -974,8 +971,6 @@
 
   // Setup sidebar overlay click handler
   function setupSidebarOverlay() {
-    if (window.innerWidth > 768) return;
-    
     const content = document.querySelector('.content');
     const sidebarToggle = document.getElementById('sidebar-toggle');
     
@@ -988,169 +983,6 @@
       });
     }
   }
-
-  // Mobile swipe functionality
-  function initializeMobileSwipe() {
-    if (window.innerWidth > 768) return; // Only for mobile
-    
-    const dashboard = document.querySelector('.dashboard');
-    if (!dashboard) return;
-    
-    // Get all cards
-    const allCards = Array.from(dashboard.querySelectorAll('.card'));
-    if (allCards.length === 0) return;
-    
-    // Create pages container
-    const pagesContainer = document.createElement('div');
-    pagesContainer.className = 'mobile-pages-container';
-    
-    // Split into 2 pages: first 4 cards (with rings), then remaining 5 cards
-    const firstPage = document.createElement('div');
-    firstPage.className = 'mobile-page page-donuts';
-    
-    const secondPage = document.createElement('div');
-    secondPage.className = 'mobile-page page-info';
-    
-    // First page: 4 cards with rings (2x2 grid)
-    for (let i = 0; i < 4 && i < allCards.length; i++) {
-      firstPage.appendChild(allCards[i].cloneNode(true));
-    }
-    
-    // Second page: remaining 5 cards
-    for (let i = 4; i < allCards.length; i++) {
-      secondPage.appendChild(allCards[i].cloneNode(true));
-    }
-    
-    pagesContainer.appendChild(firstPage);
-    pagesContainer.appendChild(secondPage);
-    
-    // Clear dashboard and add pages container
-    dashboard.innerHTML = '';
-    dashboard.appendChild(pagesContainer);
-    
-    // Add pagination dots
-    const dotsContainer = document.createElement('div');
-    dotsContainer.className = 'page-dots';
-    for (let i = 0; i < 2; i++) {
-      const dot = document.createElement('span');
-      dot.className = 'page-dot' + (i === 0 ? ' active' : '');
-      dot.onclick = () => goToPage(i);
-      dotsContainer.appendChild(dot);
-    }
-    dashboard.appendChild(dotsContainer);
-    
-    // Swipe logic
-    let currentPage = 0;
-    let startX = 0;
-    let startY = 0;
-    let isDragging = false;
-    let moved = false;
-    let startTime = 0;
-    const totalPages = 2;
-    
-    function updatePage() {
-      const offset = -currentPage * 100;
-      pagesContainer.style.transform = `translateX(${offset}%)`;
-      
-      // Update dots
-      document.querySelectorAll('.page-dot').forEach((dot, index) => {
-        dot.classList.toggle('active', index === currentPage);
-      });
-    }
-    
-    function goToPage(pageIndex) {
-      currentPage = Math.max(0, Math.min(pageIndex, totalPages - 1));
-      updatePage();
-    }
-    
-    pagesContainer.addEventListener('touchstart', (e) => {
-      startX = e.touches[0].clientX;
-      startY = e.touches[0].clientY;
-      startTime = Date.now();
-      isDragging = true;
-      moved = false;
-      pagesContainer.style.transition = 'none';
-    }, {passive: true});
-    
-    pagesContainer.addEventListener('touchmove', (e) => {
-      if (!isDragging) return;
-      
-      const currentX = e.touches[0].clientX;
-      const currentY = e.touches[0].clientY;
-      const diffX = Math.abs(startX - currentX);
-      const diffY = Math.abs(startY - currentY);
-      
-      // Only move horizontally if horizontal movement is dominant and exceeds threshold
-      if (diffX > diffY && diffX > 10) {
-        moved = true;
-        const diff = startX - currentX;
-        const offset = -currentPage * 100 - (diff / pagesContainer.offsetWidth * 100);
-        pagesContainer.style.transform = `translateX(${offset}%)`;
-      }
-    }, {passive: true});
-    
-    pagesContainer.addEventListener('touchend', (e) => {
-      if (!isDragging) return;
-      isDragging = false;
-      
-      const endTime = Date.now();
-      const duration = endTime - startTime;
-      
-      pagesContainer.style.transition = 'transform 0.25s cubic-bezier(0.4, 0.0, 0.2, 1)';
-      
-      // Only change pages if user actually swiped (moved significantly)
-      if (moved && duration < 1000) {
-        const endX = e.changedTouches[0].clientX;
-        const diff = startX - endX;
-        const threshold = 40; // minimum swipe distance
-        
-        if (Math.abs(diff) > threshold) {
-          if (diff > 0 && currentPage < 1) {
-            currentPage = 1;
-          } else if (diff < 0 && currentPage > 0) {
-            currentPage = 0;
-          }
-        }
-      }
-      
-      updatePage();
-    }, {passive: true});
-    
-    // Re-bind event listeners for cloned cards
-    rebindCardEvents();
-  }
-  
-  function rebindCardEvents() {
-    // Re-bind any click events or other interactive elements within cards
-    document.querySelectorAll('.mobile-page .set-limit-btn').forEach(btn => {
-      btn.addEventListener('click', function(e) {
-        e.stopPropagation();
-        e.preventDefault();
-        openSettingsModal();
-      });
-    });
-    
-    // Ensure all clickable elements in cards work
-    document.querySelectorAll('.mobile-page .card').forEach(card => {
-      card.addEventListener('touchstart', function(e) {
-        // Allow clicks through if not swiping
-        if (e.target.tagName === 'BUTTON' || e.target.closest('button')) {
-          e.stopPropagation();
-        }
-      }, {passive: true});
-    });
-  }
-  
-  // Re-initialize on window resize
-  let resizeTimer;
-  window.addEventListener('resize', () => {
-    clearTimeout(resizeTimer);
-    resizeTimer = setTimeout(() => {
-      if (window.innerWidth <= 768) {
-        initializeMobileSwipe();
-      }
-    }, 250);
-  });
 </script>
 
 </body>

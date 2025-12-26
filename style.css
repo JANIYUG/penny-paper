@@ -6,6 +6,14 @@
 }
 
 /* BASE */
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+  width: 100%;
+}
+
 body {
   background: linear-gradient(135deg, #FFF8F0 0%, #FFE8E0 50%, #FFD8E8 100%);
   background-attachment: fixed;
@@ -20,7 +28,10 @@ body.add-expense-page {
 .app {
   display: flex;
   flex-direction: column;
+  min-height: 100vh;
   height: 100vh;
+  width: 100%;
+  overflow-x: hidden;
 }
 
 /* TOP NAV */
@@ -3240,7 +3251,7 @@ body.login-page {
 
 @media (max-width: 768px) {
   
-  /* ===== GLOBAL RESETS ===== */
+  /* ===== MOBILE-FIRST COMPLETE REDESIGN ===== */
   * {
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
@@ -3248,26 +3259,26 @@ body.login-page {
   }
   
   html, body {
-    overflow-x: hidden;
+    overflow-x: hidden !important;
     width: 100%;
+    height: 100%;
     margin: 0;
     padding: 0;
   }
   
   body {
-    overflow-y: hidden;
+    overflow-y: auto;
     -webkit-overflow-scrolling: touch;
     min-height: 100vh;
-    height: 100vh;
   }
   
   /* ===== APP CONTAINER ===== */
   .app {
     display: flex;
     flex-direction: column;
-    height: 100vh;
+    min-height: 100vh;
     width: 100%;
-    overflow: hidden;
+    overflow-x: hidden;
   }
   
   .content {
@@ -3275,7 +3286,7 @@ body.login-page {
     flex-direction: column;
     flex: 1;
     width: 100%;
-    overflow: hidden;
+    overflow-x: hidden;
     position: relative;
   }
   
@@ -3407,145 +3418,73 @@ body.login-page {
   /* ===== MAIN CONTENT AREA ===== */
   .main {
     padding: 12px;
-    overflow: hidden;
-    height: 100%;
+    padding-bottom: 20px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    -webkit-overflow-scrolling: touch;
+    min-height: calc(100vh - 60px);
     width: 100%;
+    max-width: 100%;
     box-sizing: border-box;
     display: flex;
     flex-direction: column;
     position: relative;
   }
   
-  /* ===== DASHBOARD LAYOUT - SWIPE PAGES ===== */
+  /* ===== DASHBOARD VERTICAL STACK - MOBILE ONLY ===== */
   .dashboard {
     display: flex;
     flex-direction: column;
-    height: 100%;
-    overflow: hidden;
+    gap: 12px;
+    width: 100%;
+    max-width: 100%;
     padding: 0;
-    width: 100%;
-    position: relative;
+    overflow-x: hidden;
   }
   
-  /* For non-dashboard pages, allow scrolling */
-  body:not(.index-page) .dashboard {
-    overflow-y: auto;
-    -webkit-overflow-scrolling: touch;
-  }
-  
-  /* Mobile Pages Container */
-  .mobile-pages-container {
-    display: flex;
-    width: 100%;
-    height: calc(100% - 40px);
-    transition: transform 0.25s cubic-bezier(0.4, 0.0, 0.2, 1);
-    touch-action: pan-y;
-  }
-  
-  /* Individual Page - Default 2x2 for donuts */
-  .mobile-page {
-    min-width: 100%;
-    width: 100%;
-    height: 100%;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    grid-template-rows: 1fr 1fr;
-    gap: 8px;
-    padding: 8px;
-    box-sizing: border-box;
-    flex-shrink: 0;
-  }
-  
-  /* Second page with 5 cards - special layout */
-  .mobile-page.page-info {
-    grid-template-columns: 1fr 1fr;
-    grid-template-rows: auto auto auto;
-    gap: 6px;
-    padding: 8px;
-  }
-  
-  /* First two cards side by side */
-  .mobile-page.page-info .card:nth-child(1),
-  .mobile-page.page-info .card:nth-child(2) {
-    grid-column: span 1;
-  }
-  
-  /* Third card spans full width */
-  .mobile-page.page-info .card:nth-child(3) {
-    grid-column: 1 / -1;
-  }
-  
-  /* Last two cards side by side */
-  .mobile-page.page-info .card:nth-child(4),
-  .mobile-page.page-info .card:nth-child(5) {
-    grid-column: span 1;
-  }
-  
-  /* Page Dots */
+  /* Hide mobile-specific containers */
+  .mobile-pages-container,
+  .mobile-page,
   .page-dots {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 8px;
-    padding: 12px 0;
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    background: rgba(255, 255, 255, 0.1);
-    backdrop-filter: blur(10px);
-    z-index: 10;
-  }
-  
-  .page-dot {
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
-    background: rgba(255, 255, 255, 0.5);
-    transition: background 0.2s ease;
-    cursor: pointer;
-    border: none;
-  }
-  
-  .page-dot.active {
-    background: #FF1493;
-    transform: scale(1.2);
-  }
-  
-  /* HIDE OLD CARD ROWS */
-  .card-row {
     display: none !important;
   }
   
-  /* ===== CARDS - 2x2 GRID ===== */
+  /* Show card rows as vertical stack */
+  .card-row {
+    display: flex !important;
+    flex-direction: column;
+    gap: 12px;
+    width: 100%;
+    max-width: 100%;
+  }
+  
+  .card-row.row-2,
+  .card-row.row-5 {
+    display: flex !important;
+    flex-direction: column;
+  }
+  
+  /* ===== CARDS - FULL WIDTH VERTICAL STACK ===== */
   .card {
     width: 100% !important;
     max-width: 100% !important;
-    height: 100%;
-    min-height: unset;
-    padding: 10px;
+    min-height: 120px;
+    padding: 16px;
     box-sizing: border-box;
-    border-radius: 10px;
+    border-radius: 14px;
     border-width: 2px;
     display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-    overflow: hidden;
-    will-change: auto;
-  }
-  
-  /* First page cards with donuts - side by side layout */
-  .page-donuts .card {
-    flex-direction: row;
-    gap: 8px;
-  }
-  
-  /* Second page cards - vertical layout */
-  .page-info .card {
     flex-direction: column;
     justify-content: flex-start;
-    align-items: flex-start;
+    overflow: hidden;
+    position: relative;
+    margin-bottom: 0;
+  }
+  
+  .card-row.row-2 .card,
+  .card-row.row-5 .card {
+    width: 100% !important;
+    max-width: 100%;
   }
   
   .card:hover {
@@ -3566,147 +3505,125 @@ body.login-page {
     width: 100%;
   }
   
-  /* Typography adjustments for mobile grid */
-  .page-donuts .card h4,
-  .page-donuts .card-title {
-    font-size: 9px !important;
-    line-height: 1.2;
-    margin-bottom: 2px;
-    margin-top: 0;
-    letter-spacing: 0.3px;
-  }
-  
-  .page-donuts .card h2,
-  .page-donuts .card-value {
-    font-size: 16px !important;
-    margin: 2px 0 !important;
-    line-height: 1;
-  }
-  
-  .page-donuts .card p {
-    font-size: 8px !important;
-    margin: 1px 0;
-    line-height: 1.2;
-  }
-  
-  .page-donuts .card small {
-    font-size: 8px !important;
-    line-height: 1.2;
-  }
-  
-  .page-info .card h4,
-  .page-info .card-title {
-    font-size: 11px !important;
+  /* Typography for mobile vertical layout */
+  .card h4,
+  .card-title {
+    font-size: 12px !important;
     line-height: 1.3;
     margin-bottom: 4px;
+    margin-top: 0;
+    letter-spacing: 0.5px;
+    font-weight: 700;
   }
   
-  .page-info .card h2,
-  .page-info .card-value {
-    font-size: 20px !important;
+  .card h2,
+  .card-value {
+    font-size: 28px !important;
     margin: 4px 0 !important;
     line-height: 1.1;
+    font-weight: 900;
   }
   
-  .page-info .card p {
-    font-size: 11px !important;
-    margin: 2px 0;
+  .card p {
+    font-size: 13px !important;
+    margin: 3px 0;
+    line-height: 1.4;
+  }
+  
+  .card small {
+    font-size: 12px !important;
     line-height: 1.3;
   }
   
   .card > div {
-    gap: 2px !important;
+    gap: 4px !important;
   }
   
-  /* ===== DONUT/RING CARDS - SHOW ON FIRST PAGE ===== */
-  .page-donuts .ring-container {
-    display: flex !important;
-    flex-shrink: 0;
-    width: 90px;
-    height: 90px;
-    align-items: center;
-    justify-content: center;
-    position: relative;
+  /* ===== DONUT AS FADED BACKGROUND ===== */
+  .ring-container {
+    position: absolute !important;
+    bottom: -10px;
+    right: -10px;
+    width: 120px !important;
+    height: 120px !important;
+    opacity: 0.25;
+    pointer-events: none;
+    z-index: 0;
   }
   
-  .page-donuts .ring {
-    width: 90px !important;
-    height: 90px !important;
+  .ring {
+    width: 120px !important;
+    height: 120px !important;
     display: block !important;
   }
   
-  .page-donuts .ring-percent {
+  .ring-percent {
     display: block !important;
-    font-size: 14px !important;
+    font-size: 16px !important;
     font-weight: bold;
   }
   
-  .page-donuts .ring-info {
+  .ring-info {
     display: none !important;
   }
   
-  /* Hide rings on second page */
-  .page-info .ring-container,
-  .page-info .ring,
-  .page-info .ring-percent,
-  .page-info .ring-info {
-    display: none !important;
-  }
-  
-  .page-donuts .card > div:first-child {
-    flex: 1;
+  /* Ensure card content is above donut background */
+  .card > div:first-child {
+    position: relative;
+    z-index: 1;
     display: flex;
     flex-direction: column;
-    gap: 2px;
-    min-width: 0;
+    gap: 4px;
+    width: 100%;
   }
   
   /* Set limit button adjustment */
   .set-limit-btn {
-    position: absolute;
-    left: 50%;
-    transform: translateX(-50%);
-    bottom: 6px;
-    margin-top: 0;
-    padding: 4px 8px;
-    font-size: 7px;
+    position: relative;
+    left: auto;
+    transform: none;
+    bottom: auto;
+    margin-top: 8px;
+    padding: 8px 12px;
+    font-size: 11px;
     width: auto;
-    min-width: 60px;
-    letter-spacing: 0.3px;
+    min-width: 100px;
+    letter-spacing: 0.5px;
+    z-index: 1;
   }
   
-  /* ===== INFO CARD LISTS - COMPACT ===== */
-  .page-info .card ul {
-    gap: 3px;
+  /* ===== INFO CARD LISTS ===== */
+  .card ul {
+    gap: 6px;
     width: 100%;
-    margin: 0;
+    margin: 8px 0 0 0;
     padding: 0;
   }
   
-  .page-info .card ul li {
-    font-size: 10px;
-    padding: 3px 4px;
-    line-height: 1.3;
+  .card ul li {
+    font-size: 13px;
+    padding: 6px 8px;
+    line-height: 1.4;
   }
   
-  .page-info .transaction-category {
-    font-size: 10px;
+  .transaction-category {
+    font-size: 13px;
   }
   
-  .page-info .transaction-details {
-    font-size: 9px;
+  .transaction-details {
+    font-size: 12px;
   }
   
-  .page-info .list {
-    margin: 0;
+  .list {
+    margin: 8px 0 0 0;
     padding: 0;
     list-style: none;
   }
   
-  .page-info .list li {
-    font-size: 10px !important;
-    padding: 2px 0;
-    line-height: 1.3;
+  .list li {
+    font-size: 13px !important;
+    padding: 4px 0;
+    line-height: 1.4;
   }
   
   .category-bar {
@@ -3732,19 +3649,19 @@ body.login-page {
   
   /* ===== NOTES PAGE ===== */
   body.notes-page .main {
+    min-height: calc(100vh - 60px);
     overflow-y: auto;
     -webkit-overflow-scrolling: touch;
-    height: 100%;
   }
   
   .notes-grid {
-    display: grid;
-    grid-template-columns: 1fr !important;
-    gap: 10px;
-    padding: 10px;
-    padding-bottom: 30px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding: 0;
+    padding-bottom: 20px;
     width: 100%;
-    min-height: 100%;
+    max-width: 100%;
   }
   
   .note-card {
@@ -3806,19 +3723,21 @@ body.login-page {
   
   /* ===== ADD EXPENSE FORM ===== */
   body.add-expense-page .main {
+    min-height: calc(100vh - 60px);
     overflow-y: auto;
+    overflow-x: hidden;
     -webkit-overflow-scrolling: touch;
   }
   
   .add-expense-container {
-    display: grid;
-    grid-template-columns: 1fr;
+    display: flex;
+    flex-direction: column;
     gap: 15px;
-    padding: 15px;
-    padding-bottom: 30px;
+    padding: 0;
+    padding-bottom: 20px;
     width: 100%;
+    max-width: 100%;
     box-sizing: border-box;
-    min-height: 100%;
   }
   
   .form-card {
@@ -3858,17 +3777,17 @@ body.login-page {
   
   /* ===== REPORTS & ANALYSIS ===== */
   body.report-page .main {
+    min-height: calc(100vh - 60px);
     overflow-y: auto !important;
+    overflow-x: hidden;
     -webkit-overflow-scrolling: touch;
-    height: 100%;
   }
   
   .report-main {
-    padding: 12px;
-    padding-bottom: 40px;
-    height: auto;
-    min-height: 100%;
+    padding: 0;
+    padding-bottom: 20px;
     width: 100%;
+    max-width: 100%;
     box-sizing: border-box;
   }
   
