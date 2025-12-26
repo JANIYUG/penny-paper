@@ -3,6 +3,10 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- Optimize for vertical (portrait) mobile screens -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <title>Penny & Paper | Home</title>
   <link rel="stylesheet" href="style.css">
 </head>
@@ -16,7 +20,14 @@
   }
 </script>
 
-<div class="app">
+<div class="app vertical-mobile-optimized">
+  /* Helper class for vertical mobile layout (if needed for JS or extra tweaks) */
+  .vertical-mobile-optimized {
+    min-width: 0 !important;
+    max-width: 100vw !important;
+    width: 100vw !important;
+    overflow-x: hidden !important;
+  }
 
   <!-- SIDEBAR TOGGLE (for mobile/tablet) -->
   <input type="checkbox" id="sidebar-toggle" class="sidebar-toggle-checkbox" style="display:none;">
