@@ -28,10 +28,10 @@
     <aside class="sidebar">
       <h2 class="logo">EXPENSE</h2>
       <nav>
-        <a href="index.html">Home</a>
-        <a href="add-expense.html">Add Expenses</a>
-        <a href="r&p.html">Reports & Analysis</a>
-        <a href="notes.html" class="active">Notes</a>
+        <a href="index.html" onclick="closeSidebar()">Home</a>
+        <a href="add-expense.html" onclick="closeSidebar()">Add Expenses</a>
+        <a href="r&p.html" onclick="closeSidebar()">Reports & Analysis</a>
+        <a href="notes.html" class="active" onclick="closeSidebar()">Notes</a>
       </nav>
     </aside>
 
@@ -331,6 +331,21 @@
         });
       }
     }
+  });
+
+  // Close sidebar function
+  function closeSidebar() {
+    const sidebarToggle = document.getElementById('sidebar-toggle');
+    if (sidebarToggle) {
+      sidebarToggle.checked = false;
+    }
+  }
+
+  // Reset scroll position on page load
+  window.addEventListener('load', function() {
+    window.scrollTo(0, 0);
+    document.body.scrollTop = 0;
+    document.documentElement.scrollTop = 0;
   });
 </script>
 
