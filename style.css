@@ -764,86 +764,7 @@ body.add-expense-page {
   margin-top: 20px;
 }
 
-.ring-container::before {
-  content: "";
-  position: absolute;
-  width: 285px;
-  height: 285px;
-  border-radius: 50%;
-  background: linear-gradient(135deg, 
-    rgba(255,215,0,0.08) 0%, 
-    rgba(255,105,180,0.1) 25%, 
-    rgba(255,20,147,0.12) 50%, 
-    rgba(255,105,180,0.1) 75%, 
-    rgba(245,222,179,0.08) 100%);
-  border: 2px solid rgba(255,179,219,0.25);
-  box-shadow: 
-    0 0 30px rgba(255,105,180,0.25),
-    0 0 50px rgba(255,215,0,0.2),
-    0 8px 32px rgba(255,20,147,0.1),
-    inset 0 0 40px rgba(245,222,179,0.15),
-    inset 0 -10px 30px rgba(255,105,180,0.2),
-    inset 0 10px 30px rgba(255,215,0,0.2);
-  z-index: 0;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%) scale(0.9);
-  animation: bubbleFloat 3s ease-in-out infinite;
-  pointer-events: none;
-  backdrop-filter: blur(2px);
-}
 
-.ring-container::after {
-  content: "";
-  position: absolute;
-  width: 295px;
-  height: 295px;
-  border-radius: 50%;
-  background: radial-gradient(circle at 30% 30%, 
-    rgba(255,215,0,0.25) 0%, 
-    rgba(255,179,219,0.1) 20%, 
-    transparent 40%);
-  z-index: 1;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%) scale(0.9);
-  pointer-events: none;
-  animation: shimmer 4s ease-in-out infinite;
-}
-
-@keyframes bubbleFloat {
-  0%, 100% {
-    transform: translate(-50%, -50%) scale(0.9);
-    box-shadow: 
-      0 0 30px rgba(255,105,180,0.25),
-      0 0 50px rgba(255,215,0,0.2),
-      0 8px 32px rgba(255,20,147,0.1),
-      inset 0 0 40px rgba(245,222,179,0.15),
-      inset 0 -10px 30px rgba(255,105,180,0.2),
-      inset 0 10px 30px rgba(255,215,0,0.2);
-  }
-  50% {
-    transform: translate(-50%, -50%) scale(0.927);
-    box-shadow: 
-      0 0 40px rgba(255,105,180,0.35),
-      0 0 60px rgba(255,215,0,0.3),
-      0 10px 40px rgba(255,20,147,0.15),
-      inset 0 0 50px rgba(245,222,179,0.2),
-      inset 0 -15px 40px rgba(255,105,180,0.25),
-      inset 0 15px 40px rgba(255,215,0,0.3);
-  }
-}
-
-@keyframes shimmer {
-  0%, 100% {
-    opacity: 0.3;
-    transform: translate(-50%, -50%) scale(0.9) rotate(0deg);
-  }
-  50% {
-    opacity: 0.45;
-    transform: translate(-50%, -50%) scale(0.9) rotate(180deg);
-  }
-}
 
 .ring-info {
   display: flex;
@@ -2430,10 +2351,12 @@ body.add-expense-page {
 /* ==================== NOTES PAGE (Grid Layout) ==================== */
 
 .notes-main {
-  padding: 30px;
+  padding: 20px;
   overflow-y: auto;
-  height: 100%;
+  min-height: calc(100vh - 60px);
+  max-width: 100%;
   background: linear-gradient(135deg, #FF1493 0%, #FF69B4 50%, #FF85C1 100%);
+  box-sizing: border-box;
 }
 
 /* Notes Header */
@@ -2441,8 +2364,11 @@ body.add-expense-page {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 30px;
-  padding: 20px 0;
+  margin-bottom: 20px;
+  padding: 15px 0;
+  flex-wrap: wrap;
+  gap: 15px;
+  max-width: 100%;
 }
 
 .notes-header h1 {
@@ -2455,19 +2381,24 @@ body.add-expense-page {
 
 .notes-actions {
   display: flex;
-  gap: 15px;
+  gap: 10px;
   align-items: center;
+  flex-wrap: wrap;
+  max-width: 100%;
 }
 
 .notes-actions input {
-  padding: 10px 20px;
+  padding: 10px 15px;
   border: 2px solid rgba(255, 255, 255, 0.3);
   border-radius: 25px;
   background: rgba(255, 255, 255, 0.15);
   color: #ffffff;
   font-size: 14px;
-  width: 250px;
+  width: 100%;
+  max-width: 250px;
+  min-width: 150px;
   backdrop-filter: blur(10px);
+  box-sizing: border-box;
 }
 
 .notes-actions input::placeholder {
@@ -2501,9 +2432,11 @@ body.add-expense-page {
 /* Notes Grid */
 .notes-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-  gap: 20px;
-  margin-bottom: 30px;
+  grid-template-columns: repeat(auto-fill, minmax(min(320px, 100%), 1fr));
+  gap: 15px;
+  margin-bottom: 20px;
+  max-width: 100%;
+  box-sizing: border-box;
 }
 
 .no-notes {
@@ -2529,12 +2462,15 @@ body.add-expense-page {
 .note-card {
   background: rgba(255, 255, 255, 0.95);
   border-radius: 15px;
-  padding: 20px;
+  padding: 15px;
   cursor: pointer;
   transition: all 0.3s ease;
   position: relative;
   overflow: hidden;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  max-width: 100%;
+  box-sizing: border-box;
+  word-wrap: break-word;
 }
 
 .note-card:hover {
@@ -3553,6 +3489,20 @@ body#rp-page .report-grid {
     background: rgba(0, 0, 0, 0.5);
     pointer-events: auto;
   }
+  
+  /* Notes page responsive fixes for mobile */
+  .notes-main {
+    padding: 12px;
+  }
+  
+  .notes-header h1 {
+    font-size: 28px;
+  }
+  
+  .notes-grid {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
 }
 
 
@@ -3598,6 +3548,40 @@ body#rp-page .report-grid {
   
   .summary-cards {
     grid-template-columns: 1fr;
+  }
+  
+  /* Notes page mobile fixes */
+  .notes-main {
+    padding: 10px;
+  }
+  
+  .notes-header {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+  }
+  
+  .notes-header h1 {
+    font-size: 24px;
+  }
+  
+  .notes-actions {
+    flex-direction: column;
+    width: 100%;
+  }
+  
+  .notes-actions input {
+    width: 100%;
+    max-width: 100%;
+  }
+  
+  .new-note-btn {
+    width: 100%;
+  }
+  
+  .notes-grid {
+    grid-template-columns: 1fr;
+    gap: 10px;
   }
 }
 
@@ -3795,5 +3779,73 @@ body#rp-page .report-grid {
   canvas {
     max-width: 100%;
     height: auto;
+  }
+}
+
+/* ===== DESKTOP/TABLET STYLES (769px and above) ===== */
+@media (min-width: 769px) {
+  /* Hide hamburger menu on desktop */
+  .hamburger {
+    display: none;
+  }
+  
+  /* Show sidebar permanently on desktop */
+  .sidebar {
+    position: fixed;
+    transform: translateX(0);
+    z-index: 900;
+  }
+  
+  /* Adjust content to account for sidebar */
+  .content {
+    margin-left: 280px;
+  }
+  
+  /* Remove overlay */
+  .content::before {
+    display: none;
+  }
+  
+  /* Show desktop navigation */
+  .top-nav nav {
+    display: flex;
+    flex: 1;
+    justify-content: center;
+    gap: 20px;
+  }
+  
+  .top-nav nav a {
+    color: #ffffff;
+    text-decoration: none;
+    font-weight: 600;
+    padding: 8px 16px;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+  }
+  
+  .top-nav nav a:hover {
+    background: rgba(255, 255, 255, 0.2);
+  }
+  
+  .top-nav nav a.active {
+    background: rgba(255, 255, 255, 0.3);
+  }
+  
+  /* Ensure top-nav stays at top */
+  .top-nav {
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+  }
+  
+  /* Prevent main content from being hidden */
+  .main {
+    padding: 20px;
+  }
+  
+  /* Dashboard adjustments */
+  .dashboard {
+    height: auto;
+    min-height: calc(100vh - 100px);
   }
 }
