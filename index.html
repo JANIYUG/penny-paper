@@ -479,6 +479,20 @@
     updateSavingsCard();
   }
 
+  // Update dashboard cards on page load and after changes
+  function updateDashboard() {
+    // Get limits from localStorage
+    const dailyLimit = localStorage.getItem('dailyLimit') || 500;
+    const weeklyLimit = localStorage.getItem('weeklyLimit') || 3000;
+    const monthlyLimit = localStorage.getItem('monthlyLimit') || 20000;
+    const yearlyLimit = localStorage.getItem('yearlyLimit') || 150000;
+
+    updateCardLimit('daily', dailyLimit, 0);
+    updateCardLimit('weekly', weeklyLimit, 1);
+    updateCardLimit('monthly', monthlyLimit, 2);
+    updateCardLimit('yearly', yearlyLimit, 3);
+  }
+
   function updateTopCategory() {
     const monthStart = new Date(new Date().getFullYear(), new Date().getMonth(), 1);
     const categoryTotals = {};
@@ -719,25 +733,24 @@
     }
   }
 
+  // Update donut cards with new structure
   function updateCardLimit(period, limitAmount, cardIndex) {
-    const cards = document.querySelectorAll('.card-row.row-2 .card');
+    const cards = document.querySelectorAll('.donut-cards-grid .donut-card');
     const card = cards[cardIndex];
     if (!card) {
       console.error('Card not found at index:', cardIndex);
       return;
     }
-    
+
     const spending = calculateSpending();
-    
-    // Convert to number
     const limitNum = parseInt(limitAmount);
-    
+
     // Update the limit text
     const limitText = card.querySelector('small');
     if (limitText) {
       limitText.textContent = `Limit ₹${limitNum.toLocaleString('en-IN')}`;
     }
-    
+
     // Get current amount based on period
     let currentAmount = 0;
     switch(period) {
@@ -746,20 +759,20 @@
       case 'monthly': currentAmount = spending.monthly; break;
       case 'yearly': currentAmount = spending.yearly; break;
     }
-    
+
     // Update ring fraction
     const ringFraction = card.querySelector('.ring-fraction');
     const formattedCurrent = formatRupees(currentAmount);
     const formattedLimit = formatRupees(limitNum);
     ringFraction.textContent = `${formattedCurrent}/${formattedLimit}`;
-    
+
     // Update ring percentage
     const percentage = Math.round((currentAmount / limitNum) * 100);
     const ring = card.querySelector('.ring');
     const ringPercent = card.querySelector('.ring-percent');
     ring.style.setProperty('--percent', `${percentage}%`);
     ringPercent.textContent = `${percentage}%`;
-    
+
     // Change color based on percentage
     if (percentage >= 90) {
       ring.style.setProperty('--progress', '#ff4444');
