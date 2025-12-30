@@ -3,19 +3,29 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Penny & Paper | Add Expense</title>
+  <title>Add Expense - Expense Tracker</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
 </head>
 <body class="add-expense-page">
 
 <div class="app">
 
+  <!-- SIDEBAR TOGGLE (for mobile/tablet) -->
+  <input type="checkbox" id="sidebar-toggle" class="sidebar-toggle-checkbox">
+
   <!-- TOP NAV -->
   <header class="top-nav">
     <label for="sidebar-toggle" class="hamburger">☰</label>
     <nav>
-      <a>Add Expenses</a>
+      <a class="active">Add Expenses</a>
     </nav>
+    <div class="top-actions">
+      <button class="top-settings-btn" onclick="navigateSettings()" title="Settings">⚙</button>
+      <button class="top-logout-btn" onclick="handleLogout()" title="Logout">Logout</button>
+    </div>
   </header>
 
   <!-- CONTENT -->
@@ -23,7 +33,7 @@
 
     <!-- SIDEBAR -->
     <aside class="sidebar">
-      <h2 class="logo">EXPENSE</h2>
+      <h2 class="logo">PENNY & PAPER</h2>
       <nav>
         <a href="index.html" onclick="closeSidebar()">Home</a>
         <a href="add-expense.html" class="active" onclick="closeSidebar()">Add Expenses</a>
@@ -269,6 +279,15 @@
     this.reset();
     document.getElementById('date').valueAsDate = new Date();
   });
+
+  function handleLogout() {
+    localStorage.removeItem('currentUser');
+    window.location.href = 'login.html';
+  }
+
+  function navigateSettings() {
+    window.location.href = 'index.html#settings';
+  }
 
   // Setup sidebar overlay on mobile
   document.addEventListener('DOMContentLoaded', function() {

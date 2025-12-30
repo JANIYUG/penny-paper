@@ -7,7 +7,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <title>Penny & Paper | Home</title>
+  <title>Expense Tracker - Dark Theme</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
 </head>
 <body id="index-page" class="index-page">
@@ -20,29 +23,25 @@
   }
 </script>
 
+
 <div class="app vertical-mobile-optimized">
-  /* Helper class for vertical mobile layout (if needed for JS or extra tweaks) */
-  .vertical-mobile-optimized {
-    min-width: 0 !important;
-    max-width: 100vw !important;
-    width: 100vw !important;
-    overflow-x: hidden !important;
-  }
 
   <!-- SIDEBAR TOGGLE (for mobile/tablet) -->
   <input type="checkbox" id="sidebar-toggle" class="sidebar-toggle-checkbox" style="display:none;">
 
   <!-- TOP NAV -->
   <header class="top-nav">
-    <label for="sidebar-toggle" class="hamburger">☰</label>
-    <nav>
+    <label for="sidebar-toggle" class="hamburger mobile-only">☰</label>
+    <nav class="desktop-only">
       <a class="active">Dashboard</a>
     </nav>
     <div class="top-reminders" id="topReminders">
       <!-- Reminders will be inserted here -->
     </div>
-    <button class="top-settings-btn" onclick="openSettingsModal()" title="Settings">⚙</button>
-    <button class="top-logout-btn" onclick="handleLogout()" title="Logout">Logout</button>
+    <div class="top-actions">
+      <button class="top-settings-btn" onclick="openSettingsModal()" title="Settings">⚙</button>
+      <button class="top-logout-btn" onclick="handleLogout()" title="Logout">Logout</button>
+    </div>
   </header>
 
   <!-- CONTENT -->
@@ -434,9 +433,18 @@
   // Update dashboard on page load
   function updateDashboard() {
     const spending = calculateSpending();
+    const getDetailLine = (card) => {
+      const existing = card.querySelector('.card-sub') || card.querySelector('p');
+      if (existing) return existing;
+      const holder = document.createElement('p');
+      holder.className = 'card-sub';
+      const textWrap = card.querySelector('.card-text') || card;
+      textWrap.appendChild(holder);
+      return holder;
+    };
     
     // Update card values
-    const cards = document.querySelectorAll('.card-row.row-2 .card');
+    const cards = document.querySelectorAll('.donut-cards-grid .card');
     
     // Load saved limits
     const dailyLimit = localStorage.getItem('dailyLimit') || 500;
@@ -447,7 +455,7 @@
     // Daily card
     if (cards[0]) {
       cards[0].querySelector('h2').textContent = `₹${Math.round(spending.daily).toLocaleString('en-IN')}`;
-      cards[0].querySelector('p').textContent = `Yesterday ₹${Math.round(spending.yesterday).toLocaleString('en-IN')}`;
+      getDetailLine(cards[0]).textContent = `Yesterday ₹${Math.round(spending.yesterday).toLocaleString('en-IN')}`;
       cards[0].querySelector('small').textContent = `Limit ₹${parseInt(dailyLimit).toLocaleString('en-IN')}`;
       updateCardRing(cards[0], spending.daily, parseInt(dailyLimit));
     }
@@ -456,7 +464,7 @@
     if (cards[1]) {
       cards[1].querySelector('h2').textContent = `₹${Math.round(spending.weekly).toLocaleString('en-IN')}`;
       const avgDaily = spending.weeklyCount > 0 ? spending.weekly / 7 : 0;
-      cards[1].querySelector('p').textContent = `Avg ₹${Math.round(avgDaily).toLocaleString('en-IN')} / day`;
+      getDetailLine(cards[1]).textContent = `Avg ₹${Math.round(avgDaily).toLocaleString('en-IN')} / day`;
       cards[1].querySelector('small').textContent = `Limit ₹${parseInt(weeklyLimit).toLocaleString('en-IN')}`;
       updateCardRing(cards[1], spending.weekly, parseInt(weeklyLimit));
     }
@@ -466,7 +474,7 @@
       cards[2].querySelector('h2').textContent = `₹${Math.round(spending.monthly).toLocaleString('en-IN')}`;
       const daysInMonth = new Date(new Date().getFullYear(), new Date().getMonth() + 1, 0).getDate();
       const avgDaily = spending.monthly / daysInMonth;
-      cards[2].querySelector('p').textContent = `Avg ₹${Math.round(avgDaily).toLocaleString('en-IN')} / day`;
+      getDetailLine(cards[2]).textContent = `Avg ₹${Math.round(avgDaily).toLocaleString('en-IN')} / day`;
       cards[2].querySelector('small').textContent = `Limit ₹${parseInt(monthlyLimit).toLocaleString('en-IN')}`;
       updateCardRing(cards[2], spending.monthly, parseInt(monthlyLimit));
     }
@@ -476,7 +484,7 @@
       cards[3].querySelector('h2').textContent = `₹${Math.round(spending.yearly).toLocaleString('en-IN')}`;
       const daysInYear = (new Date() - new Date(new Date().getFullYear(), 0, 1)) / (1000 * 60 * 60 * 24);
       const avgDaily = spending.yearly / daysInYear;
-      cards[3].querySelector('p').textContent = `Avg ₹${Math.round(avgDaily).toLocaleString('en-IN')} / day`;
+      getDetailLine(cards[3]).textContent = `Avg ₹${Math.round(avgDaily).toLocaleString('en-IN')} / day`;
       cards[3].querySelector('small').textContent = `Limit ₹${parseInt(yearlyLimit).toLocaleString('en-IN')}`;
       updateCardRing(cards[3], spending.yearly, parseInt(yearlyLimit));
     }
@@ -501,7 +509,7 @@
       }
     });
 
-    const topCategoryCard = document.querySelector('.card-row.row-5 .card:nth-child(1)');
+    const topCategoryCard = document.querySelector('.other-cards-section .card:nth-child(1)');
     if (topCategoryCard) {
       const categories = Object.entries(categoryTotals);
       if (categories.length > 0) {
@@ -541,7 +549,7 @@
       }
     });
 
-    const transactionCard = document.querySelector('.card-row.row-5 .card:nth-child(2)');
+    const transactionCard = document.querySelector('.other-cards-section .card:nth-child(2)');
     if (transactionCard) {
       const difference = thisMonthCount - lastMonthCount;
       const topCategory = Object.entries(categoryCount).reduce((a, b) => a[1] > b[1] ? a : b, ['None', 0])[0];
@@ -569,7 +577,7 @@
       }
     });
 
-    const glanceCard = document.querySelector('.card-row.row-5 .card:nth-child(3)');
+    const glanceCard = document.querySelector('.other-cards-section .card:nth-child(3)');
     if (glanceCard) {
       const dailyAmounts = Object.values(dailySpending);
       const highestDay = dailyAmounts.length > 0 ? Math.max(...dailyAmounts) : 0;
@@ -596,7 +604,7 @@
     const savingsTarget = parseInt(localStorage.getItem('savingsTarget')) || 10000;
     const savings = monthlyBudget - monthlySpent;
     
-    const savingsCard = document.querySelector('.card-row.row-5 .card:nth-child(4)');
+    const savingsCard = document.querySelector('.other-cards-section .card:nth-child(4)');
     if (savingsCard) {
       const h2 = savingsCard.querySelector('h2');
       const list = savingsCard.querySelector('ul');
@@ -623,8 +631,10 @@
     
     if (ringFraction && ring && ringPercent) {
       ringFraction.textContent = `${formatRupees(currentAmount)}/${formatRupees(limitAmount)}`;
-      const percentage = Math.min(Math.round((currentAmount / limitAmount) * 100), 100);
+      const safeLimit = Math.max(1, limitAmount || 0);
+      const percentage = Math.min(Math.round((currentAmount / safeLimit) * 100), 999);
       ring.style.setProperty('--percent', `${percentage}%`);
+      ring.style.setProperty('--progress', percentage >= 90 ? 'var(--danger)' : percentage >= 75 ? 'var(--warning)' : 'var(--accent)');
       ringPercent.textContent = `${percentage}%`;
     }
   }
@@ -648,7 +658,7 @@
           return `<li><span class="transaction-category">${exp.category}</span><span class="transaction-details">₹${Math.round(exp.amount)} · ${dateText}</span></li>`;
         }).join('');
       } else {
-        recentList.innerHTML = '<li style="text-align: center; color: rgba(115, 65, 40, 0.5);">No transactions yet</li>';
+        recentList.innerHTML = '<li style="text-align: center; color: rgba(255,255,255,0.45);">No transactions yet</li>';
       }
     }
   }
@@ -723,7 +733,7 @@
   }
 
   function updateCardLimit(period, limitAmount, cardIndex) {
-    const cards = document.querySelectorAll('.card-row.row-2 .card');
+    const cards = document.querySelectorAll('.donut-cards-grid .card');
     const card = cards[cardIndex];
     if (!card) {
       console.error('Card not found at index:', cardIndex);
@@ -757,19 +767,20 @@
     ringFraction.textContent = `${formattedCurrent}/${formattedLimit}`;
     
     // Update ring percentage
-    const percentage = Math.round((currentAmount / limitNum) * 100);
+    const safeLimit = Math.max(1, limitNum || 0);
+    const percentage = Math.round((currentAmount / safeLimit) * 100);
     const ring = card.querySelector('.ring');
     const ringPercent = card.querySelector('.ring-percent');
-    ring.style.setProperty('--percent', `${percentage}%`);
-    ringPercent.textContent = `${percentage}%`;
+    ring.style.setProperty('--percent', `${Math.min(percentage, 999)}%`);
+    ringPercent.textContent = `${Math.min(percentage, 999)}%`;
     
     // Change color based on percentage
     if (percentage >= 90) {
-      ring.style.setProperty('--progress', '#ff4444');
+      ring.style.setProperty('--progress', 'var(--danger)');
     } else if (percentage >= 75) {
-      ring.style.setProperty('--progress', '#ff9944');
+      ring.style.setProperty('--progress', 'var(--warning)');
     } else {
-      ring.style.setProperty('--progress', 'rgba(245,222,179,0.85)');
+      ring.style.setProperty('--progress', 'var(--accent)');
     }
   }
 
@@ -777,12 +788,12 @@
     const savingsTarget = localStorage.getItem('savingsTarget');
     
     if (savingsTarget) {
-      const savingsCard = document.querySelector('.card-row.row-5 .card:nth-child(4)');
+      const savingsCard = document.querySelector('.other-cards-section .card:nth-child(4)');
       
       if (savingsCard) {
         const savingsAmount = savingsCard.querySelector('h2');
         const currentSavings = savingsAmount ? parseInt(savingsAmount.textContent.replace(/[₹,]/g, '')) : 0;
-        const targetAmount = parseInt(savingsTarget);
+        const targetAmount = Math.max(1, parseInt(savingsTarget));
         const percentage = Math.round((currentSavings / targetAmount) * 100);
         
         // Update target display in the list
@@ -948,38 +959,43 @@
   }
 
   // Initialize on page load - mobile-first optimized
+
   document.addEventListener('DOMContentLoaded', function() {
-    // Critical tasks first
     updateProfileDisplay();
-    
-    // Setup sidebar for mobile
-    if (window.innerWidth <= 768) {
-      setupSidebarOverlay();
-    }
-    
-    // Load reminders after a short delay
+    setupSidebarOverlay();
     setTimeout(() => {
       loadReminders();
       setInterval(loadReminders, 1000);
     }, 100);
   });
 
-  // Setup sidebar overlay click handler
+  // Setup sidebar overlay click handler for all devices
   function setupSidebarOverlay() {
     const content = document.querySelector('.content');
     const sidebarToggle = document.getElementById('sidebar-toggle');
-    
+    const sidebar = document.querySelector('.sidebar');
+    // Remove previous listeners if any
+    content && content.removeEventListener('click', window._sidebarContentClick, true);
+    window._sidebarContentClick = function(e) {
+      if (sidebarToggle && sidebarToggle.checked && !e.target.closest('.sidebar') && !e.target.classList.contains('hamburger')) {
+        sidebarToggle.checked = false;
+      }
+    };
     if (content && sidebarToggle) {
-      content.addEventListener('click', function(e) {
-        // Close sidebar if clicking outside it
-        if (sidebarToggle.checked && !e.target.closest('.sidebar')) {
-          sidebarToggle.checked = false;
-        }
+      content.addEventListener('click', window._sidebarContentClick, true);
+    }
+    // Close sidebar on nav link click (mobile)
+    if (sidebar) {
+      sidebar.querySelectorAll('a').forEach(link => {
+        link.addEventListener('click', function() {
+          if (window.innerWidth <= 1024 && sidebarToggle) sidebarToggle.checked = false;
+        });
       });
     }
   }
 
-  // Close sidebar function
+
+  // Close sidebar function (for legacy calls)
   function closeSidebar() {
     const sidebarToggle = document.getElementById('sidebar-toggle');
     if (sidebarToggle) {

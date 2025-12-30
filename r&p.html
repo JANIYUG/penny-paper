@@ -3,7 +3,10 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Penny & Paper | Reports & Analysis</title>
+  <title>Reports & Analysis - Expense Tracker</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
@@ -11,12 +14,19 @@
 
 <div class="app">
 
+  <!-- SIDEBAR TOGGLE (for mobile/tablet) -->
+  <input type="checkbox" id="sidebar-toggle" class="sidebar-toggle-checkbox">
+
   <!-- TOP NAV -->
   <header class="top-nav">
     <label for="sidebar-toggle" class="hamburger">☰</label>
     <nav>
       <a class="active">Reports & Analysis</a>
     </nav>
+    <div class="top-actions">
+      <button class="top-settings-btn" onclick="navigateSettings()" title="Settings">⚙</button>
+      <button class="top-logout-btn" onclick="handleLogout()" title="Logout">Logout</button>
+    </div>
   </header>
 
   <!-- CONTENT -->
@@ -24,7 +34,7 @@
 
     <!-- SIDEBAR -->
     <aside class="sidebar">
-      <h2 class="logo">EXPENSE</h2>
+      <h2 class="logo">PENNY & PAPER</h2>
       <nav>
         <a href="index.html" onclick="closeSidebar()">Home</a>
         <a href="add-expense.html" onclick="closeSidebar()">Add Expenses</a>
@@ -381,6 +391,15 @@
     });
   }
 
+  function handleLogout() {
+    localStorage.removeItem('currentUser');
+    window.location.href = 'login.html';
+  }
+
+  function navigateSettings() {
+    window.location.href = 'index.html#settings';
+  }
+
   function updateReports() {
     const filteredExpenses = filterExpenses();
     updateSummaryCards(filteredExpenses);
@@ -509,10 +528,10 @@
         datasets: [{
           data: Object.values(categoryTotals),
           backgroundColor: [
-            '#FF1493', '#FF69B4', '#FF85C1', '#FFB3D9', 
-            '#FF6B9D', '#FF1493CC', '#FF69B4CC', '#FF85C1CC'
+            '#38bdf8', '#22c55e', '#a855f7', '#f59e0b',
+            '#6366f1', '#10b981', '#60a5fa', '#f97316'
           ],
-          borderColor: '#FFFFFF',
+          borderColor: '#0a0c12',
           borderWidth: 2
         }]
       },
@@ -523,7 +542,7 @@
           legend: {
             position: 'right',
             labels: {
-              color: '#734128',
+              color: '#e7eaf1',
               font: { size: 12, weight: 'bold' },
               padding: 10
             }
@@ -604,14 +623,14 @@
         datasets: [{
           label: 'Daily Spending',
           data: Object.values(dailyTotals),
-          borderColor: '#FF1493',
-          backgroundColor: 'rgba(255, 20, 147, 0.1)',
+          borderColor: '#38bdf8',
+          backgroundColor: 'rgba(56, 189, 248, 0.12)',
           borderWidth: 3,
           fill: true,
           tension: 0.4,
           pointRadius: 4,
-          pointBackgroundColor: '#FF1493',
-          pointBorderColor: '#FFFFFF',
+          pointBackgroundColor: '#38bdf8',
+          pointBorderColor: '#0a0c12',
           pointBorderWidth: 2
         }]
       },
@@ -632,15 +651,15 @@
           y: {
             beginAtZero: true,
             ticks: {
-              color: '#734128',
+              color: '#e7eaf1',
               callback: function(value) {
                 return '₹' + value.toLocaleString('en-IN');
               }
             },
-            grid: { color: 'rgba(115, 65, 40, 0.1)' }
+            grid: { color: 'rgba(255, 255, 255, 0.05)' }
           },
           x: {
-            ticks: { color: '#734128', maxRotation: 45, minRotation: 45 },
+            ticks: { color: '#e7eaf1', maxRotation: 45, minRotation: 45 },
             grid: { display: false }
           }
         }
@@ -696,7 +715,7 @@
       </div>
     `).join('');
     
-    document.getElementById('topExpensesList').innerHTML = html || '<p style="text-align: center; color: #734128; opacity: 0.6;">No expenses found</p>';
+    document.getElementById('topExpensesList').innerHTML = html || '<p style="text-align: center; color: rgba(255,255,255,0.55);">No expenses found</p>';
   }
 
   function updateAverages() {
