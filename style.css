@@ -2231,6 +2231,21 @@ body.add-expense-page {
   padding-bottom: 20px;
 }
 
+/* Responsive notes grid */
+@media (max-width: 600px) {
+  .notes-grid {
+    grid-template-columns: 1fr;
+    gap: 15px;
+  }
+}
+
+@media (min-width: 601px) and (max-width: 1024px) {
+  .notes-grid {
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 15px;
+  }
+}
+
 .note-card {
   background: linear-gradient(135deg, #FFFDD0 0%, #FFF8DC 100%);
   padding: 15px;
@@ -4120,5 +4135,73 @@ body#rp-page .report-grid {
 @media (min-width: 769px) {
   .sidebar {
     padding-top: 70px !important;
+  }
+}
+
+/* Large screen optimizations for PC */
+@media (min-width: 1440px) {
+  .main {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+  
+  .content {
+    margin-left: 320px; /* Slightly wider sidebar area */
+  }
+  
+  .sidebar {
+    width: 320px;
+  }
+  
+  .top-nav nav {
+    margin-left: 320px;
+  }
+}
+
+/* Tablet optimizations */
+@media (min-width: 769px) and (max-width: 1023px) {
+  .sidebar {
+    width: 250px;
+  }
+  
+  .content {
+    margin-left: 250px;
+  }
+  
+  .top-nav nav {
+    margin-left: 250px;
+  }
+  
+  .main {
+    padding: 20px;
+  }
+}
+
+/* Mobile login responsiveness */
+@media (max-width: 480px) {
+  .login-container {
+    padding: 10px;
+  }
+  
+  .login-card {
+    border-radius: 15px;
+  }
+  
+  .login-header {
+    padding: 30px 20px;
+  }
+  
+  .login-header h1 {
+    font-size: 24px;
+  }
+  
+  .auth-form {
+    padding: 30px 20px;
+  }
+  
+  .auth-form h2 {
+    font-size: 20px;
   }
 }
