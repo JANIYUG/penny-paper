@@ -51,6 +51,16 @@ a:hover { color: #fff; }
 
 body { line-height: 1.5; }
 
+.auth-container {
+  min-height: 100vh;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg-900);
+  padding: 20px;
+}
+
 .app {
   min-height: 100vh;
   background: var(--bg-900);

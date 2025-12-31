@@ -12,7 +12,86 @@
 </head>
 <body>
 
-<div class="app">
+<!-- AUTH CONTAINER -->
+<div id="authContainer" class="auth-container" style="display:none;">
+  <div class="login-container">
+    <div class="login-card">
+      <div class="login-header">
+        <h1>Penny & Paper</h1>
+      </div>
+
+      <div class="auth-form" id="loginForm">
+        <h2>Welcome Back</h2>
+        <form id="loginFormEl">
+          <div class="form-group">
+            <label for="loginEmail">Email</label>
+            <input type="email" id="loginEmail" placeholder="Enter your email" required>
+          </div>
+          <div class="form-group">
+            <label for="loginPassword">Password</label>
+            <div class="password-input-wrapper">
+              <input type="password" id="loginPassword" placeholder="Enter your password" required>
+              <button type="button" class="toggle-password" data-target="loginPassword">
+                <svg class="eye-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                  <circle cx="12" cy="12" r="3"></circle>
+                </svg>
+              </button>
+            </div>
+          </div>
+          <button type="submit" class="btn-auth">Login</button>
+        </form>
+        <p class="auth-toggle">
+          Don't have an account? <a href="#" id="linkShowSignup">Sign Up</a>
+        </p>
+      </div>
+
+      <div class="auth-form" id="signupForm" style="display: none;">
+        <h2>Create Account</h2>
+        <form id="signupFormEl">
+          <div class="form-group">
+            <label for="signupName">Full Name</label>
+            <input type="text" id="signupName" placeholder="Enter your name" required>
+          </div>
+          <div class="form-group">
+            <label for="signupEmail">Email</label>
+            <input type="email" id="signupEmail" placeholder="Enter your email" required>
+          </div>
+          <div class="form-group">
+            <label for="signupPassword">Password</label>
+            <div class="password-input-wrapper">
+              <input type="password" id="signupPassword" placeholder="Create a password" required minlength="6">
+              <button type="button" class="toggle-password" data-target="signupPassword">
+                <svg class="eye-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                  <circle cx="12" cy="12" r="3"></circle>
+                </svg>
+              </button>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="signupConfirmPassword">Confirm Password</label>
+            <div class="password-input-wrapper">
+              <input type="password" id="signupConfirmPassword" placeholder="Confirm your password" required minlength="6">
+              <button type="button" class="toggle-password" data-target="signupConfirmPassword">
+                <svg class="eye-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                  <circle cx="12" cy="12" r="3"></circle>
+                </svg>
+              </button>
+            </div>
+          </div>
+          <button type="submit" class="btn-auth">Sign Up</button>
+        </form>
+        <p class="auth-toggle">
+          Already have an account? <a href="#" id="linkShowLogin">Login</a>
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="app" id="appRoot" style="display:none;">
   <!-- Top Nav -->
   <header class="top-nav">
     <label for="sidebar-toggle" class="hamburger">&#9776;</label>
@@ -388,451 +467,6 @@
   </div>
 </div>
 
-<script>
-  // --- GLOBAL STATE ---
-  let expenses = JSON.parse(localStorage.getItem('expenses')) || [];
-  let notes = JSON.parse(localStorage.getItem('expenseNotes')) || [];
-  let currentNoteId = null;
-  
-  // --- NAVIGATION ---
-  function scrollToSection(id) {
-    const el = document.getElementById(id);
-    if(el) el.scrollIntoView({ behavior: 'smooth' });
-    document.querySelectorAll('.sidebar nav a').forEach(a => a.classList.remove('active'));
-    document.getElementById('nav-' + id).classList.add('active');
-    document.getElementById('sidebar-toggle').checked = false;
-  }
-
-  function scrollReports(dir) {
-    const grid = document.getElementById('reportGrid');
-    const scrollAmount = grid.clientWidth;
-    grid.scrollBy({ left: dir === 'left' ? -scrollAmount : scrollAmount, behavior: 'smooth' });
-  }
-
-  // --- DASHBOARD LOGIC ---
-  function updateDashboard() {
-    const now = new Date();
-    const todayStr = now.toISOString().split('T')[0];
-    
-    // Calculate Totals
-    const dailyTotal = expenses.filter(e => e.date === todayStr).reduce((sum, e) => sum + e.amount, 0);
-    
-    const startOfWeek = new Date(now);
-    startOfWeek.setDate(now.getDate() - now.getDay()); // Sunday
-    const weeklyTotal = expenses.filter(e => new Date(e.date) >= startOfWeek).reduce((sum, e) => sum + e.amount, 0);
-    
-    const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
-    const monthlyTotal = expenses.filter(e => new Date(e.date) >= startOfMonth).reduce((sum, e) => sum + e.amount, 0);
-    
-    const startOfYear = new Date(now.getFullYear(), 0, 1);
-    const yearlyTotal = expenses.filter(e => new Date(e.date) >= startOfYear).reduce((sum, e) => sum + e.amount, 0);
-
-    // Get Limits
-    const limDaily = parseFloat(localStorage.getItem('dailyLimit')) || 500;
-    const limMonthly = parseFloat(localStorage.getItem('monthlyLimit')) || 20000;
-    const limYearly = parseFloat(localStorage.getItem('yearlyLimit')) || (limMonthly * 12);
-    const limWeekly = parseFloat(localStorage.getItem('weeklyLimit')) || (limMonthly / 4);
-    const savingsTarget = parseFloat(localStorage.getItem('savingsTarget')) || 10000;
-
-    // Update Cards
-    updateCard('card-daily', dailyTotal, limDaily);
-    updateCard('card-weekly', weeklyTotal, limWeekly);
-    updateCard('card-monthly', monthlyTotal, limMonthly);
-    updateCard('card-yearly', yearlyTotal, limYearly);
-
-    // Other Cards
-    // Top Category
-    const cats = {};
-    expenses.forEach(e => cats[e.category] = (cats[e.category] || 0) + e.amount);
-    const topCat = Object.entries(cats).sort((a,b) => b[1] - a[1])[0];
-    document.getElementById('topCatName').textContent = topCat ? topCat[0] : '-';
-    document.getElementById('topCatAmount').textContent = topCat ? `₹${topCat[1]}` : '₹0';
-
-    // Transactions
-    document.getElementById('transCount').textContent = expenses.length;
-    
-    // Savings
-    const savings = Math.max(0, limMonthly - monthlyTotal);
-    document.getElementById('savingsAmount').textContent = `₹${savings}`;
-    document.getElementById('savingsTarget').textContent = `Target: ₹${formatNumber(savingsTarget)}`;
-
-    // Recent List
-    const recent = expenses.slice(-4).reverse();
-    const list = document.getElementById('recentList');
-    if(recent.length) {
-      list.innerHTML = recent.map(e => `
-        <li style="display:flex; justify-content:space-between; padding:8px; background:var(--bg-800); border-radius:4px;">
-          <span>${e.category}</span>
-          <span style="color:var(--text)">${e.amount}</span>
-        </li>
-      `).join('');
-    } else {
-      list.innerHTML = '<li>No transactions</li>';
-    }
-    
-    updateReports();
-  }
-
-  function updateCard(id, amount, limit) {
-    const el = document.getElementById(id);
-    if(!el) return;
-    el.querySelector('h2').textContent = `${amount}`;
-    el.querySelector('small').textContent = `Limit ${formatNumber(limit)}`;
-    el.querySelector('.ring-fraction').textContent = `${formatNumber(amount)}/${formatNumber(limit)}`;
-    
-    const percent = Math.min(100, (amount / limit) * 100);
-    el.querySelector('.ring').style.setProperty('--percent', `${percent}%`);
-    el.querySelector('.ring-percent').textContent = `${Math.round(percent)}%`;
-  }
-
-  function formatNumber(num) {
-    if(num >= 100000) return (num/100000).toFixed(1) + 'L';
-    if(num >= 1000) return (num/1000).toFixed(1) + 'k';
-    return Math.round(num);
-  }
-
-  // --- ADD EXPENSE LOGIC ---
-  document.getElementById('expenseForm').addEventListener('submit', function(e) {
-    e.preventDefault();
-    const amount = parseFloat(document.getElementById('amount').value);
-    const category = document.getElementById('category').value;
-    const paymentMethod = document.getElementById('paymentMethod').value;
-    const desc = document.getElementById('description').value;
-    const date = document.getElementById('date').value;
-    
-    expenses.push({
-      id: Date.now(),
-      amount, category, paymentMethod, description: desc, date
-    });
-    localStorage.setItem('expenses', JSON.stringify(expenses));
-    
-    alert('Expense Added');
-    this.reset();
-    document.getElementById('date').valueAsDate = new Date();
-    updateDashboard();
-    updateEntriesList();
-  });
-
-  function updateEntriesList() {
-    const list = document.getElementById('entriesList');
-    const recent = expenses.slice(-5).reverse();
-    list.innerHTML = recent.map(e => `
-      <div style="display:flex; justify-content:space-between; padding:12px; background:var(--bg-800); border-radius:8px;">
-        <div>
-          <div style="font-weight:bold">${e.category} <span style="font-size:10px; background:var(--bg-900); padding:2px 6px; border-radius:4px; margin-left:5px; color:var(--muted)">${e.paymentMethod || 'Cash'}</span></div>
-          <div style="font-size:12px; color:var(--muted)">${e.description}</div>
-        </div>
-        <div style="text-align:right">
-          <div style="font-weight:bold">₹${e.amount}</div>
-          <div style="font-size:12px; color:var(--muted)">${e.date}</div>
-        </div>
-      </div>
-    `).join('');
-  }
-
-  // --- REPORTS LOGIC ---
-  let catChart = null;
-  let trendChart = null;
-
-  function updateReports() {
-    // Category Chart
-    const cats = {};
-    expenses.forEach(e => cats[e.category] = (cats[e.category] || 0) + e.amount);
-    
-    const ctxCat = document.getElementById('categoryChart').getContext('2d');
-    if(catChart) catChart.destroy();
-    catChart = new Chart(ctxCat, {
-      type: 'doughnut',
-      data: {
-        labels: Object.keys(cats),
-        datasets: [{
-          data: Object.values(cats),
-          backgroundColor: ['#525252', '#737373', '#a3a3a3', '#d4d4d4', '#404040'],
-          borderColor: '#000'
-        }]
-      },
-      options: { plugins: { legend: { position: 'right', labels: { color: '#fff' } } } }
-    });
-
-    // Trend Chart
-    const ctxTrend = document.getElementById('trendChart').getContext('2d');
-    const daily = {};
-    expenses.forEach(e => daily[e.date] = (daily[e.date] || 0) + e.amount);
-    const sortedDates = Object.keys(daily).sort();
-    
-    if(trendChart) trendChart.destroy();
-    trendChart = new Chart(ctxTrend, {
-      type: 'line',
-      data: {
-        labels: sortedDates,
-        datasets: [{
-          label: 'Daily',
-          data: sortedDates.map(d => daily[d]),
-          borderColor: '#737373',
-          backgroundColor: 'rgba(115,115,115,0.2)',
-          fill: true
-        }]
-      },
-      options: { scales: { y: { ticks: { color: '#fff' }, grid: { color: '#333' } }, x: { ticks: { color: '#fff' } } } }
-    });
-    
-    document.getElementById('repTotal').textContent = `₹${expenses.reduce((a,b)=>a+b.amount,0)}`;
-
-    // New Analysis Cards Logic
-    // 1. Budget Status (Monthly)
-    const now = new Date();
-    const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
-    const monthlyTotal = expenses.filter(e => new Date(e.date) >= startOfMonth).reduce((sum, e) => sum + e.amount, 0);
-    const limMonthly = parseFloat(localStorage.getItem('monthlyLimit')) || 20000;
-    const monthPercent = Math.min(100, (monthlyTotal / limMonthly) * 100);
-    
-    document.getElementById('repMonthStatus').textContent = `${Math.round(monthPercent)}%`;
-    document.getElementById('repMonthBar').style.width = `${monthPercent}%`;
-    document.getElementById('repMonthBar').style.background = monthPercent > 90 ? 'var(--danger)' : 'var(--text)';
-
-    // 2. Avg Daily Spend
-    const totalDays = sortedDates.length || 1;
-    const totalExp = expenses.reduce((a,b)=>a+b.amount,0);
-    document.getElementById('repAvgDaily').textContent = `₹${Math.round(totalExp / totalDays)}`;
-
-    // 3. Highest Spending Day
-    const highestDay = Object.entries(daily).sort((a,b) => b[1] - a[1])[0];
-    document.getElementById('repHighestDay').textContent = highestDay ? `${highestDay[0]} (₹${highestDay[1]})` : '-';
-
-    // Top Expenses List
-    const sortedExpenses = [...expenses].sort((a,b) => b.amount - a.amount).slice(0, 5);
-    document.getElementById('repTopList').innerHTML = sortedExpenses.map(e => `
-      <div style="display:flex; justify-content:space-between; padding:8px; border-bottom:1px solid var(--border);">
-        <span>${e.category}</span>
-        <span style="font-weight:bold">₹${e.amount}</span>
-      </div>
-    `).join('');
-
-    // Transaction History Summary (Top 5)
-    const summaryList = document.getElementById('historySummaryList');
-    const allExpenses = [...expenses].sort((a,b) => new Date(b.date) - new Date(a.date));
-    const top5 = allExpenses.slice(0, 5);
-    
-    if(top5.length === 0) {
-      summaryList.innerHTML = '<p style="color:var(--muted); text-align:center;">No transactions found</p>';
-    } else {
-      summaryList.innerHTML = top5.map(e => `
-        <div style="display:flex; justify-content:space-between; padding:10px; background:var(--bg-800); border-radius:6px; align-items:center;">
-          <div>
-            <div style="font-weight:500">${e.category}</div>
-            <div style="font-size:12px; color:var(--muted)">${e.date} • ${e.paymentMethod || 'Cash'}</div>
-          </div>
-          <div style="font-weight:bold">₹${e.amount}</div>
-        </div>
-      `).join('');
-    }
-
-    // Full History Table (For Modal)
-    const fullBody = document.getElementById('fullHistoryTableBody');
-    if(allExpenses.length === 0) {
-      fullBody.innerHTML = '<tr><td colspan="5" style="padding:15px; text-align:center; color:var(--muted)">No transactions found</td></tr>';
-    } else {
-      fullBody.innerHTML = allExpenses.map(e => `
-        <tr style="border-bottom:1px solid var(--border);">
-          <td style="padding:8px;">${e.date}</td>
-          <td style="padding:8px;">${e.category}</td>
-          <td style="padding:8px;">${e.description}</td>
-          <td style="padding:8px;">${e.paymentMethod || 'Cash'}</td>
-          <td style="padding:8px; text-align:right; font-weight:bold;">₹${e.amount}</td>
-        </tr>
-      `).join('');
-    }
-  }
-
-  function openHistoryModal() {
-    document.getElementById('historyModal').style.display = 'grid';
-  }
-  function closeHistoryModal() {
-    document.getElementById('historyModal').style.display = 'none';
-  }
-
-  // --- NOTES LOGIC ---
-  function renderNotes() {
-    const grid = document.getElementById('notesGrid');
-    if(notes.length === 0) {
-      grid.innerHTML = '<p style="color:var(--muted); grid-column:1/-1; text-align:center;">No notes yet.</p>';
-      return;
-    }
-    grid.innerHTML = notes.map(n => `
-      <div class="note-card" onclick="editNote(${n.id})">
-        <h3>${n.title || 'Untitled'}</h3>
-        <p>${n.content ? n.content.substring(0, 60) + '...' : 'No content'}</p>
-        ${n.reminder && n.reminder.date ? `
-          <div style="margin-top:8px; font-size:12px; color:var(--warning); display:flex; gap:8px; align-items:center;">
-            <span>⏰ ${n.reminder.date} ${n.reminder.time || ''}</span>
-            ${n.reminder.amount ? `<span style="background:var(--bg-800); padding:2px 6px; border-radius:4px;">₹${n.reminder.amount}</span>` : ''}
-          </div>
-        ` : ''}
-      </div>
-    `).join('');
-  }
-
-  function createNewNote() {
-    currentNoteId = Date.now();
-    document.getElementById('noteTitle').value = '';
-    document.getElementById('noteBody').value = '';
-    document.getElementById('noteDate').value = '';
-    document.getElementById('noteTime').value = '';
-    document.getElementById('noteAmount').value = '';
-    document.getElementById('noteModal').style.display = 'grid';
-  }
-
-  function editNote(id) {
-    currentNoteId = id;
-    const n = notes.find(x => x.id === id);
-    if(n) {
-      document.getElementById('noteTitle').value = n.title;
-      document.getElementById('noteBody').value = n.content;
-      document.getElementById('noteDate').value = n.reminder ? n.reminder.date : '';
-      document.getElementById('noteTime').value = (n.reminder && n.reminder.time) ? n.reminder.time : '';
-      document.getElementById('noteAmount').value = (n.reminder && n.reminder.amount) ? n.reminder.amount : '';
-      document.getElementById('noteModal').style.display = 'grid';
-    }
-  }
-
-  function saveNote() {
-    if(!currentNoteId) return;
-    let n = notes.find(x => x.id === currentNoteId);
-    const title = document.getElementById('noteTitle').value;
-    const content = document.getElementById('noteBody').value;
-    const date = document.getElementById('noteDate').value;
-    const time = document.getElementById('noteTime').value;
-    const amount = document.getElementById('noteAmount').value;
-    
-    if(!n) {
-      n = { id: currentNoteId };
-      notes.push(n);
-    }
-    n.title = title;
-    n.content = content;
-    n.lastModified = new Date().toISOString();
-    
-    if(date) {
-      n.reminder = { date, time, amount };
-    } else {
-      delete n.reminder;
-    }
-    
-    localStorage.setItem('expenseNotes', JSON.stringify(notes));
-    renderNotes();
-    closeNoteModal();
-  }
-
-  function deleteNote() {
-    if(confirm('Delete note?')) {
-      notes = notes.filter(n => n.id !== currentNoteId);
-      localStorage.setItem('expenseNotes', JSON.stringify(notes));
-      renderNotes();
-      closeNoteModal();
-    }
-  }
-
-  function closeNoteModal() {
-    document.getElementById('noteModal').style.display = 'none';
-  }
-
-  // --- SETTINGS LOGIC ---
-  function openSettingsModal() {
-    document.getElementById('settingsModal').style.display = 'grid';
-    document.getElementById('setDaily').value = localStorage.getItem('dailyLimit') || '';
-    document.getElementById('setWeekly').value = localStorage.getItem('weeklyLimit') || '';
-    document.getElementById('setMonthly').value = localStorage.getItem('monthlyLimit') || '';
-    document.getElementById('setYearly').value = localStorage.getItem('yearlyLimit') || '';
-    document.getElementById('setSavings').value = localStorage.getItem('savingsTarget') || '';
-  }
-  function closeSettingsModal() {
-    document.getElementById('settingsModal').style.display = 'none';
-  }
-  function saveSettings() {
-    localStorage.setItem('weeklyLimit', document.getElementById('setWeekly').value);
-    localStorage.setItem('dailyLimit', document.getElementById('setDaily').value);
-    localStorage.setItem('monthlyLimit', document.getElementById('setMonthly').value);
-    localStorage.setItem('yearlyLimit', document.getElementById('setYearly').value);
-    localStorage.setItem('savingsTarget', document.getElementById('setSavings').value);
-    alert('Settings Saved');
-    closeSettingsModal();
-    updateDashboard();
-  }
-  function resetData() {
-    if(confirm('Reset all data?')) {
-      localStorage.removeItem('expenses');
-      expenses = [];
-      updateDashboard();
-      updateEntriesList();
-      alert('Data Reset');
-      closeSettingsModal();
-    }
-  }
-  function handleLogout() {
-    localStorage.removeItem('currentUser');
-    window.location.href = 'login.html';
-  }
-
-  // --- PROFILE LOGIC ---
-  function openProfileModal() {
-    document.getElementById('sidebar-toggle').checked = false;
-    const p = JSON.parse(localStorage.getItem('userProfile')) || {};
-    document.getElementById('profName').value = p.name || '';
-    document.getElementById('profAge').value = p.age || '';
-    document.getElementById('profileModal').style.display = 'grid';
-  }
-  function closeProfileModal() {
-    document.getElementById('profileModal').style.display = 'none';
-  }
-  function saveProfile() {
-    const name = document.getElementById('profName').value;
-    const age = document.getElementById('profAge').value;
-    localStorage.setItem('userProfile', JSON.stringify({ name, age }));
-    document.getElementById('sidebarName').textContent = name || 'Guest';
-    document.getElementById('sidebarAge').textContent = age ? 'Age: ' + age : 'Age: --';
-    closeProfileModal();
-  }
-
-  // --- INIT ---
-  document.addEventListener('DOMContentLoaded', () => {
-    document.getElementById('date').valueAsDate = new Date();
-    updateDashboard();
-    updateEntriesList();
-    renderNotes();
-    
-    // Profile
-    const p = JSON.parse(localStorage.getItem('userProfile')) || {};
-    if(p.name) document.getElementById('sidebarName').textContent = p.name;
-    if(p.age) document.getElementById('sidebarAge').textContent = 'Age: ' + p.age;
-  });
-  // --- SWIPE LOGIC ---
-  let touchStartX = 0;
-  let touchEndX = 0;
-  
-  document.addEventListener('touchstart', e => {
-    touchStartX = e.changedTouches[0].screenX;
-  }, {passive: true});
-  
-  document.addEventListener('touchend', e => {
-    touchEndX = e.changedTouches[0].screenX;
-    handleSwipe();
-  }, {passive: true});
-  
-  function handleSwipe() {
-    const toggle = document.getElementById('sidebar-toggle');
-    const swipeThreshold = 50;
-    
-    // Swipe Right (Open Sidebar) - only if starting from left edge (first 30px)
-    if (touchEndX > touchStartX + swipeThreshold && touchStartX < 30) {
-      toggle.checked = true;
-    }
-    
-    // Swipe Left (Close Sidebar)
-    if (touchEndX < touchStartX - swipeThreshold && toggle.checked) {
-      toggle.checked = false;
-    }
-  }
-
-</script>
+<script src="script.js"></script>
 </body>
 </html>
