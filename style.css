@@ -186,6 +186,7 @@ body { line-height: 1.5; }
   width: 100vw;
   overflow: hidden;
   position: relative;
+  overscroll-behavior: contain;
 }
 
 .main-slider {
@@ -196,7 +197,9 @@ body { line-height: 1.5; }
   scroll-snap-type: x mandatory;
   scroll-behavior: smooth;
   -webkit-overflow-scrolling: touch;
+  touch-action: pan-x;
 }
+.main-slider::-webkit-scrollbar { display: none; }
 
 .page-section {
   min-width: 100vw;
@@ -305,6 +308,44 @@ input:focus, select:focus, textarea:focus { outline: none; border-color: var(--a
 
 /* Notes */
 .notes-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 16px; }
+
+/* Mobile Optimizations */
+@media (max-width: 768px) {
+  :root { --sidebar-width: 230px; }
+
+  .top-nav { height: 56px; padding: 0 12px; }
+  .top-nav h1 { font-size: 16px; }
+  .hamburger { width: 38px; height: 38px; }
+
+  .main-slider-container { margin-top: 56px; height: calc(100vh - 56px); }
+  .page-section { padding: 12px; }
+
+  .dashboard { gap: 12px; }
+  .donut-cards-grid, .other-cards-section {
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 12px;
+  }
+
+  .card { padding: 14px; }
+  .donut-card { gap: 12px; }
+  .ring { width: 80px; height: 80px; }
+  .ring::after { inset: 10px; }
+  .ring-percent { font-size: 14px; }
+  .ring-fraction { font-size: 10px; }
+
+  .add-expense-container { gap: 12px; }
+  .form-card { padding: 16px; }
+  .form-group { margin-bottom: 12px; }
+  input, select, textarea { padding: 10px; font-size: 14px; }
+
+  .report-grid { gap: 12px; }
+  .grid-column { min-width: min(100%, 320px); }
+
+  .notes-grid {
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 12px;
+  }
+}
 .note-card {
   background: var(--panel);
   border: 1px solid var(--border);
