@@ -44,12 +44,5 @@ A front-end-only expense tracker dashboard with offline-first storage. Built wit
 - Multi-user support with roles
 
 ## Screenshots
-Add your screenshots to a `docs/screenshots/` folder and reference them here:
-
-- Dashboard: ![Dashboard](docs/screenshots/dashboard.png)
-- Add Expense: ![Add Expense](docs/screenshots/add-expense.png)
-- Reports: ![Reports](docs/screenshots/reports.png)
-- Notes: ![Notes](docs/screenshots/notes.png)
-
-Tip (Windows): open the page, press `Win + Shift + S` to grab an area, save the file into `docs/screenshots/`, and update the filenames above if they differ.
+Add your captures in `docs/screenshots/` and reference as needed.
 
