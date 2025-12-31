@@ -18,7 +18,7 @@ A front-end-only expense tracker dashboard with offline-first storage. Built wit
 
 ## Getting Started
 1. Clone or download this folder.
-2. Open `index.html` in a modern browser (Chrome/Edge/Firefox). 
+2. Open `index.html` in a modern browser (Chrome/Edge/Firefox).
    - On Windows, double-click `index.html`, or run: `file:///c:/expense%20tracker/template/dashboard/index.html`
 3. Optional: serve locally for best results (avoids some browser restrictions):
    - Using Python: `python -m http.server 8000` then visit `http://localhost:8000/index.html`
@@ -29,12 +29,9 @@ A front-end-only expense tracker dashboard with offline-first storage. Built wit
 - Reset actions clear current expenses but archive them to `expenseHistory` in localStorage for statements.
 
 ## File Map
-- `index.html` — main dashboard (cards, charts, modals)
-- `add-expense.html` — add expense form + recent entries
-- `r&p.html` — reports/analysis, statements, exports
-- `notes.html` — notes with reminders
-- `login.html` — mock auth entry point
+- `index.html` — single-page app: auth, dashboard, add expense, reports, notes, modals
 - `style.css` — shared dark theme styling
+- `script.js` — all app logic (auth, expenses, reports, notes, settings, profile)
 
 ## Customization Ideas
 - Add real backend (auth + synced data)
