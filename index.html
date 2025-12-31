@@ -15,7 +15,7 @@
 <div class="app">
   <!-- Top Nav -->
   <header class="top-nav">
-    <label for="sidebar-toggle" class="hamburger"></label>
+    <label for="sidebar-toggle" class="hamburger">&#9776;</label>
     <h1>PENNY & PAPER</h1>
     <div class="top-actions">
       <button class="top-settings-btn" onclick="openSettingsModal()"> Settings</button>
@@ -25,6 +25,7 @@
 
   <!-- Sidebar -->
   <input type="checkbox" id="sidebar-toggle" class="sidebar-toggle-checkbox">
+  <label for="sidebar-toggle" class="sidebar-overlay"></label>
   <aside class="sidebar">
     <div class="sidebar-profile" onclick="openProfileModal()">
       <div class="profile-avatar"></div>
@@ -280,6 +281,8 @@
         <div class="settings-group">
           <label>Daily Limit (₹)</label>
           <input type="number" id="setDaily">
+          <label>Weekly Limit (₹)</label>
+          <input type="number" id="setWeekly">
           <label>Monthly Limit (₹)</label>
           <input type="number" id="setMonthly">
           <label>Yearly Limit (₹)</label>
@@ -428,7 +431,7 @@
     const limDaily = parseFloat(localStorage.getItem('dailyLimit')) || 500;
     const limMonthly = parseFloat(localStorage.getItem('monthlyLimit')) || 20000;
     const limYearly = parseFloat(localStorage.getItem('yearlyLimit')) || (limMonthly * 12);
-    const limWeekly = limMonthly / 4; // Approx
+    const limWeekly = parseFloat(localStorage.getItem('weeklyLimit')) || (limMonthly / 4);
     const savingsTarget = parseFloat(localStorage.getItem('savingsTarget')) || 10000;
 
     // Update Cards
@@ -737,6 +740,7 @@
   function openSettingsModal() {
     document.getElementById('settingsModal').style.display = 'grid';
     document.getElementById('setDaily').value = localStorage.getItem('dailyLimit') || '';
+    document.getElementById('setWeekly').value = localStorage.getItem('weeklyLimit') || '';
     document.getElementById('setMonthly').value = localStorage.getItem('monthlyLimit') || '';
     document.getElementById('setYearly').value = localStorage.getItem('yearlyLimit') || '';
     document.getElementById('setSavings').value = localStorage.getItem('savingsTarget') || '';
@@ -745,6 +749,7 @@
     document.getElementById('settingsModal').style.display = 'none';
   }
   function saveSettings() {
+    localStorage.setItem('weeklyLimit', document.getElementById('setWeekly').value);
     localStorage.setItem('dailyLimit', document.getElementById('setDaily').value);
     localStorage.setItem('monthlyLimit', document.getElementById('setMonthly').value);
     localStorage.setItem('yearlyLimit', document.getElementById('setYearly').value);
@@ -770,6 +775,7 @@
 
   // --- PROFILE LOGIC ---
   function openProfileModal() {
+    document.getElementById('sidebar-toggle').checked = false;
     const p = JSON.parse(localStorage.getItem('userProfile')) || {};
     document.getElementById('profName').value = p.name || '';
     document.getElementById('profAge').value = p.age || '';
@@ -799,6 +805,33 @@
     if(p.name) document.getElementById('sidebarName').textContent = p.name;
     if(p.age) document.getElementById('sidebarAge').textContent = 'Age: ' + p.age;
   });
+  // --- SWIPE LOGIC ---
+  let touchStartX = 0;
+  let touchEndX = 0;
+  
+  document.addEventListener('touchstart', e => {
+    touchStartX = e.changedTouches[0].screenX;
+  }, {passive: true});
+  
+  document.addEventListener('touchend', e => {
+    touchEndX = e.changedTouches[0].screenX;
+    handleSwipe();
+  }, {passive: true});
+  
+  function handleSwipe() {
+    const toggle = document.getElementById('sidebar-toggle');
+    const swipeThreshold = 50;
+    
+    // Swipe Right (Open Sidebar) - only if starting from left edge (first 30px)
+    if (touchEndX > touchStartX + swipeThreshold && touchStartX < 30) {
+      toggle.checked = true;
+    }
+    
+    // Swipe Left (Close Sidebar)
+    if (touchEndX < touchStartX - swipeThreshold && toggle.checked) {
+      toggle.checked = false;
+    }
+  }
 
 </script>
 </body>

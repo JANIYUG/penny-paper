@@ -125,12 +125,19 @@ body { line-height: 1.5; }
 }
 
 #sidebar-toggle:checked ~ .sidebar { transform: translateX(0); }
-#sidebar-toggle:checked ~ .main-slider-container::after {
-  content: "";
+
+.sidebar-overlay {
   position: fixed;
   inset: 0;
   background: rgba(0,0,0,0.7);
   z-index: 800;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--transition-fast);
+}
+#sidebar-toggle:checked ~ .sidebar-overlay {
+  opacity: 1;
+  pointer-events: auto;
 }
 
 .sidebar-profile {
