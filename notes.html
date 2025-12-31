@@ -236,6 +236,11 @@
     displayNotesGrid();
   }
 
+  function saveAndCloseNote() {
+    // Manual save hook for the footer button so reminder fields persist immediately
+    closeNoteModal();
+  }
+
   function setupAutoSave() {
     const inputs = ['editorTitle', 'editorBody', 'reminderDate', 'reminderTime', 'reminderAmount'];
     
