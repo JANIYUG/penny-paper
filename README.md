@@ -43,6 +43,4 @@ A front-end-only expense tracker dashboard with offline-first storage. Built wit
 - Category budgets and alerts
 - Multi-user support with roles
 
-## Screenshots
-Add your captures in `docs/screenshots/` and reference as needed.
 
